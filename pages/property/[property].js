@@ -2,12 +2,12 @@ import Table from 'react-bootstrap/Table';
 import React from "react"
 import styles from "../../styles/Property.module.css";
 import Container from 'react-bootstrap/Container';
-import {BsSearch} from "react-icons/bs";
-import {AiFillCaretDown} from "react-icons/ai";
+import { BsSearch } from "react-icons/bs";
+import { AiFillCaretDown } from "react-icons/ai";
 import Link from "next/link";
 
 import { useState } from 'react';
-function Property({oldProperties}) {
+function Property({ oldProperties }) {
     console.log(oldProperties)
     const [shopModal, setshopModal] = useState(false);
 
@@ -28,11 +28,14 @@ function Property({oldProperties}) {
                     <tr className={styles.heading}>
                         <td>
                             <button onClick={handleShopModal} className={styles.button}>All Room Types <AiFillCaretDown />
-                        <div className={styles.shopModal} style={shopModal?{display: 'block'}:{display: 'none'}}>
-                                <Link href="/"><li>All</li></Link>
-                                <Link href="/"><li>Siteminder</li></Link>
-                                <Link href="/"><li>OYO</li></Link>
-                            </div>
+                                <div className={styles.shopModal} style={shopModal ? { display: 'block' } : { display: 'none' }}>
+                                    <Link href="/"><li>All</li></Link>
+                                    {oldProperties.propertiesOnlineTravelAgencies.map((val, i) => {
+                                        return (
+                                            <Link key={i} href="/"><li>{val.onlineTravelAgencyName}</li></Link>
+                                        )
+                                    })}
+                                </div>
                             </button></td>
                         <td>
                             <div className={styles.inputContainer}>
@@ -41,8 +44,8 @@ function Property({oldProperties}) {
                             </div>
                         </td>
                     </tr>
-                    {oldProperties.propertiesOnlineTravelAgencies.map((val,i)=>{
-                        return(
+                    {oldProperties.propertiesOnlineTravelAgencies.map((val, i) => {
+                        return (
                             <tr key={i}>
                                 <td>
                                     {val.onlineTravelAgencyName}
@@ -100,38 +103,37 @@ export default Property;
 
 export async function getStaticPaths() {
     return {
-      paths: [
-        { params: { property: "237" } },
-        { params: { property: "424" } },
-        { params: { property: "368" } },
-        { params: { property: "575" } },
-        { params: { property: "578" } },
-        { params: { property: "495" } },
-        { params: { property: "424" } },
-        { params: { property: "547" } },
-      ],
-      fallback: false,
+        paths: [
+            { params: { property: "237" } },
+            { params: { property: "424" } },
+            { params: { property: "368" } },
+            { params: { property: "575" } },
+            { params: { property: "578" } },
+            { params: { property: "495" } },
+            { params: { property: "424" } },
+            { params: { property: "547" } },
+        ],
+        fallback: false,
     };
-  }
-  
-  export async function getStaticProps(context) {
+}
+
+export async function getStaticProps(context) {
     const { property } = context.params;
     const propertiesResponse = await fetch(`https://api.bookonelocal.in/channel-integration/api/channelManager/property/${property}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-        "Content-Type": "application/x-www-form-urlencoded",
-        APP_ID: "BOOKONE_WEB_APP",
-      },
-    });
+        {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                Authorization:
+                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+                "Content-Type": "application/x-www-form-urlencoded",
+                APP_ID: "BOOKONE_WEB_APP",
+            },
+        });
     const oldProperties = await propertiesResponse.json();
 
- 
+
     return { props: { oldProperties } };
-  
-  }
-  
-  
+
+}
+
