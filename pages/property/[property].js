@@ -41,7 +41,19 @@ function Property({oldProperties}) {
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    {oldProperties.propertiesOnlineTravelAgencies.map((val,i)=>{
+                        return(
+                            <tr key={i}>
+                                <td>
+                                    {val.onlineTravelAgencyName}
+                                </td>
+                                <td>
+                                    Plan Rooms
+                                </td>
+                            </tr>
+                        )
+                    })}
+                    {/* <tr>
                         <td rowSpan={3}>
                             Double Room
                         </td>
@@ -76,7 +88,7 @@ function Property({oldProperties}) {
                         <td className={styles.td}>
                             Honeymoon
                         </td>
-                    </tr>
+                    </tr> */}
                 </tbody>
             </Table>
         </Container>
@@ -104,7 +116,7 @@ export async function getStaticPaths() {
   
   export async function getStaticProps(context) {
     const { property } = context.params;
-    const propertiesResponse = await fetch(`https://api.bookonelocal.in/api-bookone/api/property/${property}/rooms`,
+    const propertiesResponse = await fetch(`https://api.bookonelocal.in/channel-integration/api/channelManager/property/${property}`,
     {
       method: "GET",
       headers: {
