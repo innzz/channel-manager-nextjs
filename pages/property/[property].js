@@ -8,7 +8,8 @@ import Link from "next/link";
 
 import { useState } from 'react';
 function Property({ oldProperties,property }) {
-    console.log(oldProperties)
+    console.log(oldProperties.roomDtos)
+    // console.log(property)
     const [shopModal, setshopModal] = useState(false);
 
     const handleShopModal = () => {
