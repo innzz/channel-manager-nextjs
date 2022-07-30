@@ -43,13 +43,13 @@
  .shopModal {
     display: block;
     position: absolute;
-    top: 50px;
+    top: 150px;
     padding: 10px 0;
-    left: 0;
+    left: 250px;
     background-color: rgb(255, 255, 255);
     color: black;
     list-style: none;
-    width: 240px;
+    width: 340px;
     z-index: 20;
     border-radius: 10px;
     border: 1px solid rgb(236, 234, 234)
@@ -67,3 +67,32 @@
     box-shadow: 0 6px 8px 0 rgb(209, 207, 207);
 }
 
+@media screen and (max-width: 1200px) {
+  
+ .shopModal {
+  display: block;
+  position: absolute;
+  top: 173px;
+  padding: 10px 0;
+  left: 20px;
+  background-color: rgb(255, 255, 255);
+  color: black;
+  list-style: none;
+  width: 165px;
+  z-index: 20;
+  border-radius: 10px;
+  border: 1px solid rgb(236, 234, 234)
+}
+
+.shopModal > li {
+  padding: 8px 8px;
+  margin: 3px 6px;
+  border-radius: 6px;
+}
+
+.shopModal > li:hover{
+  background-color: rgb(51, 163, 233);
+  color: black;
+  box-shadow: 0 6px 8px 0 rgb(209, 207, 207);
+}
+}

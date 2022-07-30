@@ -7,7 +7,7 @@ import { AiFillCaretDown } from "react-icons/ai";
 import Link from "next/link";
 
 import { useState } from 'react';
-function Property({ oldProperties }) {
+function Property({ oldProperties,property }) {
     console.log(oldProperties)
     const [shopModal, setshopModal] = useState(false);
 
@@ -29,10 +29,10 @@ function Property({ oldProperties }) {
                         <td>
                             <button onClick={handleShopModal} className={styles.button}>All Room Types <AiFillCaretDown />
                                 <div className={styles.shopModal} style={shopModal ? { display: 'block' } : { display: 'none' }}>
-                                    <Link href="/"><li>All</li></Link>
+                                    <Link href="/property/237"><li>All</li></Link>
                                     {oldProperties.propertiesOnlineTravelAgencies.map((val, i) => {
                                         return (
-                                            <Link key={i} href="/"><li>{val.onlineTravelAgencyName}</li></Link>
+                                            <Link key={i} href="/property/237"><li>{val.onlineTravelAgencyName}</li></Link>
                                         )
                                     })}
                                 </div>
@@ -133,7 +133,7 @@ export async function getStaticProps(context) {
     const oldProperties = await propertiesResponse.json();
 
 
-    return { props: { oldProperties } };
+    return { props: { oldProperties, property } };
 
 }
 
