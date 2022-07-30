@@ -29,10 +29,10 @@ function Property({ oldProperties,property }) {
                         <td>
                             <button onClick={handleShopModal} className={styles.button}>All Room Types <AiFillCaretDown />
                                 <div className={styles.shopModal} style={shopModal ? { display: 'block' } : { display: 'none' }}>
-                                    <Link href="/property/237"><li>All</li></Link>
+                                    <Link href={`${property}`}><li>All</li></Link>
                                     {oldProperties.propertiesOnlineTravelAgencies.map((val, i) => {
                                         return (
-                                            <Link key={i} href="/property/237"><li>{val.onlineTravelAgencyName}</li></Link>
+                                            <Link key={i} href={`${val.bookonePropertyId}`}><li>{val.onlineTravelAgencyName}</li></Link>
                                         )
                                     })}
                                 </div>
