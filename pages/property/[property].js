@@ -30,9 +30,9 @@ function Property({ oldProperties,property }) {
                             <button onClick={handleShopModal} className={styles.button}>All Room Types <AiFillCaretDown />
                                 <div className={styles.shopModal} style={shopModal ? { display: 'block' } : { display: 'none' }}>
                                     <Link href={`${property}`}><li>All</li></Link>
-                                    {oldProperties.propertiesOnlineTravelAgencies.map((val, i) => {
+                                    {oldProperties.roomDtos.map((val, i) => {
                                         return (
-                                            <Link key={i} href={`${val.bookonePropertyId}`}><li>{val.onlineTravelAgencyName}</li></Link>
+                                            <Link key={i} href={`${property}`}><li>{val.name}</li></Link>
                                         )
                                     })}
                                 </div>
@@ -44,11 +44,11 @@ function Property({ oldProperties,property }) {
                             </div>
                         </td>
                     </tr>
-                    {oldProperties.propertiesOnlineTravelAgencies.map((val, i) => {
+                    {oldProperties.roomDtos.map((val, i) => {
                         return (
                             <tr key={i}>
                                 <td>
-                                    {val.onlineTravelAgencyName}
+                                    {val.name}
                                 </td>
                                 <td>
                                     Plan Rooms
