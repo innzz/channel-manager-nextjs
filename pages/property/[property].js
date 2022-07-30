@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import { useState } from 'react';
 function Property({ oldProperties,property }) {
-    console.log(oldProperties.roomDtos)
+    // console.log(oldProperties.roomDtos)
     // console.log(property)
     const [shopModal, setshopModal] = useState(false);
 
@@ -29,7 +29,7 @@ function Property({ oldProperties,property }) {
                     <tr className={styles.heading}>
                         <td>
                             <button onClick={handleShopModal} className={styles.button}>All Room Types <AiFillCaretDown />
-                                <div className={styles.shopModal} style={shopModal ? { display: 'block' } : { display: 'none' }}>
+                                <div onMouseLeave={handleShopModal} className={styles.shopModal} style={shopModal ? { display: 'block' } : { display: 'none' }}>
                                     <Link href={`${property}`}><li>All</li></Link>
                                     {oldProperties.roomDtos.map((val, i) => {
                                         return (
