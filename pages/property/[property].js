@@ -106,10 +106,8 @@ export async function getStaticPaths() {
     return {
         paths: [
             { params: { property: "237" } },
-            { params: { property: "424" } },
             { params: { property: "368" } },
             { params: { property: "495" } },
-            { params: { property: "424" } },
         ],
         fallback: false,
     };
