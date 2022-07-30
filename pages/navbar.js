@@ -13,8 +13,8 @@ function NavBar() {
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
                     <Nav.Link href="/property/237" style={{ fontSize: "12px",marginTop:"5px" }}>AGODA</Nav.Link>
-                    <Nav.Link href="/property/237" style={{ fontSize: "12px",marginTop:"5px" }}>BOOKING.COM</Nav.Link>
-                    <Nav.Link href="/property/237" style={{ fontSize: "12px",marginTop:"5px" }}>EXPEDIA</Nav.Link>
+                    <Nav.Link href="/property/495" style={{ fontSize: "12px",marginTop:"5px" }}>BOOKING.COM</Nav.Link>
+                    <Nav.Link href="/property/368" style={{ fontSize: "12px",marginTop:"5px" }}>EXPEDIA</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
