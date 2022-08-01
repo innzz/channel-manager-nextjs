@@ -1,98 +1,100 @@
-.button{
-    width: 100%;
-    border: 1px solid rgb(216, 216, 216);
-    padding: 5px;
+.button {
+  width: 100%;
+  border: 1px solid rgb(216, 216, 216);
+  padding: 5px;
 }
 
 .inputContainer {
-    display: -ms-flexbox; /* IE10 */
-    display: flex;
-    width: 100%;
-  }
-  
-  .icon {
-    padding: 5px;
-    background: rgb(216, 216, 216);
-    color: white;
-    min-width: 50px;
-    text-align: center;
-  }
-  .searchIcon{
-    color: black;
-  }
-  
-  .inputField {
-    width: 100%;
-    padding: 5px;
-    outline: none;
-  }
-  
-  .input-field:focus {
-    border: 1px solid rgb(216, 216, 216);
-  }
-  .heading{
-    background-color: rgb(230, 246, 251);
-  }
-.container{
-    margin-top: 10px;
-}
-.td{
-    color: rgb(64, 177, 208);
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  width: 100%;
 }
 
- .shopModal {
-    display: block;
-    position: absolute;
-    top: 150px;
-    padding: 10px 0;
-    left: 250px;
-    background-color: rgb(255, 255, 255);
-    color: black;
-    list-style: none;
-    width: 340px;
-    z-index: 20;
-    border-radius: 10px;
-    border: 1px solid rgb(236, 234, 234)
+.icon {
+  padding: 5px;
+  background: rgb(216, 216, 216);
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+.searchIcon {
+  color: black;
 }
 
-.shopModal > li {
-    padding: 8px 8px;
-    margin: 3px 6px;
-    border-radius: 6px;
+.inputField {
+  width: 100%;
+  padding: 5px;
+  outline: none;
 }
 
- .shopModal > li:hover{
-    background-color: rgb(51, 163, 233);
-    color: black;
-    box-shadow: 0 6px 8px 0 rgb(209, 207, 207);
+.input-field:focus {
+  border: 1px solid rgb(216, 216, 216);
+}
+.heading {
+  background-color: rgb(230, 246, 251);
+}
+.container {
+  margin-top: 10px;
+}
+.td {
+  color: rgb(64, 177, 208);
 }
 
-@media screen and (max-width: 1200px) {
-  
- .shopModal {
+.shopModal {
   display: block;
   position: absolute;
-  top: 173px;
+  top: 150px;
   padding: 10px 0;
-  left: 20px;
+  left: 250px;
   background-color: rgb(255, 255, 255);
   color: black;
   list-style: none;
-  width: 165px;
+  width: 340px;
   z-index: 20;
   border-radius: 10px;
-  border: 1px solid rgb(236, 234, 234)
+  border: 1px solid rgb(236, 234, 234);
 }
 
-.shopModal > li {
+.shopModal > li > button {
   padding: 8px 8px;
   margin: 3px 6px;
   border-radius: 6px;
+  width: 90%;
+  border: none;
+  background-color: white;
+  /* background-color: rgb(51, 163, 233); */
 }
 
-.shopModal > li:hover{
+.shopModal > li > button:hover {
   background-color: rgb(51, 163, 233);
-  color: black;
-  box-shadow: 0 6px 8px 0 rgb(209, 207, 207);
+  color: white;
 }
+
+@media screen and (max-width: 1200px) {
+  .shopModal {
+    display: block;
+    position: absolute;
+    top: 173px;
+    padding: 10px 0;
+    left: 20px;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    list-style: none;
+    width: 165px;
+    z-index: 20;
+    border-radius: 10px;
+    border: 1px solid rgb(236, 234, 234);
+  }
+
+  .shopModal > li {
+    padding: 8px 8px;
+    margin: 3px 6px;
+    border-radius: 6px;
+  }
+
+  .shopModal > li:hover {
+    background-color: rgb(51, 163, 233);
+    color: black;
+    box-shadow: 0 6px 8px 0 rgb(209, 207, 207);
+  }
 }
