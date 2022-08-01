@@ -7,17 +7,34 @@ import { AiFillCaretDown } from "react-icons/ai";
 import Link from "next/link";
 
 import { useState } from "react";
+import { Nav, Navbar } from "react-bootstrap";
 function Property({ oldProperties, property }) {
-  console.log(oldProperties.roomDtos);
+//   console.log(oldProperties);
   // console.log(property)
   const [shopModal, setshopModal] = useState(false);
-
+  const [dropdownValue, setDropDownValue] = useState("All");
+  console.log(dropdownValue)
+  
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
 
   return (
-    <Container>
+    <div>
+         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ paddingLeft: "35px", paddingRight: "35px" }}>
+            <Navbar.Brand href="#" className={styles.navBrand}><b>Channel Manager</b></Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="me-auto">
+                    {oldProperties.propertiesOnlineTravelAgencies.map((val,i)=>{
+                        return(
+                            <Nav.Link key={i} href={`${property}`} style={{ fontSize: "12px",marginTop:"5px" }}>{val.onlineTravelAgencyName}</Nav.Link>
+                        )
+                    })}
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+        <Container>
       <Table bordered className={styles.container}>
         <thead className={styles.heading}>
           <tr className={styles.heading}>
@@ -36,12 +53,12 @@ function Property({ oldProperties, property }) {
                   style={shopModal ? { display: "block" } : { display: "none" }}
                 >
                   <Link href={`${property}`}>
-                    <li>All</li>
+                    <li onClick={()=>setDropDownValue("All")}>All</li>
                   </Link>
                   {oldProperties.roomDtos.map((val, i) => {
                     return (
                       <Link key={i} href={`${property}`}>
-                        <li>{val.name}</li>
+                        <li onClick={()=>setDropDownValue(val.name)}>{val.name}</li>
                       </Link>
                     );
                   })}
@@ -109,6 +126,7 @@ function Property({ oldProperties, property }) {
         </tbody>
       </Table>
     </Container>
+    </div>
   );
 }
 
