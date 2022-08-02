@@ -310,6 +310,12 @@
     align-items: center;
   }
 
+  .roomsRatesButtonsColLeft:hover{
+    background-color: #136794;
+    color: #ddd;
+    border-radius: 5px;
+  }
+
   .roomsRatesButtonsColLeft > .roomsRatesButtonsColLeftIcon{
     padding: 0 1vh;
     display: flex;
@@ -320,7 +326,14 @@
     flex: 1;
     padding: 0.5vh 1vh;
     display: flex;
+    justify-content: center;
     align-items: center;
+  }
+
+  .roomsRatesButtonsColRight:hover{
+    background-color: #136794;
+    color: #ddd;
+    border-radius: 5px;
   }
 
   .channelsViewText{
