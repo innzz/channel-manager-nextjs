@@ -1,6 +1,7 @@
 
 .table{
     padding: 20px 40px;
+    overflow: hidden;
   }
   
   .topBarButtons::before{
@@ -21,6 +22,10 @@
     justify-content: flex-end;
   }
   
+  .buttonsWrapper{
+    display: flex;
+  }
+
   .buttonsWrapper > button {
     margin: 0 20px;
   }
@@ -236,4 +241,26 @@
   .rightSection > .data{
     justify-content: space-between;
     margin: 0;
+  }
+
+  .saveBtn {
+    background-color: #136794;
+    color: #fff;
+    padding: 0.5vh 1.3vh;
+    border-radius: 1vh;
+    border: 1px solid #136794;
+  }
+
+  .bulkUpdateBtn{
+    background-color: #136794;
+    color: #fff;
+    padding: 0.5vh 1.3vh;
+    border-radius: 1vh;
+    border: 1px solid #136794;
+  }
+
+  .resetLink{
+    display: flex;
+    align-items:center;
+    color: #2494d1;
   }
