@@ -11,13 +11,24 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
 import { useState } from "react";
+import { display } from "@mui/system";
 
 export default function Home() {
   const [shopModal, setshopModal] = useState(false);
+  const [roomType, setRoomType] = useState(false);
+  const [ratePlans, setRatePlans] = useState(false);
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
-  console.log(styles);
+
+  const handleRoomTypesDrop = () => {
+    setRoomType(!roomType);
+  };
+
+  const handleRateDrop = () => {
+    setRatePlans(!ratePlans);
+  };
+  // console.log(styles);
   return (
     <div className={styles.container}>
       <div className={styles.table}>
@@ -41,19 +52,13 @@ export default function Home() {
                     }
                   >
                     <li>
-                      <button value={"All"} type="button">
-                        Siteminder
-                      </button>
+                      <button type="button">Siteminder</button>
                     </li>
                     <li>
-                      <button value={"All"} type="button">
-                        OYO
-                      </button>
+                      <button type="button">OYO</button>
                     </li>
                     <li>
-                      <button value={"All"} type="button">
-                        AirBnb
-                      </button>
+                      <button type="button">AirBnb</button>
                     </li>
                   </div>
                 ) : (
@@ -175,7 +180,7 @@ export default function Home() {
                   />
                 </span>
               </button>
-              <button className={styles.button}>
+              <button onClick={handleRoomTypesDrop} className={styles.button}>
                 <FaBed
                   style={{ marginRight: "8px", marginBottom: "2px" }}
                   size={15}
@@ -185,8 +190,18 @@ export default function Home() {
                   size={22}
                   style={{ marginLeft: "2px", marginBottom: "2px" }}
                 />
+                <div
+                  className={styles.roomTypeDrop}
+                  onMouseLeave={handleRoomTypesDrop}
+                  style={roomType ? { display: "block" } : { display: "none" }}
+                >
+                  <li>Classic Room</li>
+                  <li>Deluxe Room</li>
+                  <li>Twin Room</li>
+                  <li>Supreme Room</li>
+                </div>
               </button>
-              <button className={styles.button}>
+              <button className={styles.button} onClick={handleRateDrop}>
                 <BsFillTagFill
                   style={{ marginRight: "8px", marginBottom: "2px" }}
                 />
@@ -195,6 +210,15 @@ export default function Home() {
                   size={22}
                   style={{ marginLeft: "2px", marginBottom: "4px" }}
                 />
+                <div
+                  className={styles.ratePlanDrop}
+                  onMouseLeave={handleRateDrop}
+                  style={ratePlans ? { display: "block" } : { display: "none" }}
+                >
+                  <li>Bar</li>
+                  <li>Honeymoon</li>
+                  <li>Bed & Breakfast</li>
+                </div>
               </button>
               <div className={styles.inputItem}>
                 <span>

@@ -244,18 +244,18 @@
 }
 
 .saveBtn {
-  background-color: #136794;
+  background-color: #5cb85c;
   color: #fff;
   padding: 0.5vh 1.3vh;
-  border-radius: 1vh;
-  border: 1px solid #136794;
+  border-radius: 0.5vh;
+  border: 1px solid #5cb85c;
 }
 
 .bulkUpdateBtn {
   background-color: #136794;
   color: #fff;
   padding: 0.5vh 1.3vh;
-  border-radius: 1vh;
+  border-radius: 0.5vh;
   border: 1px solid #136794;
 }
 
@@ -270,7 +270,7 @@
   background-color: #136794;
   color: #fff;
   padding: 0.5vh 4vh;
-  border-radius: 1vh;
+  border-radius: 0.5vh;
   border: 1px solid #136794;
 }
 .channelManagerFont {
@@ -304,6 +304,64 @@
 }
 
 .shopModal > li > button:hover {
+  background-color: #136794;
+  color: white;
+}
+
+.roomTypeDrop {
+  display: block;
+  position: absolute;
+  top: 20vh;
+  padding: 10px 0;
+  left: 20vh;
+  background-color: rgb(255, 255, 255);
+  color: black;
+  list-style: none;
+  width: 20vh;
+  z-index: 20;
+  /* border-radius: 0.5vh; */
+  border: 1px solid rgb(206, 206, 206);
+}
+
+.roomTypeDrop > li {
+  padding: 8px 8px;
+  margin: 3px 6px;
+  /* border-radius: 6px; */
+  width: 90%;
+  border: none;
+  background-color: white;
+}
+
+.roomTypeDrop > li:hover {
+  background-color: #136794;
+  color: white;
+}
+
+.ratePlanDrop {
+  display: block;
+  position: absolute;
+  top: 20vh;
+  padding: 10px 0;
+  left: 36vh;
+  background-color: rgb(255, 255, 255);
+  color: black;
+  list-style: none;
+  width: 20vh;
+  z-index: 20;
+  /* border-radius: 0.5vh; */
+  border: 1px solid rgb(206, 206, 206);
+}
+
+.ratePlanDrop > li {
+  padding: 8px 8px;
+  margin: 3px 6px;
+  /* border-radius: 6px; */
+  width: 90%;
+  border: none;
+  background-color: white;
+}
+
+.ratePlanDrop > li:hover {
   background-color: #136794;
   color: white;
 }
