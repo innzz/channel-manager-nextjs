@@ -283,6 +283,10 @@
   color: #2494d1;
 }
 
+.allRatesDropdownBtn{
+  box-shadow: 0px 8px 10px #656a6c;
+}
+
 .allRatesDropdownBtn > h6 {
   margin: 0;
 }
