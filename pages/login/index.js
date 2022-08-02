@@ -1,25 +1,42 @@
 import React from "react";
-import styles from "../styles/Login.module.css";
+import styles from "../../styles/Login.module.css";
 // import Link from "next/link";
 import { Alert, Form } from "react-bootstrap";
 import { useRouter } from 'next/router'
 import { useState } from "react";
 // import { Button, CardContent, Card, Grid } from "@mui/material";
 const Login = () => {
+    
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [alert, setAlert] = useState(false);
     const router = useRouter()
     const signIn = (e) => {
         e.preventDefault()
-        if (email === "bookone@gmail.com" && password == "bookone") {
-            return (
-                router.push("property/237")
-            )
-        }
-        else {
-            setAlert(true)
-        }
+        fetch(
+            "https://api.bookonelocal.in/api-bookone/api/user/login",
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1OTQzMzg0NywiZXhwIjoxNjU5ODY1ODQ3fQ.JCOTqDvv76JmeSMBGObKfHOA3NeRGtum2ESXpgUfSHU",
+                "Content-Type": "application/json",
+                APP_ID: "BOOKONE_WEB_APP",
+              },
+              body:JSON.stringify({
+                "password": password,
+                "username": email
+              })
+            })
+            .then(res=>res.json())
+            .then((resJson)=>{
+                if(resJson.token){
+                    router.push(`property/${resJson.property.id}`)
+                }else{
+                     setAlert(true)
+                }
+            }) 
     }
     return (
         <div className={styles.bgimage}>
@@ -78,26 +95,3 @@ const Login = () => {
 
 export default Login;
 
-{
-    /* <div className={styles.bgimage}>
-    <div className={styles.cardContainer}>
-      <div className={styles.imageContainer}>
-        {/* <img
-                className={styles.image}
-                src="https://app.bookonelocal.in/assets/images/sortlogo/Logo_Bookone.png"
-                alt=""
-              /> */
-}
-// </div>
-//     <div className={styles.card}>
-//       <div className={styles.leftContainer}>
-//         <h2>Logo</h2>
-//         <div>
-//           <h3>Google</h3>
-//           <h4>Apple</h4>
-//         </div>
-//       </div>
-//       <div className={styles.rightContainer}>All Data</div>
-//     </div>
-//   </div>
-// </div>; */}
