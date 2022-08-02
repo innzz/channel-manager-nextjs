@@ -1,0 +1,239 @@
+
+.table{
+    padding: 20px 40px;
+  }
+  
+  .topBarButtons::before{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: 0;
+    border-bottom: 1px solid #E2E2E2;
+    z-index: -1;
+  }
+  
+  .topBarButtons{
+    position: relative;
+    display: flex;
+    padding: 10px 0;
+    justify-content: flex-end;
+  }
+  
+  .buttonsWrapper > button {
+    margin: 0 20px;
+  }
+  
+  .topBar::before{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: 0;
+    border-top: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    z-index: -1;
+    box-shadow: 0px 1px 5px rgb(171, 170, 170);
+  }
+  
+  .topBar{
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+  }
+  
+  
+  .dateSection{
+    margin: 0;
+  }
+  
+  .dates{
+    flex: 6.8;
+    border-top: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    padding: 0;
+  }
+  
+  .dateCards{
+    margin: 0;
+  }
+  
+  .dateSelector{
+    display: flex;
+    justify-content: flex-end;
+    flex: 5.2;
+    border-right: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    align-items: center;
+    font-size: 20px;
+    color: #2494d1;
+    font-weight: 600;
+  }
+  
+  .dateSelector>span{
+    display: flex;
+    align-items: center;
+  }
+  
+  .dateCard {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0;
+    line-height: 18px;
+    padding: 5px 0;
+    border-right: 1px solid #E2E2E2;
+  }
+  
+  .dateCard > span {
+    font-size: 12px;
+  }
+  
+  .dateCard > .boldDateText{
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .buttonGroup {
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .button {
+    border: none;
+    padding: 0px 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+  .button:hover {
+    background-color: #E2E2E2;
+  }
+  .buttons{
+    flex: 9;
+    display: flex;
+  }
+  
+  .buttonHover{
+    background-color: #2494d1; 
+    color: #fff; 
+    border: '2px solid #2085bb';
+  }
+  .buttonHover:hover{
+    background-color: #136794;
+  }
+  .buttons > .inputItem{
+    border-bottom: 0;
+    border-left: 0;
+    display: flex;
+    margin: 0 10px;
+    padding: 0;
+    border-radius: 6px;
+  }
+  .buttons > .inputItem > span {
+    background-color: #E2E2E2;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    margin-left: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  .buttons > .inputItem > input {
+    border: 1px solid #ddd;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding-left: 10px;
+  }
+  .buttons > span {
+    display: flex;
+    align-items: center;
+    color: #2494d1;
+  }
+  .buttons > .button {
+    margin-right: 15px;
+  }
+  .rightlinkText{
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .rightlinkText > .linkText:hover{
+    color: #136794;
+    text-decoration: underline;
+  }
+  .rightlinkText > .linkText{
+    cursor: pointer;
+    color: #2494d1;
+    font-size: 14px;
+  }
+  .inputItem {
+    padding: 0 10px;
+  }
+  
+  .item{
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+  }
+  .heading{
+    margin: 0 0;
+    background-color: #E2E2E2;
+  }
+  .content{
+    margin: 0 0;
+  }
+  .col{
+    text-align: center;
+    padding: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  .Icon{
+    flex: 0.2;
+    padding-right: 0;
+  }
+  .leftSection{
+    display: flex;
+    justify-content: space-between;
+    flex: 4;
+    padding-right: 0;
+    padding-left: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  .leftSectionTop{
+    display: flex;
+    justify-content: space-between;
+    flex: 3;
+    padding-right: 0;
+    padding-left: 0;
+    padding: 6px 0;
+    border-right: 0px solid #ddd;
+  }
+  .midSection{
+    flex: 1;
+    margin-left: 10px;
+    padding-right: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  .midSectionTop{
+    flex: 2;
+    margin-left: 10px;
+    padding-top: 50;
+  display: flex;
+    padding-right: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  
+  .rightSection{
+    flex: 6.8;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .rightSection > .data{
+    justify-content: space-between;
+    margin: 0;
+  }
