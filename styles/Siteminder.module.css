@@ -1,309 +1,328 @@
-.table {
+
+
+.table{
   padding: 20px 40px;
   overflow: hidden;
-}
+  height: 100vh;
+  }
+  
+  .topBarButtons::before{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: 0;
+    background-color: #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    z-index: -1;
+    border-top: 1px solid #E2E2E2;
+  }
+  
+  .topBarButtons{
+    position: relative;
+    display: flex;
+    padding: 10px 0;
+    justify-content: flex-end;
+  }
+  
+  .buttonsWrapper{
+    display: flex;
+  }
 
-.topBarButtons::before {
-  position: absolute;
-  content: "";
-  top: 0;
-  left: -100px;
-  right: -100px;
-  bottom: 0;
-  border-bottom: 1px solid #e2e2e2;
-  z-index: -1;
-}
+  .buttonsWrapper > button {
+    margin: 0 20px;
+  }
+  
+  .topBar::before{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: 0;
+    border-top: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    z-index: -1;
+    box-shadow: 0px 1px 5px rgb(171, 170, 170);
+  }
+  
+  .topBar{
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+  }
+  
+  
+  .dateSection{
+    margin: 0;
+  }
+  
+  .dates{
+    flex: 6.8;
+    border-top: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    padding: 0;
+  }
+  
+  .dateCards{
+    margin: 0;
+  }
+  
+  .dateSelector{
+    display: flex;
+    justify-content: flex-end;
+    flex: 5.2;
+    border-right: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;
+    align-items: center;
+    font-size: 20px;
+    color: #2494d1;
+    font-weight: 600;
+  }
+  
+  .dateSelector>span{
+    display: flex;
+    align-items: center;
+  }
+  
+  .dateCard {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0;
+    line-height: 18px;
+    padding: 5px 0;
+    border-right: 1px solid #E2E2E2;
+  }
+  
+  .dateCard > span {
+    font-size: 12px;
+  }
+  
+  .dateCard > .boldDateText{
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .buttonGroup {
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .button {
+    border: none;
+    padding: 0px 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    position: relative;
+  }
+  
+  .allRatesDropdownBtn{
+    position: absolute;
+    background-color: #fff;
+    color: black;
+    font-size: small;
+    top: 30px;
+    width: 16vw;
+    padding: 1vh 1vh;
+  }
 
-.topBarButtons {
-  position: relative;
+  .allRatesDropdownBtn > h6 {
+    text-align: left;
+  }
+  
+  .button:hover {
+    position: relative;
+    background-color: #E2E2E2;
+  }
+  .buttons{
+    flex: 9;
+    display: flex;
+  }
+  
+  .buttonHover{
+    background-color: #2494d1; 
+    color: #fff; 
+    border: '2px solid #2085bb';
+  }
+  .buttonHover:hover{
+    background-color: #136794;
+  }
+  .buttons > .inputItem{
+    border-bottom: 0;
+    border-left: 0;
+    display: flex;
+    margin: 0 10px;
+    padding: 0;
+    border-radius: 6px;
+  }
+  .buttons > .inputItem > span {
+    background-color: #E2E2E2;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    margin-left: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  .buttons > .inputItem > input {
+    border: 1px solid #ddd;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding-left: 10px;
+  }
+  .buttons > span {
+    display: flex;
+    align-items: center;
+    color: #2494d1;
+  }
+  .buttons > .button {
+    margin-right: 15px;
+  }
+  .rightlinkText{
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .rightlinkText > .linkText:hover{
+    color: #136794;
+    text-decoration: underline;
+  }
+  .rightlinkText > .linkText{
+    cursor: pointer;
+    color: #2494d1;
+    font-size: 14px;
+  }
+  .inputItem {
+    padding: 0 10px;
+  }
+  
+  .item{
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+  }
+  .heading{
+    margin: 0 0;
+    background-color: #E2E2E2;
+  }
+  .content{
+    margin: 0 0;
+  }
+  .col{
+    text-align: center;
+    padding: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  .Icon{
+    flex: 0.2;
+    padding-right: 0;
+  }
+  .leftSection{
+    display: flex;
+    justify-content: space-between;
+    flex: 4;
+    padding-right: 0;
+    padding-left: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  .leftSectionTop{
+    display: flex;
+    justify-content: space-between;
+    flex: 3;
+    padding-right: 0;
+    padding-left: 0;
+    padding: 6px 0;
+    border-right: 0px solid #ddd;
+  }
+  .midSection{
+    flex: 1;
+    margin-left: 10px;
+    padding-right: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  .midSectionTop{
+    flex: 2;
+    margin-left: 10px;
+    padding-top: 50;
   display: flex;
-  padding: 10px 0;
-  justify-content: space-between;
-  /* align-items: center; */
-  text-align: center;
-}
+    padding-right: 0;
+    padding: 6px 0;
+    border-right: 1px solid #ddd;
+  }
+  
+  .rightSection{
+    flex: 6.8;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .rightSection > .data{
+    justify-content: space-between;
+    margin: 0;
+  }
 
-.buttonsWrapper {
-  display: flex;
-}
+  .saveBtn {
+    background-color: #136794;
+    color: #fff;
+    padding: 0.5vh 1.3vh;
+    border-radius: 1vh;
+    border: 1px solid #136794;
+  }
 
-.buttonsWrapper > button {
-  margin: 0 20px;
-}
+  .bulkUpdateBtn{
+    background-color: #136794;
+    color: #fff;
+    padding: 0.5vh 1.3vh;
+    border-radius: 1vh;
+    border: 1px solid #136794;
+  }
 
-.topBar::before {
-  position: absolute;
-  content: "";
-  top: 0;
-  left: -100px;
-  right: -100px;
-  bottom: 0;
-  border-top: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
-  z-index: -1;
-  box-shadow: 0px 1px 5px rgb(171, 170, 170);
-}
+  .resetLink{
+    display: flex;
+    align-items:center;
+    color: #2494d1;
+  }
 
-.topBar {
-  position: relative;
-  background-color: rgb(255, 255, 255);
-  z-index: 1;
-}
+  .allRatesDropdownBtn > h6 {
+    margin: 0;
+  }
 
-.dateSection {
-  margin: 0;
-}
+  .roomsRatesButtons{
+    padding: 2vh 0;
+    border-bottom: 1px solid rgb(185, 185, 185);
+  }
+  .channelViewButtons{
+    padding: 2vh 0;
+  }
 
-.dates {
-  flex: 6.8;
-  border-top: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
-  padding: 0;
-}
+  .roomsRatesButtonsRow{
+    margin: 0;
+    padding: 0.5vh 0;
+  }
 
-.dateCards {
-  margin: 0;
-}
+  .roomsRatesButtonsColLeft{
+    flex: 11;
+    padding: 0.5vh 1vh;
+    display: flex;
+    align-items: center;
+  }
 
-.dateSelector {
-  display: flex;
-  justify-content: flex-end;
-  flex: 5.2;
-  border-right: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
-  align-items: center;
-  font-size: 20px;
-  color: #2494d1;
-  font-weight: 600;
-}
+  .roomsRatesButtonsColLeft > .roomsRatesButtonsColLeftIcon{
+    padding: 0 1vh;
+    display: flex;
+    align-items:center ;
+  }
 
-.dateSelector > span {
-  display: flex;
-  align-items: center;
-}
+  .roomsRatesButtonsColRight{
+    flex: 1;
+    padding: 0.5vh 1vh;
+    display: flex;
+    align-items: center;
+  }
 
-.dateCard {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  padding: 0;
-  line-height: 18px;
-  padding: 5px 0;
-  border-right: 1px solid #e2e2e2;
-}
-
-.dateCard > span {
-  font-size: 12px;
-}
-
-.dateCard > .boldDateText {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.buttonGroup {
-  margin: 20px 0;
-  font-size: 13px;
-}
-.button {
-  border: none;
-  padding: 0px 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-.button:hover {
-  background-color: #e2e2e2;
-}
-.buttons {
-  flex: 9;
-  display: flex;
-}
-
-.buttonHover {
-  background-color: #2494d1;
-  color: #fff;
-  border: "2px solid #2085bb";
-}
-.buttonHover:hover {
-  background-color: #136794;
-}
-.buttons > .inputItem {
-  border-bottom: 0;
-  border-left: 0;
-  display: flex;
-  margin: 0 10px;
-  padding: 0;
-  border-radius: 6px;
-}
-.buttons > .inputItem > span {
-  background-color: #e2e2e2;
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  margin-left: 0;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-}
-.buttons > .inputItem > input {
-  border: 1px solid #ddd;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  padding-left: 10px;
-}
-.buttons > span {
-  display: flex;
-  align-items: center;
-  color: #2494d1;
-}
-.buttons > .button {
-  margin-right: 15px;
-}
-.rightlinkText {
-  flex: 2;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.rightlinkText > .linkText:hover {
-  color: #136794;
-  text-decoration: underline;
-}
-.rightlinkText > .linkText {
-  cursor: pointer;
-  color: #2494d1;
-  font-size: 14px;
-}
-.inputItem {
-  padding: 0 10px;
-}
-
-.item {
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-}
-.heading {
-  margin: 0 0;
-  background-color: #e2e2e2;
-}
-.content {
-  margin: 0 0;
-}
-.col {
-  text-align: center;
-  padding: 0;
-  padding: 6px 0;
-  border-right: 1px solid #ddd;
-}
-.Icon {
-  flex: 0.2;
-  padding-right: 0;
-}
-.leftSection {
-  display: flex;
-  justify-content: space-between;
-  flex: 4;
-  padding-right: 0;
-  padding-left: 0;
-  padding: 6px 0;
-  border-right: 1px solid #ddd;
-}
-.leftSectionTop {
-  display: flex;
-  justify-content: space-between;
-  flex: 3;
-  padding-right: 0;
-  padding-left: 0;
-  padding: 6px 0;
-  border-right: 0px solid #ddd;
-}
-.midSection {
-  flex: 1;
-  margin-left: 10px;
-  padding-right: 0;
-  padding: 6px 0;
-  border-right: 1px solid #ddd;
-}
-.midSectionTop {
-  flex: 2;
-  margin-left: 10px;
-  padding-top: 50;
-  display: flex;
-  padding-right: 0;
-  padding: 6px 0;
-  border-right: 1px solid #ddd;
-}
-
-.rightSection {
-  flex: 6.8;
-  padding-left: 0;
-  padding-right: 0;
-}
-.rightSection > .data {
-  justify-content: space-between;
-  margin: 0;
-}
-
-.saveBtn {
-  background-color: #136794;
-  color: #fff;
-  padding: 0.5vh 1.3vh;
-  border-radius: 1vh;
-  border: 1px solid #136794;
-}
-
-.bulkUpdateBtn {
-  background-color: #136794;
-  color: #fff;
-  padding: 0.5vh 1.3vh;
-  border-radius: 1vh;
-  border: 1px solid #136794;
-}
-
-.resetLink {
-  display: flex;
-  align-items: center;
-  color: #2494d1;
-}
-
-.channelSelectionBtn {
-  margin-left: 1vh;
-  background-color: #136794;
-  color: #fff;
-  padding: 0.5vh 4vh;
-  border-radius: 1vh;
-  border: 1px solid #136794;
-}
-.channelManagerFont {
-  font-weight: 500;
-  font-size: 2vh;
-}
-
-.shopModal {
-  display: block;
-  position: absolute;
-  top: 5vh;
-  padding: 10px 0;
-  left: 8vh;
-  background-color: rgb(255, 255, 255);
-  color: black;
-  list-style: none;
-  width: 340px;
-  z-index: 20;
-  border-radius: 10px;
-  border: 1px solid rgb(206, 206, 206);
-}
-
-.shopModal > li > button {
-  padding: 8px 8px;
-  margin: 3px 6px;
-  border-radius: 6px;
-  width: 90%;
-  border: none;
-  background-color: white;
-  /* background-color: rgb(51, 163, 233); */
-}
-
-.shopModal > li > button:hover {
-  background-color: #136794;
-  color: white;
-}
+  .channelsViewText{
+    padding-top: 2vh;
+  }
