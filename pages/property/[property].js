@@ -8,6 +8,7 @@ import Link from "next/link";
 
 import { useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
+
 function Property({ oldProperties, property }) {
   // console.log(oldProperties);
   // console.log(property)
@@ -103,6 +104,7 @@ function Property({ oldProperties, property }) {
               <td>
                 <button onClick={handleShopModal} className={styles.button}>
                   All Room Types <AiFillCaretDown />
+                  {shopModal? 
                   <div
                     onMouseLeave={handleShopModal}
                     className={styles.shopModal}
@@ -117,8 +119,8 @@ function Property({ oldProperties, property }) {
                     </li>
                     {allNames.map((val, i) => {
                       return (
-                        <>
-                          <li>
+                        // <div key={i}>
+                          <li key={i}>
                             <button
                               value={val.name}
                               type="button"
@@ -127,10 +129,10 @@ function Property({ oldProperties, property }) {
                               {val.name}
                             </button>
                           </li>
-                        </>
+                        // </div>
                       );
                     })}
-                  </div>
+                  </div>:''}
                 </button>
               </td>
               <td>
@@ -155,42 +157,6 @@ function Property({ oldProperties, property }) {
                 </tr>
               );
             })}
-            {/* <tr>
-                        <td rowSpan={3}>
-                            Double Room
-                        </td>
-                        <td className={styles.td}>
-                            BAR
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={styles.td}>
-                            Bed & Breakfast
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={styles.td}>
-                            Weekend Special Deal
-                        </td>
-                    </tr>
-                    <tr>
-                        <td rowSpan={3}>
-                            Twin Room
-                        </td>
-                        <td className={styles.td}>
-                            BAR
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={styles.td}>
-                            Stay 3 Pay 2
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={styles.td}>
-                            Honeymoon
-                        </td>
-                    </tr> */}
           </tbody>
         </Table>
       </Container>

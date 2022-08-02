@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import React from "react";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Link from 'next/link';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import styles from "../styles/Navbar.module.css";
@@ -12,9 +13,9 @@ function NavBar() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link href="/property/237" style={{ fontSize: "12px",marginTop:"5px" }}>AGODA</Nav.Link>
-                    <Nav.Link href="/property/495" style={{ fontSize: "12px",marginTop:"5px" }}>BOOKING.COM</Nav.Link>
-                    <Nav.Link href="/property/368" style={{ fontSize: "12px",marginTop:"5px" }}>EXPEDIA</Nav.Link>
+                    <Link href="/property/237" >AGODA</Link>
+                    <Link href="/property/495" >BOOKING.COM</Link>
+                    <Link href="/property/368" >EXPEDIA</Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
