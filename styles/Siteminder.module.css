@@ -1,7 +1,9 @@
 
+
 .table{
-    padding: 20px 40px;
-    overflow: hidden;
+  padding: 20px 40px;
+  overflow: hidden;
+  height: 100vh;
   }
   
   .topBarButtons::before{
@@ -11,8 +13,10 @@
     left: -100px;
     right: -100px;
     bottom: 0;
+    background-color: #E2E2E2;
     border-bottom: 1px solid #E2E2E2;
     z-index: -1;
+    border-top: 1px solid #E2E2E2;
   }
   
   .topBarButtons{
@@ -111,8 +115,25 @@
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 6px;
+    position: relative;
   }
+  
+  .allRatesDropdownBtn{
+    position: absolute;
+    background-color: #fff;
+    color: black;
+    font-size: small;
+    top: 30px;
+    width: 16vw;
+    padding: 1vh 1vh;
+  }
+
+  .allRatesDropdownBtn > h6 {
+    text-align: left;
+  }
+  
   .button:hover {
+    position: relative;
     background-color: #E2E2E2;
   }
   .buttons{
@@ -263,4 +284,45 @@
     display: flex;
     align-items:center;
     color: #2494d1;
+  }
+
+  .allRatesDropdownBtn > h6 {
+    margin: 0;
+  }
+
+  .roomsRatesButtons{
+    padding: 2vh 0;
+    border-bottom: 1px solid rgb(185, 185, 185);
+  }
+  .channelViewButtons{
+    padding: 2vh 0;
+  }
+
+  .roomsRatesButtonsRow{
+    margin: 0;
+    padding: 0.5vh 0;
+  }
+
+  .roomsRatesButtonsColLeft{
+    flex: 11;
+    padding: 0.5vh 1vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .roomsRatesButtonsColLeft > .roomsRatesButtonsColLeftIcon{
+    padding: 0 1vh;
+    display: flex;
+    align-items:center ;
+  }
+
+  .roomsRatesButtonsColRight{
+    flex: 1;
+    padding: 0.5vh 1vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .channelsViewText{
+    padding-top: 2vh;
   }

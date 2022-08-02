@@ -4,15 +4,20 @@ import { Row,Col } from 'react-bootstrap';
 import {FaBed} from 'react-icons/fa';
 import {AiFillThunderbolt} from 'react-icons/ai';
 import {MdOutlineArrowDropDown} from 'react-icons/md';
-import {BsFillTagFill} from 'react-icons/bs';
+import {BsFillTagFill,BsFillStarFill} from 'react-icons/bs';
 import {BiSearch} from 'react-icons/bi';
+import {TiTick} from 'react-icons/ti';
 import {GoTriangleRight} from 'react-icons/go';
 import {MdKeyboardArrowLeft,MdKeyboardArrowRight} from 'react-icons/md';
 import {AiOutlineDoubleRight,AiOutlineDoubleLeft} from 'react-icons/ai';
 import {GrRotateLeft} from 'react-icons/gr'
+import { useState } from 'react';
 
 export default function Home() {
-  console.log(styles);
+  const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] = useState(false);
+  const handleRatesAvailiblityDropDown = ()=>{
+    setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.table}>
@@ -191,7 +196,40 @@ export default function Home() {
       <div className={styles.buttonGroup}>
           <Row>
             <Col className={styles.buttons}>
-              <button className={`${styles.buttonHover} ${styles.button} `}>All Rates & Availablity<span><MdOutlineArrowDropDown size={22} style={{marginBottom: '2px'}}/></span></button>
+              <button onClick={handleRatesAvailiblityDropDown} className={`${styles.buttonHover} ${styles.button} `}>All Rates & Availablity<span><MdOutlineArrowDropDown size={22} style={{marginBottom: '2px'}}/></span>
+              {allRatesAvailiblityDropDown?<div className={styles.allRatesDropdownBtn}>
+                <h6>Room & Rates View</h6>
+                <div className={styles.roomsRatesButtons}>
+                  <Row className={styles.roomsRatesButtonsRow}>
+                    <Col className={styles.roomsRatesButtonsColLeft}><span className={styles.roomsRatesButtonsColLeftIcon}><TiTick size={20} /></span><span>ALL RATES & AVAILABLITY</span></Col>
+                    <Col className={styles.roomsRatesButtonsColRight}><BsFillStarFill /></Col>
+                  </Row>
+                  <Row className={styles.roomsRatesButtonsRow}>
+                    <Col className={styles.roomsRatesButtonsColLeft}><span className={styles.roomsRatesButtonsColLeftIcon}><TiTick size={20} /></span><span>ALL RATES & AVAILABLITY</span></Col>
+                    <Col className={styles.roomsRatesButtonsColRight}><BsFillStarFill /></Col>
+                  </Row>
+                  <Row className={styles.roomsRatesButtonsRow}>
+                    <Col className={styles.roomsRatesButtonsColLeft}><span className={styles.roomsRatesButtonsColLeftIcon}><TiTick size={20} /></span><span>ALL RATES & AVAILABLITY</span></Col>
+                    <Col className={styles.roomsRatesButtonsColRight}><BsFillStarFill /></Col>
+                  </Row>
+                </div>
+                <h6 className={styles.channelsViewText}>Channels View</h6>
+                <div className={styles.channelViewButtons}>
+                  <Row className={styles.roomsRatesButtonsRow}>
+                    <Col className={styles.roomsRatesButtonsColLeft}><span className={styles.roomsRatesButtonsColLeftIcon}><TiTick size={20} color={'transparent'} /></span><span>ALL RATES & AVAILABLITY</span></Col>
+                    <Col className={styles.roomsRatesButtonsColRight}></Col>
+                  </Row>
+                  <Row className={styles.roomsRatesButtonsRow}>
+                    <Col className={styles.roomsRatesButtonsColLeft}><span className={styles.roomsRatesButtonsColLeftIcon}><TiTick size={20} color={'transparent'} /></span><span>ALL RATES & AVAILABLITY</span></Col>
+                    <Col className={styles.roomsRatesButtonsColRight}></Col>
+                  </Row>
+                  <Row className={styles.roomsRatesButtonsRow}>
+                    <Col className={styles.roomsRatesButtonsColLeft}><span className={styles.roomsRatesButtonsColLeftIcon}><TiTick size={20} color={'transparent'} /></span><span>ALL RATES & AVAILABLITY</span></Col>
+                    <Col className={styles.roomsRatesButtonsColRight}></Col>
+                  </Row>
+                </div>
+              </div>:''}
+              </button>
               <button className={styles.button}><FaBed style={{marginRight: '8px',marginBottom: '2px'}} size={15} />All Room Types<MdOutlineArrowDropDown size={22} style={{marginLeft: '2px',marginBottom: '2px'}}  /></button>
               <button className={styles.button}><BsFillTagFill style={{marginRight: '8px',marginBottom: '2px'}}/>All Rates Plans<MdOutlineArrowDropDown size={22}  style={{marginLeft: '2px',marginBottom: '4px'}} /></button>
               <div className={styles.inputItem}><span><BiSearch size={15} style={{marginBottom: '1px'}}/></span><input placeholder='Search room Rates'/></div>
