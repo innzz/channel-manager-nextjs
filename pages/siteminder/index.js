@@ -2,7 +2,7 @@ import styles from '../../styles/Siteminder.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row,Col } from 'react-bootstrap';
 import {FaBed} from 'react-icons/fa';
-import {AiFillThunderbolt} from 'react-icons/ai';
+import {AiFillThunderbolt,AiFillCaretDown} from 'react-icons/ai';
 import {MdOutlineArrowDropDown} from 'react-icons/md';
 import {BsFillTagFill,BsFillStarFill} from 'react-icons/bs';
 import {BiSearch} from 'react-icons/bi';
@@ -15,6 +15,21 @@ import { useState } from 'react';
 
 export default function Home() {
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] = useState(false);
+  const [shopModal, setshopModal] = useState(false);
+ const [roomType, setRoomType] = useState(false);
+ const [ratePlans, setRatePlans] = useState(false);
+  const handleShopModal = () => {
+  setshopModal(!shopModal);
+ };
+
+ const handleRoomTypesDrop = () => {
+  setRoomType(!roomType);
+ };
+
+ const handleRateDrop = () => {
+  setRatePlans(!ratePlans);
+ };
+
   const handleRatesAvailiblityDropDown = ()=>{
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
@@ -23,6 +38,38 @@ export default function Home() {
       <div className={styles.table}>
       <div className={styles.topBar}>
         <div className={styles.topBarButtons}>
+        <div className={styles.channelmanagerButton}>
+              <span className={styles.channelManagerFont}>
+                Channel Manager:
+              </span>
+              <button
+                onClick={handleShopModal}
+                className={styles.channelSelectionBtn}
+              >
+                Agoda <AiFillCaretDown />
+                {shopModal ? (
+                  <div
+                    onMouseLeave={handleShopModal}
+                    className={styles.shopModal}
+                    style={
+                      shopModal ? { display: "block" } : { display: "none" }
+                    }
+                  >
+                    <li>
+                      <button type="button">Siteminder</button>
+                    </li>
+                    <li>
+                      <button type="button">OYO</button>
+                    </li>
+                    <li>
+                      <button type="button">AirBnb</button>
+                    </li>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </button>
+            </div>
          <div className={styles.buttonsWrapper}>
           <button className={styles.bulkUpdateBtn}>Bulk Update</button>
           <span className={styles.resetLink}><GrRotateLeft/><span>Reset</span></span>
@@ -230,8 +277,46 @@ export default function Home() {
                 </div>
               </div>:''}
               </button>
-              <button className={styles.button}><FaBed style={{marginRight: '8px',marginBottom: '2px'}} size={15} />All Room Types<MdOutlineArrowDropDown size={22} style={{marginLeft: '2px',marginBottom: '2px'}}  /></button>
-              <button className={styles.button}><BsFillTagFill style={{marginRight: '8px',marginBottom: '2px'}}/>All Rates Plans<MdOutlineArrowDropDown size={22}  style={{marginLeft: '2px',marginBottom: '4px'}} /></button>
+              <button onClick={handleRoomTypesDrop} className={styles.button}>
+              <FaBed
+                style={{ marginRight: "8px", marginBottom: "2px" }}
+                size={15}
+              />
+              All Room Types
+              <MdOutlineArrowDropDown
+                size={22}
+                style={{ marginLeft: "2px", marginBottom: "2px" }}
+              />
+              <div
+                className={styles.roomTypeDrop}
+                onMouseLeave={handleRoomTypesDrop}
+                style={roomType ? { display: "block" } : { display: "none" }}
+              >
+                <li>Classic Room</li>
+                <li>Deluxe Room</li>
+                <li>Twin Room</li>
+                <li>Supreme Room</li>
+              </div>
+            </button>
+            <button className={styles.button} onClick={handleRateDrop}>
+              <BsFillTagFill
+                style={{ marginRight: "8px", marginBottom: "2px" }}
+              />
+              All Rates Plans
+              <MdOutlineArrowDropDown
+                size={22}
+                style={{ marginLeft: "2px", marginBottom: "4px" }}
+              />
+              <div
+                className={styles.ratePlanDrop}
+                onMouseLeave={handleRateDrop}
+                style={ratePlans ? { display: "block" } : { display: "none" }}
+              >
+                <li>Bar</li>
+                <li>Honeymoon</li>
+                <li>Bed & Breakfast</li>
+              </div>
+            </button>
               <div className={styles.inputItem}><span><BiSearch size={15} style={{marginBottom: '1px'}}/></span><input placeholder='Search room Rates'/></div>
               <span>Clear all filters</span>
             </Col>

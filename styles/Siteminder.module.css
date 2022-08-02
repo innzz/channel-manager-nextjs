@@ -23,7 +23,7 @@
     position: relative;
     display: flex;
     padding: 10px 0;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
   
   .buttonsWrapper{
@@ -338,4 +338,104 @@
 
   .channelsViewText{
     padding-top: 2vh;
+  }
+
+  .channelSelectionBtn {
+    margin-left: 1vh;
+    position: relative;
+    background-color: #136794;
+    color: #fff;
+    padding: 0.5vh 4vh;
+    border-radius: 0.5vh;
+    border: 1px solid #136794;
+  }
+  .channelManagerFont {
+    font-weight: 500;
+    font-size: 2vh;
+  }
+  
+  .shopModal {
+    display: block;
+    position: absolute;
+    top: 5vh;
+    padding: 10px 0;
+    left: 8vh;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    list-style: none;
+    width: 340px;
+    z-index: 20;
+    border-radius: 10px;
+    border: 1px solid rgb(206, 206, 206);
+  }
+  
+  .shopModal > li > button {
+    padding: 8px 8px;
+    margin: 3px 6px;
+    border-radius: 6px;
+    width: 90%;
+    border: none;
+    background-color: white;
+    /* background-color: rgb(51, 163, 233); */
+  }
+  
+  .shopModal > li > button:hover {
+    background-color: #136794;
+    color: white;
+  }
+
+  .roomTypeDrop {
+    display: block;
+    position: absolute;
+    top: 5vh;
+    padding: 10px 0;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    list-style: none;
+    width: 20vh;
+    z-index: 20;
+    /* border-radius: 0.5vh; */
+    border: 1px solid rgb(206, 206, 206);
+  }
+  
+  .roomTypeDrop > li {
+    padding: 8px 8px;
+    margin: 3px 6px;
+    /* border-radius: 6px; */
+    width: 90%;
+    border: none;
+    background-color: white;
+  }
+  
+  .roomTypeDrop > li:hover {
+    background-color: #136794;
+    color: white;
+  }
+
+  .ratePlanDrop {
+    display: block;
+    position: absolute;
+    top: 5vh;
+    padding: 10px 0;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    list-style: none;
+    width: 20vh;
+    z-index: 20;
+    /* border-radius: 0.5vh; */
+    border: 1px solid rgb(206, 206, 206);
+  }
+  
+  .ratePlanDrop > li {
+    padding: 8px 8px;
+    margin: 3px 6px;
+    /* border-radius: 6px; */
+    width: 90%;
+    border: none;
+    background-color: white;
+  }
+  
+  .ratePlanDrop > li:hover {
+    background-color: #136794;
+    color: white;
   }
