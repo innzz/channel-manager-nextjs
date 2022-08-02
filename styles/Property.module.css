@@ -43,9 +43,9 @@
 .shopModal {
   display: block;
   position: absolute;
-  top: 22vh;
+  top: 150px;
   padding: 10px 0;
-  left: 35vh;
+  left: 250px;
   background-color: rgb(255, 255, 255);
   color: black;
   list-style: none;
