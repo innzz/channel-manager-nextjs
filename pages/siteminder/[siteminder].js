@@ -270,10 +270,11 @@ export default function Home() {
                   onMouseLeave={handleRoomTypesDrop}
                   style={roomType ? { display: "block" } : { display: "none" }}
                 >
-                  <li>Classic Room</li>
-                  <li>Deluxe Room</li>
-                  <li>Twin Room</li>
-                  <li>Supreme Room</li>
+                  {roomDetails?.map((val, i)=>{
+                    return(
+                    <li key={i}>{val.name}</li>
+                    )
+                  })}
                 </div>
               </button>
               <button className={styles.button} onClick={handleRateDrop}>
