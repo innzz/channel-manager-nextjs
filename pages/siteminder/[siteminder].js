@@ -11,17 +11,49 @@ import { GoTriangleRight } from "react-icons/go";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router"
 
 export default function Home() {
+  let router = useRouter()
+
+  const { siteminder } = router.query;
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
     useState(false);
   const [shopModal, setshopModal] = useState(false);
+  const [showTravelAgencyName, setShowTravelAgencyName] = useState("")
   const [roomType, setRoomType] = useState(false);
   const [ratePlans, setRatePlans] = useState(false);
+  const [dropdownValue, setDropDownValue] = useState([])
+  const [roomDetails, setRoomDetails] = useState([])
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
+
+
+  useEffect(() => {
+
+    fetch(
+      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${siteminder}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+            "Content-Type": "application/json",
+            APP_ID: "BOOKONE_WEB_APP",
+          }
+        })
+        .then(res => res.json())
+        .then((resJson) => {
+          console.log(resJson)
+          setDropDownValue(resJson.propertiesOnlineTravelAgencies)
+          setShowTravelAgencyName(resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName)
+          setRoomDetails(resJson.roomDtos)
+      })
+  }
+    , []);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -47,7 +79,7 @@ export default function Home() {
                 onClick={handleShopModal}
                 className={styles.channelSelectionBtn}
               >
-                Agoda <AiFillCaretDown />
+                {dropdownValue.length !== 0 ? showTravelAgencyName : "onlineTravelAgencyName"} <AiFillCaretDown />
                 {shopModal ? (
                   <div
                     onMouseLeave={handleShopModal}
@@ -56,15 +88,13 @@ export default function Home() {
                       shopModal ? { display: "block" } : { display: "none" }
                     }
                   >
-                    <li>
-                      <button type="button">Siteminder</button>
-                    </li>
-                    <li>
-                      <button type="button">OYO</button>
-                    </li>
-                    <li>
-                      <button type="button">AirBnb</button>
-                    </li>
+                    {dropdownValue.map((val,i)=>{
+                      return(
+                        <li key={i}>
+                        <button type="button" onClick={()=>setShowTravelAgencyName(val.onlineTravelAgencyName)}>{val.onlineTravelAgencyName}</button>
+                      </li>
+                      )
+                    })}
                   </div>
                 ) : (
                   ""
@@ -99,41 +129,6 @@ export default function Home() {
             </Col>
             <Col className={styles.dates}>
               <Row className={styles.dateCards}>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
-                <Col className={styles.dateCard}>
-                  <span>Mon</span>
-                  <span className={styles.boldDateText}>03</span>
-                  <span>JUL</span>
-                </Col>
                 <Col className={styles.dateCard}>
                   <span>Mon</span>
                   <span className={styles.boldDateText}>03</span>
@@ -316,192 +311,61 @@ export default function Home() {
             </Col>
           </Row>
         </div>
-        <div className={styles.item}>
-          <Row className={styles.heading}>
-            <Col className={styles.Icon}>
-              <FaBed size={18} style={{ marginTop: "5px" }} />
-            </Col>
-            <Col className={styles.leftSection}>
-              <span>Deluxe View</span>
-              <AiFillThunderbolt
-                size={15}
-                style={{ marginTop: "5px", color: "#2494d1" }}
-              />
-            </Col>
-            <Col className={styles.midSection}>Avail</Col>
-            <Col className={styles.rightSection}>
-              <Row className={styles.data}>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-              </Row>
-            </Col>
-          </Row>
-          <Row className={styles.content}>
-            <Col className={styles.Icon}></Col>
-            <Col className={styles.leftSection}>
-              Rath Yatra Plan (Rath Yatra Special)
-              <AiFillThunderbolt
-                size={15}
-                style={{ marginTop: "5px", color: "#2494d1" }}
-              />
-            </Col>
-            <Col className={styles.midSection}>Avail</Col>
-            <Col className={styles.rightSection}>
-              <Row className={styles.data}>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-              </Row>
-            </Col>
-          </Row>
-        </div>
-        <div className={styles.item}>
-          <Row className={styles.heading}>
-            <Col className={styles.Icon}>
-              <FaBed size={18} style={{ marginTop: "5px" }} />
-            </Col>
-            <Col className={styles.leftSection}>
-              <span>Deluxe View</span>
-              <AiFillThunderbolt
-                size={15}
-                style={{ marginTop: "5px", color: "#2494d1" }}
-              />
-            </Col>
-            <Col className={styles.midSection}>Avail</Col>
-            <Col className={styles.rightSection}>
-              <Row className={styles.data}>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-              </Row>
-            </Col>
-          </Row>
-          <Row className={styles.content}>
-            <Col className={styles.Icon}></Col>
-            <Col className={styles.leftSection}>
-              Rath Yatra Plan (Rath Yatra Special)
-              <AiFillThunderbolt
-                size={15}
-                style={{ marginTop: "5px", color: "#2494d1" }}
-              />
-            </Col>
-            <Col className={styles.midSection}>Avail</Col>
-            <Col className={styles.rightSection}>
-              <Row className={styles.data}>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-              </Row>
-            </Col>
-          </Row>
-        </div>
-        <div className={styles.item}>
-          <Row className={styles.heading}>
-            <Col className={styles.Icon}>
-              <FaBed size={18} style={{ marginTop: "5px" }} />
-            </Col>
-            <Col className={styles.leftSection}>
-              <span>Deluxe View</span>
-              <AiFillThunderbolt
-                size={15}
-                style={{ marginTop: "5px", color: "#2494d1" }}
-              />
-            </Col>
-            <Col className={styles.midSection}>Avail</Col>
-            <Col className={styles.rightSection}>
-              <Row className={styles.data}>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-              </Row>
-            </Col>
-          </Row>
-          <Row className={styles.content}>
-            <Col className={styles.Icon}></Col>
-            <Col className={styles.leftSection}>
-              Rath Yatra Plan (Rath Yatra Special)
-              <AiFillThunderbolt
-                size={15}
-                style={{ marginTop: "5px", color: "#2494d1" }}
-              />
-            </Col>
-            <Col className={styles.midSection}>Avail</Col>
-            <Col className={styles.rightSection}>
-              <Row className={styles.data}>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-                <Col className={styles.col}>10</Col>
-              </Row>
-            </Col>
-          </Row>
-        </div>
+{roomDetails?.map((val,i)=>{
+  return(
+    <div key={i} className={styles.item}>
+        
+    <Row className={styles.heading}>
+      <Col className={styles.Icon}>
+        <FaBed size={18} style={{ marginTop: "5px" }} />
+      </Col>
+      <Col className={styles.leftSection}>
+        <span>{val.name}</span>
+        <AiFillThunderbolt
+          size={15}
+          style={{ marginTop: "5px", color: "#2494d1" }}
+        />
+      </Col>
+      <Col className={styles.midSection}>Avail</Col>
+      <Col className={styles.rightSection}>
+        <Row className={styles.data}>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+        </Row>
+      </Col>
+    </Row>
+    <Row className={styles.content}>
+      <Col className={styles.Icon}></Col>
+      <Col className={styles.leftSection}>
+        Rath Yatra Plan (Rath Yatra Special)
+        <AiFillThunderbolt
+          size={15}
+          style={{ marginTop: "5px", color: "#2494d1" }}
+        />
+      </Col>
+      <Col className={styles.midSection}>Avail</Col>
+      <Col className={styles.rightSection}>
+        <Row className={styles.data}>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+          <Col className={styles.col}>10</Col>
+        </Row>
+      </Col>
+    </Row>
+  </div>
+  )
+})}
+       
+   
       </div>
     </div>
   );
