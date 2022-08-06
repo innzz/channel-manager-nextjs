@@ -1,5 +1,10 @@
+.container{
+  background-color: #EAF5FF;
+}
+
 .table {
   padding: 20px 40px;
+  padding-top: 0;
   overflow: hidden;
   height: 100vh;
 }
@@ -11,10 +16,10 @@
   left: -100px;
   right: -100px;
   bottom: 0;
-  background-color: #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
+  background-color: #EAF5FF;
+  border-bottom: 1px solid #EAF5FF;
   z-index: -1;
-  border-top: 1px solid #e2e2e2;
+  border-top: 1px solid #EAF5FF;
 }
 
 .topBarButtons {
@@ -39,26 +44,28 @@
   left: -100px;
   right: -100px;
   bottom: 0;
-  border-top: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
+  border-top: 1px solid #CEE4F8;
+  border-bottom: 1px solid #CEE4F8;
   z-index: -1;
   box-shadow: 0px 1px 5px rgb(171, 170, 170);
+  background-color: #CEE4F8;
 }
 
 .topBar {
   position: relative;
-  background-color: rgb(255, 255, 255);
+  background-color: #CEE4F8;
   z-index: 1;
 }
 
 .dateSection {
   margin: 0;
+ 
 }
 
 .dates {
   flex: 6.8;
-  border-top: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
+  border-top: 1px solid #CEE4F8;
+  border-bottom: 1px solid #CEE4F8;
   padding: 0;
 }
 
@@ -70,8 +77,8 @@
   display: flex;
   justify-content: flex-end;
   flex: 5.2;
-  border-right: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
+  border-right: 1px solid #EAF5FF;
+  border-bottom: 1px solid #CEE4F8;
   align-items: center;
   font-size: 20px;
   color: #2494d1;
@@ -90,7 +97,7 @@
   padding: 0;
   line-height: 18px;
   padding: 5px 0;
-  border-right: 1px solid #e2e2e2;
+  border-right: 1px solid #EAF5FF;
 }
 
 .dateCard > span {
@@ -109,8 +116,8 @@
 .button {
   border: none;
   padding: 0px 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #B4D6F4;
+  border: 1px solid #B4D6F4;
   border-radius: 6px;
   position: relative;
 }
@@ -131,7 +138,7 @@
 
 .button:hover {
   position: relative;
-  background-color: #e2e2e2;
+  background-color: rgb(149, 193, 235);
 }
 .buttons {
   flex: 9;
@@ -155,9 +162,9 @@
   border-radius: 6px;
 }
 .buttons > .inputItem > span {
-  background-color: #e2e2e2;
+  background-color: #AFD8FE;
   padding: 5px 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #AFD8FE;
   margin-left: 0;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -201,7 +208,7 @@
 }
 .heading {
   margin: 0 0;
-  background-color: #e2e2e2;
+  background-color: #AFD8FE;
 }
 .content {
   margin: 0 0;
@@ -261,26 +268,47 @@
   margin: 0;
 }
 
-.saveBtn {
-  background-color: #136794;
-  color: #fff;
-  padding: 0.5vh 1.3vh;
-  border-radius: 1vh;
-  border: 1px solid #136794;
+.saveBtn > span {
+  padding: 0 1vh;
 }
 
-.bulkUpdateBtn {
-  background-color: #136794;
+.saveBtn {
+  background-color: #22817B;
   color: #fff;
-  padding: 0.5vh 1.3vh;
+  padding: 0.5vh 3vh;
   border-radius: 1vh;
-  border: 1px solid #136794;
+  border: 1px solid #22817B;
+  display: flex;
+  align-items: center;
+}
+
+
+.bulkUpdateBtn > span {
+  padding: 0 1vh;
+}
+.bulkUpdateBtn {
+  background-color: #00427D;
+  color: #fff;
+  padding: 0.5vh 3vh;
+  border-radius: 1vh;
+  border: 1px solid #00427D;
+  display: flex;
+  align-items: center;
+}
+
+.resetLink > span {
+  padding: 0 1vh;
 }
 
 .resetLink {
   display: flex;
   align-items: center;
-  color: #2494d1;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  border-radius: 1vh;
+  padding: 0.5vh 3vh;
+  background-color: #0061B9;
 }
 
 .allRatesDropdownBtn{
@@ -344,11 +372,11 @@
 .channelSelectionBtn {
   margin-left: 1vh;
   position: relative;
-  background-color: #136794;
+  background-color: #123452;
   color: #fff;
   padding: 0.5vh 4vh;
   border-radius: 0.5vh;
-  border: 1px solid #136794;
+  border: 1px solid #123452;
 }
 .channelManagerFont {
   font-weight: 500;

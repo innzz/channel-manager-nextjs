@@ -1,3 +1,31 @@
-.navBrand{
-    font-size: 20px;
+.navbarContainer{
+    display: flex;
+    background-color: #001D37;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    flex: 2;
+    justify-content: center;
+}
+
+.navItem{
+    display: flex;
+    align-items: center;
+    flex: 8;
+}
+
+.links > a {
+    color: #fff;
+    text-decoration: none;
+    padding: 1vh 2vh;
+}
+
+.profileButtonColumn{
+    display: flex;
+    flex: 2;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
 }

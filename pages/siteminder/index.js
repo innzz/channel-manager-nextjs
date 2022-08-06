@@ -1,17 +1,19 @@
 import styles from "../../styles/Siteminder.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Image from 'next/image';
 import { Row, Col } from "react-bootstrap";
-import { FaBed } from "react-icons/fa";
+import { FaBed, FaSave } from "react-icons/fa";
 import { AiFillThunderbolt, AiFillCaretDown } from "react-icons/ai";
-import { MdOutlineArrowDropDown } from "react-icons/md";
+import { MdOutlineArrowDropDown,MdSystemUpdateAlt } from "react-icons/md";
 import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { GoTriangleRight } from "react-icons/go";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
-import { GrRotateLeft } from "react-icons/gr";
+import { GrRotateLeft,GrDocumentUpdate } from "react-icons/gr";
 import { useState } from "react";
+import Navbar from "../../components/Navbar";
 
 export default function Home() {
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
@@ -35,6 +37,8 @@ export default function Home() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
   return (
+    <>
+    <Navbar />
     <div className={styles.container}>
       <div className={styles.table}>
         <div className={styles.topBar}>
@@ -72,12 +76,16 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.buttonsWrapper}>
-              <button className={styles.bulkUpdateBtn}>Bulk Update</button>
+              <button className={styles.bulkUpdateBtn}>
+              <MdSystemUpdateAlt />
+                <span>Bulk Update</span>
+                </button>
               <span className={styles.resetLink}>
                 <GrRotateLeft />
                 <span>Reset</span>
               </span>
-              <button className={styles.saveBtn}>Save</button>
+              <button className={styles.saveBtn}>
+              <FaSave /><span>Save</span></button>
             </div>
           </div>
           <Row className={styles.dateSection}>
@@ -504,5 +512,6 @@ export default function Home() {
         </div>
       </div>
     </div>
+    </>
   );
 }

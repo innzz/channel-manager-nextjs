@@ -1,7 +1,6 @@
 import '../styles/globals.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavBar from './navbar';
 
 import {SSRProvider} from '@react-aria/ssr'; 
 
