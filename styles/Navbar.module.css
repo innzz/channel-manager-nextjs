@@ -29,3 +29,60 @@
     justify-content: center;
     color: #fff;
 }
+.profileButton{
+    cursor: pointer;
+}
+
+.roomTypeDrop {
+    display: block;
+    position: absolute;
+    top: 5vh;
+    padding: 10px 0;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    list-style: none;
+    width: 27vh;
+    z-index: 20;
+    align-items: center;
+    align-content: center;
+    /* border-radius: 0.5vh; */
+    border: 1px solid rgb(206, 206, 206);
+  }
+  
+  .roomTypeDrop > li {
+    padding: 8px 8px;
+    margin: 0px 6px;
+    /* border-radius: 6px; */
+    width: 90%;
+    border: none;
+    /* background-color: white; */
+  }
+  
+  .roomTypeDrop > li:hover {
+    background-color: #136794;
+    color: white;
+  }
+  .bulkUpdateBtn > span {
+    /* padding: 0 1vh; */
+  }
+  .bulkUpdateBtn {
+    /* background-color: #00427D; */
+    /* color: #fff; */
+    padding: 0.5vh 3vh;
+    border-radius: none;
+    /* border: 1px solid #00427D; */
+    display: flex;
+    align-items: center;
+  }
+  .button {
+    border: none;
+    padding: 0px 10px;
+    background-color: #B4D6F4;
+    border: 1px solid #B4D6F4;
+    border-radius: 6px;
+    position: relative;
+  }
+  .button:hover {
+    position: relative;
+    background-color: rgb(149, 193, 235);
+  }
