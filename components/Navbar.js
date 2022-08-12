@@ -20,7 +20,7 @@ function NavBar() {
     return (
         <div className={styles.navbarContainer}>
             <Col className={styles.logo}>
-                <Image className={styles.logoImage} height={60} width={150} src='/logo.svg' />
+                <Link href={'/'}><Image className={styles.logoImage} height={60} width={150} src='/logo.svg' /></Link>
             </Col>
             <Col className={styles.navItem}>
                 <div className={styles.links}>
@@ -45,6 +45,7 @@ function NavBar() {
                             <li><CgProfile height={50} width={50} /> <span>My Account</span></li>
                             <li><TbNotes height={50} width={50} /><span>Terms & Condition </span></li>
                             <li><MdSupportAgent height={50} width={50} /><span>Support</span></li>
+                            <Link href={'/bookings'}><li><MdSupportAgent height={50} width={50} /><span>Bookings</span></li></Link>
                             <li><AiOutlineLogout height={50} width={50} /><span>Logout</span></li>
                         </div>
 
