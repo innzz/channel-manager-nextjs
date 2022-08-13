@@ -20,6 +20,7 @@ export default function Home() {
   let router = useRouter()
 
   const { siteminder } = router.query;
+  // console.log(siteminder)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
     useState(false);
     const [shopModal, setshopModal] = useState(false);
@@ -40,6 +41,7 @@ export default function Home() {
   
   useEffect(() => {
 
+   if (siteminder !== undefined) {
     fetch(
       `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${siteminder}`,
       {
@@ -54,38 +56,14 @@ export default function Home() {
         })
         .then(res => res.json())
         .then((resJson) => {
-          console.log(resJson)
+          // console.log(resJson)
           setDropDownValue(resJson.propertiesOnlineTravelAgencies)
           setShowTravelAgencyName(resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName)
           setRoomDetails(resJson.roomDtos)
       })
+   }
   }
-    , []);
-
-
-  useEffect(() => {
-
-    fetch(
-      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${siteminder}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          }
-        })
-        .then(res => res.json())
-        .then((resJson) => {
-          console.log(resJson)
-          setDropDownValue(resJson.propertiesOnlineTravelAgencies)
-          setShowTravelAgencyName(resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName)
-          setRoomDetails(resJson.roomDtos)
-      })
-  }
-    , []);
+    , [router]);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
