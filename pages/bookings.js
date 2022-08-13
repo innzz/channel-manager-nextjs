@@ -10,16 +10,32 @@ import {BsThreeDotsVertical} from 'react-icons/bs';
 import { Col, Row } from 'react-bootstrap';
 
 const Bookings = ()=> {
-    const [bookings, setBookings] = useState([])
-  useEffect(() => {
-    fetch('http://localhost:5000/getBookingsRetrieval')
-        .then(response => response.json())
-        .then((data) => {
-        //  console.log(data);
-         setBookings(data);
+    const [bookingsResponse, setBookingsResponse] = useState([]);
+    const [bookings, setBookings] = useState([]);
+    const [booking, setBooking] = useState([{}]);
+    useEffect(() => {
+        fetch('http://localhost:5000/getBookingsRetrieval')
+            .then(response => response.json())
+            .then((data) => {
+            //  console.log(data);
+            setBookingsResponse(data);
+            setBookings(data.result.bookings)
+            const booking = [{}];
+            for (let index = 0; index < data.result.bookings.length; index++) {
+                // console.log(data.result.bookings[index].booking)
+                if (!booking[index][data.result.bookings[index].$.iataid]) {
+                    booking[index]["id"] = data.result.bookings[index].$.iataid ;
+                    booking[index]["bookings"] = data.result.bookings[index].booking;
+                }
+            }
+            // console.log(booking)
+            setBooking(booking);
         })
-  }, [])
-//   console.log(bookings)
+    }, [])
+// console.log(bookingsResponse)
+// console.log(bookings)
+console.log(booking)
+
   return (
     <div className={styles.bookingsOuterContainer}>
     <Navbar />
@@ -50,27 +66,46 @@ const Bookings = ()=> {
                 <button>Reset</button>
             </div>
             <div className={styles.bookingsTable}>
+                <Row className={styles.bookingsTableHeadingRow}>
+                    <Col><span>Action</span></Col>
+                    <Col><span>Reservation Id</span></Col>
+                    <Col><span>Name</span></Col>
+                    <Col><span>Booking Date</span></Col>
+                    <Col><span>Arrival</span></Col>
+                    <Col><span>Departure</span></Col>
+                    <Col><span>Room Type/Room No</span></Col>
+                    <Col><span>Source</span></Col>
+                    <Col><span>Status</span></Col>
+                    <Col><span>Payable Amount</span></Col>
+                    <Col><span>Note</span></Col>
+                    <Col><span>Action</span></Col>
+                </Row>
                 {
-                    // bookings.map((val,i)=>{
-                    //     console.log(val.booking)
-                    //     return (
-                    //     <Row key={i} className={styles.bookingsTableHeadingRow}>
-                    //         <Col><span>Action</span></Col>
-                    //         <Col><span>Reservation Id</span></Col>
-                    //         <Col><span>Name</span></Col>
-                    //         <Col><span>Booking Date</span></Col>
-                    //         <Col><span>Arrival</span></Col>
-                    //         <Col><span>Departure</span></Col>
-                    //         <Col><span>Room Type/Room No</span></Col>
-                    //         <Col><span>Source</span></Col>
-                    //         <Col><span>Status</span></Col>
-                    //         <Col><span>Payable Amount</span></Col>
-                    //         <Col><span>Note</span></Col>
-                    //         <Col><span>Action</span></Col>
-                    //     </Row>
-                    //     )
-                    // })
-                }
+                   booking ? booking.map((val,i)=>{
+                        // console.log(val.bookings)
+                        if (val.bookings) {
+                            return val.bookings.map((val2,j)=>{
+                                // console.log(val2.$.room_type)
+                                return (
+                                <Row key={j} className={styles.bookingsTableInnerRow}>
+                                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
+                                    <Col><span>{val2.$.booking_id}</span></Col>
+                                    <Col><span>{val2.customer[0].$.first_name} {val2.customer[0].$.last_name}</span></Col>
+                                    <Col><span>{val2.$.booking_date}</span></Col>
+                                    <Col><span>{val2.$.arrival}<span>ETA</span></span></Col>
+                                    <Col><span>{val2.$.departure}<span>ETA</span></span></Col>
+                                    <Col><span>{val2.$.room_type}</span></Col>
+                                    <Col><span>Walkin</span></Col>
+                                    <Col><span>{val2.$.status}</span></Col>
+                                    <Col><span>{val2.prices[0].$.net_inclusive_amt}</span></Col>
+                                    <Col><span></span></Col>
+                                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
+                                </Row>
+                                )
+                            })
+                        }
+                    })
+                :''}
                 {/* <Row className={styles.bookingsTableInnerRow}>
                     <Col><span><BsThreeDotsVertical size={25} /></span></Col>
                     <Col><span>BST-B-1690</span></Col>
