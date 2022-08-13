@@ -32,7 +32,9 @@ const Login = () => {
             .then(res=>res.json())
             .then((resJson)=>{
                 if(resJson.token){
-                    router.push(`siteminder/${resJson.property.id}`)
+                    // router.push(`/siteminder/${resJson.property.id}`);
+                    router.push(`/siteminder/${resJson.property.id}`);
+                    localStorage.setItem('token',resJson.token);
                 }else{
                      setAlert(true)
                 }

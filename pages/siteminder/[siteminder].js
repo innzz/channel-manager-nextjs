@@ -8,7 +8,7 @@ import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { GoTriangleRight } from "react-icons/go";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight,MdArrowDropDown } from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
 import { useState, useEffect } from "react";
@@ -20,21 +20,28 @@ export default function Home() {
   let router = useRouter()
 
   const { siteminder } = router.query;
+  // console.log(siteminder)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
     useState(false);
     const [shopModal, setshopModal] = useState(false);
     const [showTravelAgencyName, setShowTravelAgencyName] = useState("")
     const [roomType, setRoomType] = useState(false);
     const [ratePlans, setRatePlans] = useState(false);
-    const [dropdownValue, setDropDownValue] = useState([])
-    const [roomDetails, setRoomDetails] = useState([])
+    const [dropdownValue, setDropDownValue] = useState([]);
+    const [roomDetails, setRoomDetails] = useState([]);
+    const [bulkUpdateModal, setBulkUpdateModal] = useState(false);
     const handleShopModal = () => {
       setshopModal(!shopModal);
+    };
+
+    const handleBulkUpdateModal = () => {
+      setBulkUpdateModal(!bulkUpdateModal);
     };
 
   
   useEffect(() => {
 
+   if (siteminder !== undefined) {
     fetch(
       `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${siteminder}`,
       {
@@ -49,38 +56,14 @@ export default function Home() {
         })
         .then(res => res.json())
         .then((resJson) => {
-          console.log(resJson)
+          // console.log(resJson)
           setDropDownValue(resJson.propertiesOnlineTravelAgencies)
           setShowTravelAgencyName(resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName)
           setRoomDetails(resJson.roomDtos)
       })
+   }
   }
-    , []);
-
-
-  useEffect(() => {
-
-    fetch(
-      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${siteminder}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          }
-        })
-        .then(res => res.json())
-        .then((resJson) => {
-          console.log(resJson)
-          setDropDownValue(resJson.propertiesOnlineTravelAgencies)
-          setShowTravelAgencyName(resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName)
-          setRoomDetails(resJson.roomDtos)
-      })
-  }
-    , []);
+    , [router]);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -94,7 +77,88 @@ export default function Home() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
   return (
-    <>
+    <div className={styles.outerContainer}>
+      {bulkUpdateModal ? <div className={styles.modalContainer}>
+        <div className={styles.modal}>
+          <div className={styles.modalHeader}>
+            <span>BULK UPDATE</span>
+            <span onClick={handleBulkUpdateModal}>X</span>
+          </div>
+          <div className={styles.modalContent}>
+            <Row className={styles.quickTourLinkRow}>
+              <Col className={styles.quickTourLinkCol}>
+                <div className={styles.linkText}>
+                  <GoTriangleRight size={20} style={{ marginBottom: "3px" }} />
+                  <span>Quick Tour - Inventory Grid</span>
+                </div>
+              </Col>
+            </Row>
+            <Row className={styles.setToRow}>
+                  <Col className={styles.setToCol1}>
+                  <span className={styles.setToCol1Span}>Set</span>
+                  <button className={styles.setToCol1Input}>Availablity<MdArrowDropDown size={20} /></button>
+                  </Col>
+                  <Col className={styles.setToCol2}>
+                  <span className={styles.setToCol2Span}>to</span>
+                  <input className={styles.setToCol2Input} type="text" />
+                  </Col>
+            </Row>
+            <Row className={styles.datesRow}>
+              <Col className={styles.datesCol1}><span><input className={styles.datesCol1Input} type="date" /></span></Col>
+              <Col className={styles.datesCol2}><span><input className={styles.datesCol2Input} type="date" /></span></Col>
+              <Col className={styles.datesCol3}>
+                <div className={styles.labels}>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                  <label>
+                    <input type='checkbox' />
+                    <span>Mon</span>
+                  </label>
+                </div>
+              </Col>
+            </Row>
+            <Row className={styles.addDateRangeRow}>
+              <Col className={styles.addDateRangeCol}>
+                <button>Add Date Range</button>
+              </Col>
+            </Row>
+            <div className={styles.clearSelected}>
+              <span>Clear Selected</span>
+            </div>
+            <div className={styles.roomsContainer}>
+              <div className={styles.room}><input type='checkbox' /><span>Deluxe Room</span></div>
+              <div className={styles.room}><input type='checkbox' /><span>Deluxe Room</span></div>
+              <div className={styles.room}><input type='checkbox' /><span>Deluxe Room</span></div>
+              <div className={styles.room}><input type='checkbox' /><span>Deluxe Room</span></div>
+            </div>
+            <div className={styles.saveBtnContainer}>
+              <button>Save</button>
+            </div>
+          </div>
+        </div>
+      </div>:''}
     <Navbar />
     <div className={styles.container}>
       <Head>
@@ -136,7 +200,7 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.buttonsWrapper}>
-              <button className={styles.bulkUpdateBtn}>
+              <button onClick={handleBulkUpdateModal} className={styles.bulkUpdateBtn}>
               <MdSystemUpdateAlt />
                 <span>Bulk Update</span>
               </button>
@@ -166,6 +230,11 @@ export default function Home() {
             </Col>
             <Col className={styles.dates}>
               <Row className={styles.dateCards}>
+                <Col className={styles.dateCard}>
+                  <span>Mon</span>
+                  <span className={styles.boldDateText}>03</span>
+                  <span>JUL</span>
+                </Col>
                 <Col className={styles.dateCard}>
                   <span>Mon</span>
                   <span className={styles.boldDateText}>03</span>
@@ -402,6 +471,6 @@ export default function Home() {
    
       </div>
     </div>
-    </>
+    </div>
   );
 }
