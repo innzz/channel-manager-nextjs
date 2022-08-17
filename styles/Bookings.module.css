@@ -2,6 +2,7 @@
     background-color: #EAF5FF;
     height: 100vh;
     overflow-y: auto;
+    overflow-x: hidden ;
 }
 
 .bookingsMainContainer{
@@ -10,11 +11,25 @@
 }
 
 .bookingsSearchSection{
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 8vh 0;
     padding-bottom: 6vh;
     padding-right: 1.5vh;
+    z-index: 1;
+    color: #fff;
+}
+
+.bookingsSearchSection::before{
+    content: '';
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: -70px;
+    background-color: #2494d1;
+    position: absolute;
+    z-index: -1;
 }
 
 
@@ -35,7 +50,8 @@
     margin-left: 8vw;
     border-radius: 10px;
     padding: 2.5vh 0;
-    box-shadow: 0px 3px 6px 0px rgb(150, 150, 150);
+    box-shadow: 0px 3px 6px 0px rgb(59, 66, 120);
+    color: black;
 }
 
 .bookingsSearchSectionInput{
@@ -52,12 +68,14 @@
 }
 
 .bookingsTableSection{
+    position: relative;
     background-color: #fff;
     padding: 1vh 1vw;
     padding-top: 3vh;
     padding-bottom: 3vh;
     border-radius: 8px;
     box-shadow: 0px 3px 6px 0px rgb(150, 150, 150);
+    z-index: 1;
 }
 
 .bookingsTableButtonsSection{
