@@ -16,9 +16,70 @@ const Bookings = ()=> {
     const [bookingsResponse, setBookingsResponse] = useState([]);
     const [bookings, setBookings] = useState([]);
     const [booking, setBooking] = useState([{}]);
-    const [startDateArrival, setStartDateArrival] = useState(null);
-    const [startDateBooking, setStartDateBooking] = useState(null);
-    const [startDateDeparture, setStartDateDeparture] = useState(null);
+    const [startDateArrival, setStartDateArrival] = useState(new Date());
+    const [startDateBooking, setStartDateBooking] = useState(new Date());
+    const [startDateDeparture, setStartDateDeparture] = useState(new Date());
+    const [arrivalDateToShow, setArrivalDateToShow] = useState('');
+    const [bookingDateToShow, setBookingDateToShow] = useState('');
+    const [departureDateToShow, setDepartureDateToShow] = useState('');
+    // console.log(startDateArrival)
+    useEffect(() => {
+        let newDateArrival = startDateArrival.toLocaleDateString().split('/').reverse();
+        // setArrivalDateToShow(arrivalDate.toLocaleDateString().split('/').reverse());
+        // console.log(newDate)
+        // let newArray = [];
+        for (let index = 0; index < newDateArrival.length; index++) {
+            if (newDateArrival[index] < 10) {
+                // console.log('yes')
+                newDateArrival[index] = `0${newDateArrival[index]}`
+                // arrivalDateToShow.push(arrivalDateToShow[index])
+                // console.log(newDateArrival[index])
+            }
+        }
+        let tempArrival = '';
+        tempArrival = newDateArrival[2];
+        newDateArrival[2] = newDateArrival[1];
+        newDateArrival[1] = tempArrival;
+        setArrivalDateToShow(newDateArrival.join('-'));
+
+        let newDateBooking = startDateBooking.toLocaleDateString().split('/').reverse();
+        // setArrivalDateToShow(arrivalDate.toLocaleDateString().split('/').reverse());
+        // console.log(newDate)
+        // let newArray = [];
+        for (let index = 0; index < newDateBooking.length; index++) {
+            if (newDateBooking[index] < 10) {
+                // console.log('yes')
+                newDateBooking[index] = `0${newDateBooking[index]}`
+                // arrivalDateToShow.push(arrivalDateToShow[index])
+                // console.log(newDateArrival[index])
+            }
+        }
+        let tempBooking = '';
+        tempBooking = newDateBooking[2];
+        newDateBooking[2] = newDateBooking[1];
+        newDateBooking[1] = tempBooking;
+        setBookingDateToShow(newDateBooking.join('-'));
+
+        let newDateDeparture = startDateDeparture.toLocaleDateString().split('/').reverse();
+        // setArrivalDateToShow(arrivalDate.toLocaleDateString().split('/').reverse());
+        // console.log(newDate)
+        // let newArray = [];
+        for (let index = 0; index < newDateDeparture.length; index++) {
+            if (newDateDeparture[index] < 10) {
+                // console.log('yes')
+                newDateDeparture[index] = `0${newDateDeparture[index]}`
+                // arrivalDateToShow.push(arrivalDateToShow[index])
+                // console.log(newDateArrival[index])
+            }
+        }
+        let tempDeparture = '';
+        tempDeparture = newDateDeparture[2];
+        newDateDeparture[2] = newDateDeparture[1];
+        newDateDeparture[1] = tempDeparture;
+        setDepartureDateToShow(newDateDeparture.join('-'));
+
+    }, [startDateArrival , startDateBooking, startDateDeparture])
+    
     useEffect(() => {
         // fetch('http://localhost:5000/getBookingsRetrieval')
         fetch('https://channel-manager-server.herokuapp.com/getBookingsRetrieval')
@@ -38,10 +99,16 @@ const Bookings = ()=> {
             // console.log(booking)
             setBooking(booking);
         })
+        // console.log(arrivalDate)
+        // arrivalDateToShow = arrivalDate;
     }, [])
-// console.log(bookingsResponse)
-// console.log(bookings)
-// console.log(booking)
+    // console.log(newarrivalDateToShow)
+    console.log('arrival date' ,arrivalDateToShow)
+    console.log('booking date',bookingDateToShow)
+    console.log('departure date',departureDateToShow)
+    // console.log(bookingsResponse)
+    // console.log(bookings)
+    // console.log(booking)
 
   return (
     <div className={styles.bookingsOuterContainer}>
@@ -70,12 +137,15 @@ const Bookings = ()=> {
                 {/* <span className={styles.bookingsTableDropdown}><span>Booking Date</span><ImCalendar /></span> */}
                 <div>
                     <DatePicker selected={startDateBooking} onChange={(date) => setStartDateBooking(date)} placeholderText="Booking Date"/><ImCalendar />
+                    <span className={styles.bookingsTableDropdownTopText}>Booking Date</span>
                 </div>
                 <div>
                     <DatePicker selected={startDateArrival} onChange={(date) => setStartDateArrival(date)} placeholderText="Arrival Date"/><ImCalendar />
+                    <span className={styles.bookingsTableDropdownTopText}>Arrival Date</span>
                 </div>
                 <div>
                     <DatePicker selected={startDateDeparture} onChange={(date) => setStartDateDeparture(date)} placeholderText="Departure Date"/><ImCalendar />
+                    <span className={styles.bookingsTableDropdownTopText}>Departure Date</span>
                 </div>
                 {/* <span className={styles.bookingsTableDropdown}><span>Arrival Date</span><ImCalendar /></span> */}
                 {/* <span className={styles.bookingsTableDropdown}><span>Departure Date</span><ImCalendar /></span> */}
@@ -102,8 +172,11 @@ const Bookings = ()=> {
                         if (val.bookings) {
                             return val.bookings.map((val2,j)=>{
                                 // console.log(val2.$.room_type)
+                                // startDateArrival?.reverse()
                                 return (
-                                <Row key={j} className={styles.bookingsTableInnerRow}>
+                                    <>
+                                {arrivalDateToShow == val2.$.arrival || bookingDateToShow == val2.$.booking_date.slice(0,10) || departureDateToShow == val2.$.departure?
+                                    <Row key={j} className={styles.bookingsTableInnerRow}>
                                     <Col><span><BsThreeDotsVertical size={25} /></span></Col>
                                     <Col><span>{val2.$.booking_id}</span></Col>
                                     <Col><span>{val2.customer[0].$.first_name} {val2.customer[0].$.last_name}</span></Col>
@@ -116,7 +189,9 @@ const Bookings = ()=> {
                                     <Col><span>{val2.prices[0].$.net_inclusive_amt}</span></Col>
                                     <Col><span></span></Col>
                                     <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                                </Row>
+                                </Row> : ''}
+                                {/* </Row> */}
+                                </>
                                 )
                             })
                         }
