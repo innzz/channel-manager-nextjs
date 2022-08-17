@@ -175,7 +175,14 @@ const Bookings = ()=> {
                 </div>
                 {/* <span className={styles.bookingsTableDropdown}><span>Arrival Date</span><ImCalendar /></span> */}
                 {/* <span className={styles.bookingsTableDropdown}><span>Departure Date</span><ImCalendar /></span> */}
-                <button>Reset</button>
+                <button onClick={()=>{
+                        setRoomType('All');
+                        setBookingStatus('All');
+                        setBookingSource('All');
+                        setStartDateArrival(new Date());
+                        setStartDateBooking(new Date());
+                        setStartDateDeparture(new Date());
+                }}>Reset</button>
             </div>
             <div className={styles.bookingsTable}>
                 <Row className={styles.bookingsTableHeadingRow}>
