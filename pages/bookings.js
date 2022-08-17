@@ -14,7 +14,13 @@ const Bookings = ()=> {
     const [bookings, setBookings] = useState([]);
     const [booking, setBooking] = useState([{}]);
     useEffect(() => {
-        fetch('http://localhost:5000/getBookingsRetrieval')
+        // fetch('https://channel-manager-server.herokuapp.com/getBookingsRetrieval')
+        //     .then(response => response.json())
+        //     .then((data) => {
+        //      console.log(data);
+        // })
+        // fetch('http://localhost:5000/getBookingsRetrieval')
+        fetch('https://channel-manager-server.herokuapp.com/getBookingsRetrieval')
             .then(response => response.json())
             .then((data) => {
             //  console.log(data);
@@ -34,7 +40,7 @@ const Bookings = ()=> {
     }, [])
 // console.log(bookingsResponse)
 // console.log(bookings)
-console.log(booking)
+// console.log(booking)
 
   return (
     <div className={styles.bookingsOuterContainer}>
@@ -106,48 +112,6 @@ console.log(booking)
                         }
                     })
                 :''}
-                {/* <Row className={styles.bookingsTableInnerRow}>
-                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                    <Col><span>BST-B-1690</span></Col>
-                    <Col><span>Inzamam Pawaskar</span></Col>
-                    <Col><span>Aug 12, 2022 to Aug 13, 2022</span></Col>
-                    <Col><span>Fri, Aug 12,01:30 PM<span>ETA</span></span></Col>
-                    <Col><span>Fri, Aug 12,01:30 PM<span>ETA</span></span></Col>
-                    <Col><span>Double Room 302</span></Col>
-                    <Col><span>Walkin</span></Col>
-                    <Col><span>CONFIRMED</span></Col>
-                    <Col><span>₹4,000.00</span></Col>
-                    <Col><span></span></Col>
-                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                </Row>
-                <Row className={styles.bookingsTableInnerRow}>
-                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                    <Col><span>BST-B-1690</span></Col>
-                    <Col><span>Inzamam Pawaskar</span></Col>
-                    <Col><span>Aug 12, 2022 to Aug 13, 2022</span></Col>
-                    <Col><span>Fri, Aug 12,01:30 PM<span>ETA</span></span></Col>
-                    <Col><span>Fri, Aug 12,01:30 PM<span>ETA</span></span></Col>
-                    <Col><span>Double Room 302</span></Col>
-                    <Col><span>Walkin</span></Col>
-                    <Col><span>CONFIRMED</span></Col>
-                    <Col><span>₹4,000.00</span></Col>
-                    <Col><span></span></Col>
-                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                </Row>
-                <Row className={styles.bookingsTableInnerRow}>
-                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                    <Col><span>BST-B-1690</span></Col>
-                    <Col><span>Inzamam Pawaskar</span></Col>
-                    <Col><span>Aug 12, 2022 to Aug 13, 2022</span></Col>
-                    <Col><span>Fri, Aug 12,01:30 PM<span>ETA</span></span></Col>
-                    <Col><span>Fri, Aug 12,01:30 PM<span>ETA</span></span></Col>
-                    <Col><span>Double Room 302</span></Col>
-                    <Col><span>Walkin</span></Col>
-                    <Col><span>CONFIRMED</span></Col>
-                    <Col><span>₹4,000.00</span></Col>
-                    <Col><span></span></Col>
-                    <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                </Row> */}
             </div>
         </div>
     </div>
