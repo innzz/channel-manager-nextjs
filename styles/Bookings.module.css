@@ -104,13 +104,36 @@
 
 .bookingsTableDropdownsSection > span {
     background-color: #fff;
-    border: 2px solid gray;
+    border: 2px solid rgb(169, 169, 169);
     width: 15%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 5px;
     padding: 0 1vw;
+}
+
+.bookingsTableDropdownsSection > div {
+    position: relative;
+    background-color: #fff;
+    border: 2px solid rgb(169, 169, 169);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 5px;
+    /* padding: 0 1vw; */
+}
+
+.bookingsTableDropdownsSection > div > div > div > input{
+    border: none;
+    padding: 0 1vw;
+    padding-right: 0;
+    width: 100%;
+}
+
+.bookingsTableDropdownsSection > div > svg{
+    position: absolute;
+    right: 20px;
 }
 
 .bookingsTableDropdownsSection > button {
@@ -120,6 +143,56 @@
     color: #fff;
     border-radius: 5px;
     box-shadow: 0px 3px 6px 0px rgb(150, 150, 150);
+}
+
+.bookingsTableDropdown{
+    position: relative;
+    color: gray;
+    cursor: pointer;
+}
+
+.bookingsTableDropdown:hover{
+    border: 2px solid black;
+}
+
+.bookingsTableDropdown > span {
+    color: black;
+}
+
+.bookingsTableDropdown > ul{
+   position: absolute;
+   top: 30px;
+   left: 0;
+   right: 0;
+   background-color: #fff;
+   padding: 0 0;
+   margin: 0;
+    border-radius: 5px;
+    box-shadow: 0px 3px 6px 0px rgb(150, 150, 150);
+    height: 25vh;
+    overflow-y: auto;
+}
+
+.bookingsTableDropdown > ul > li {
+    list-style: none;
+    padding: 1vh 1vw;
+    color: #2494d1;
+    font-size: 13px;
+}
+
+.bookingsTableDropdown > ul > li:hover{
+    background-color: #bedcf8;
+    color: #fff;
+}
+
+.bookingsTableDropdownTopText{
+    position: absolute;
+    top: -12px;
+    background-color: #fff;
+    font-size: small;
+    padding: 0 0.5vw;
+    left: 5px;
+    font-stretch:extra-expanded;
 }
 
 .bookingsTableHeadingRow{
