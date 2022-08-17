@@ -22,12 +22,16 @@ const Bookings = ()=> {
     const [arrivalDateToShow, setArrivalDateToShow] = useState('');
     const [bookingDateToShow, setBookingDateToShow] = useState('');
     const [departureDateToShow, setDepartureDateToShow] = useState('');
+    const [roomTypeDropdown, setRoomTypeDropdown] = useState(false);
+    const [bookingStatusDropdown, setBookingStatusDropdown] = useState(false);
+    const [bookingSourceDropdown, setBookingSourceDropdown] = useState(false);
+    const [roomType, setRoomType] = useState('All');
+    const [bookingStatus, setBookingStatus] = useState('All');
+    const [bookingSource, setBookingSource] = useState('All');
     // console.log(startDateArrival)
+
     useEffect(() => {
         let newDateArrival = startDateArrival.toLocaleDateString().split('/').reverse();
-        // setArrivalDateToShow(arrivalDate.toLocaleDateString().split('/').reverse());
-        // console.log(newDate)
-        // let newArray = [];
         for (let index = 0; index < newDateArrival.length; index++) {
             if (newDateArrival[index] < 10) {
                 // console.log('yes')
@@ -43,9 +47,6 @@ const Bookings = ()=> {
         setArrivalDateToShow(newDateArrival.join('-'));
 
         let newDateBooking = startDateBooking.toLocaleDateString().split('/').reverse();
-        // setArrivalDateToShow(arrivalDate.toLocaleDateString().split('/').reverse());
-        // console.log(newDate)
-        // let newArray = [];
         for (let index = 0; index < newDateBooking.length; index++) {
             if (newDateBooking[index] < 10) {
                 // console.log('yes')
@@ -61,9 +62,6 @@ const Bookings = ()=> {
         setBookingDateToShow(newDateBooking.join('-'));
 
         let newDateDeparture = startDateDeparture.toLocaleDateString().split('/').reverse();
-        // setArrivalDateToShow(arrivalDate.toLocaleDateString().split('/').reverse());
-        // console.log(newDate)
-        // let newArray = [];
         for (let index = 0; index < newDateDeparture.length; index++) {
             if (newDateDeparture[index] < 10) {
                 // console.log('yes')
@@ -103,9 +101,9 @@ const Bookings = ()=> {
         // arrivalDateToShow = arrivalDate;
     }, [])
     // console.log(newarrivalDateToShow)
-    console.log('arrival date' ,arrivalDateToShow)
-    console.log('booking date',bookingDateToShow)
-    console.log('departure date',departureDateToShow)
+    // console.log('arrival date' ,arrivalDateToShow)
+    // console.log('booking date',bookingDateToShow)
+    // console.log('departure date',departureDateToShow)
     // console.log(bookingsResponse)
     // console.log(bookings)
     // console.log(booking)
@@ -131,9 +129,37 @@ const Bookings = ()=> {
                 </span>
             </div>
             <div className={styles.bookingsTableDropdownsSection}>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Room Type</span></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Booking Status</span></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Booking Source</span></span>
+                <span className={styles.bookingsTableDropdown} onMouseLeave={()=>{setRoomTypeDropdown(false)}} onClick={()=>{setRoomTypeDropdown(!roomTypeDropdown); setBookingStatusDropdown(false); setBookingSourceDropdown(false)}}><span>{roomType.length > 20 ?roomType.substr(0,20)+'...' : roomType}</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Room Type</span>
+                {roomTypeDropdown ? <ul>
+                    <li onClick={()=>{setRoomType('All')}}>All</li>   
+                    <li onClick={()=>{setRoomType('Double Room')}}>Double Room</li>   
+                    <li onClick={()=>{setRoomType('Twin Room')}}>Twin Room</li>   
+                    <li onClick={()=>{setRoomType('Banquet Hall')}}>Banquet Hall</li>   
+                    <li onClick={()=>{setRoomType('One Day Trip')}}>One Day Trip</li>   
+                </ul>:''}
+                </span>
+                <span className={styles.bookingsTableDropdown} onMouseLeave={()=>{setBookingStatusDropdown(false)}} onClick={()=>{setRoomTypeDropdown(false); setBookingStatusDropdown(!bookingStatusDropdown); setBookingSourceDropdown(false)}}><span>{bookingStatus.length > 20 ?bookingStatus.substr(0,20)+'...' : bookingStatus}</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Booking Status</span>
+                {bookingStatusDropdown ? <ul>
+                    <li onClick={()=>{setBookingStatus('All')}}>All</li>   
+                    <li onClick={()=>{setBookingStatus('ENQUIRY')}}>ENQUIRY</li>   
+                    <li onClick={()=>{setBookingStatus('Confirmed')}}>Confirmed</li>   
+                    <li onClick={()=>{setBookingStatus('Checked In')}}>Checked In</li>   
+                    <li onClick={()=>{setBookingStatus('Checked Out')}}>Checked Out</li>   
+                    <li onClick={()=>{setBookingStatus('Cancelled')}}>Cancelled</li>   
+                </ul>:''}
+                </span>
+                <span className={styles.bookingsTableDropdown} onMouseLeave={()=>{setBookingSourceDropdown(false)}} onClick={()=>{setRoomTypeDropdown(false); setBookingStatusDropdown(false); setBookingSourceDropdown(!bookingSourceDropdown)}}><span>{bookingSource.length > 20 ?bookingSource.substr(0,20)+'...' : bookingSource}</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Booking Source</span>
+                {bookingSourceDropdown ? <ul>
+                    <li onClick={()=>{setBookingSource('All')}}>All</li>   
+                    <li onClick={()=>{setBookingSource('Fit Frequent Individual Traveller')}}>Fit Frequent Individual Traveller</li>   
+                    <li onClick={()=>{setBookingSource('Walk In')}}>Walk In</li>   
+                    <li onClick={()=>{setBookingSource('Website')}}>Website</li>   
+                    <li onClick={()=>{setBookingSource('The Hotel Mate')}}>The Hotel Mate</li>   
+                    <li onClick={()=>{setBookingSource('SiteMinder')}}>SiteMinder</li>   
+                    <li onClick={()=>{setBookingSource('Oyo')}}>Oyo</li>   
+                    <li onClick={()=>{setBookingSource('Agoda')}}>Agoda</li>   
+                </ul>:''}
+                </span>
                 {/* <span className={styles.bookingsTableDropdown}><span>Booking Date</span><ImCalendar /></span> */}
                 <div>
                     <DatePicker selected={startDateBooking} onChange={(date) => setStartDateBooking(date)} placeholderText="Booking Date"/><ImCalendar />
@@ -189,7 +215,22 @@ const Bookings = ()=> {
                                     <Col><span>{val2.prices[0].$.net_inclusive_amt}</span></Col>
                                     <Col><span></span></Col>
                                     <Col><span><BsThreeDotsVertical size={25} /></span></Col>
-                                </Row> : ''}
+                                </Row> : 
+                                <Row key={j} className={styles.bookingsTableInnerRow}>
+                                <Col><span><BsThreeDotsVertical size={25} /></span></Col>
+                                <Col><span>{val2.$.booking_id}</span></Col>
+                                <Col><span>{val2.customer[0].$.first_name} {val2.customer[0].$.last_name}</span></Col>
+                                <Col><span>{val2.$.booking_date.slice(0,10)}</span></Col>
+                                <Col><span>{val2.$.arrival}</span></Col>
+                                <Col><span>{val2.$.departure}</span></Col>
+                                <Col><span>{val2.$.room_type}</span></Col>
+                                <Col><span>Walkin</span></Col>
+                                <Col><span>{val2.$.status}</span></Col>
+                                <Col><span>{val2.prices[0].$.net_inclusive_amt}</span></Col>
+                                <Col><span></span></Col>
+                                <Col><span><BsThreeDotsVertical size={25} /></span></Col>
+                            </Row>
+                                }
                                 {/* </Row> */}
                                 </>
                                 )
