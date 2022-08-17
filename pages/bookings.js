@@ -107,9 +107,9 @@ const Bookings = ()=> {
                                     <Col><span><BsThreeDotsVertical size={25} /></span></Col>
                                     <Col><span>{val2.$.booking_id}</span></Col>
                                     <Col><span>{val2.customer[0].$.first_name} {val2.customer[0].$.last_name}</span></Col>
-                                    <Col><span>{val2.$.booking_date}</span></Col>
-                                    <Col><span>{val2.$.arrival}<span>ETA</span></span></Col>
-                                    <Col><span>{val2.$.departure}<span>ETA</span></span></Col>
+                                    <Col><span>{val2.$.booking_date.slice(0,10)}</span></Col>
+                                    <Col><span>{val2.$.arrival}</span></Col>
+                                    <Col><span>{val2.$.departure}</span></Col>
                                     <Col><span>{val2.$.room_type}</span></Col>
                                     <Col><span>Walkin</span></Col>
                                     <Col><span>{val2.$.status}</span></Col>
