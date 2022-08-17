@@ -4,21 +4,22 @@ import styles from '../styles/Bookings.module.css';
 import Link from 'next/link';
 import { useEffect,useState } from 'react';
 import {BiArrowBack,BiSearch} from 'react-icons/bi';
+import {ImCalendar} from 'react-icons/im';
 import {MdAddCircle} from 'react-icons/md';
 import {AiFillCaretDown} from 'react-icons/ai';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import { Col, Row } from 'react-bootstrap';
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Bookings = ()=> {
     const [bookingsResponse, setBookingsResponse] = useState([]);
     const [bookings, setBookings] = useState([]);
     const [booking, setBooking] = useState([{}]);
+    const [startDateArrival, setStartDateArrival] = useState(null);
+    const [startDateBooking, setStartDateBooking] = useState(null);
+    const [startDateDeparture, setStartDateDeparture] = useState(null);
     useEffect(() => {
-        // fetch('https://channel-manager-server.herokuapp.com/getBookingsRetrieval')
-        //     .then(response => response.json())
-        //     .then((data) => {
-        //      console.log(data);
-        // })
         // fetch('http://localhost:5000/getBookingsRetrieval')
         fetch('https://channel-manager-server.herokuapp.com/getBookingsRetrieval')
             .then(response => response.json())
@@ -52,9 +53,9 @@ const Bookings = ()=> {
         </div>
         <div className={styles.bookingsTableSection}>
             <div className={styles.bookingsTableButtonsSection}>
-                <button><MdAddCircle size={20} className={styles.bookingsTableButtonIcon}/> A Room</button>
+                {/* <button><MdAddCircle size={20} className={styles.bookingsTableButtonIcon}/> A Room</button>
                 <button><MdAddCircle size={20} className={styles.bookingsTableButtonIcon}/> Property</button>
-                <button><MdAddCircle size={20} className={styles.bookingsTableButtonIcon}/> Enquiry</button>
+                <button><MdAddCircle size={20} className={styles.bookingsTableButtonIcon}/> Enquiry</button> */}
                 <span className={styles.bookingsTableButtonsGroup}>
                     <button>Recent Booking</button>
                     <button>Todays Arrival</button>
@@ -63,12 +64,21 @@ const Bookings = ()=> {
                 </span>
             </div>
             <div className={styles.bookingsTableDropdownsSection}>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /></span>
-                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /></span>
+                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Room Type</span></span>
+                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Booking Status</span></span>
+                <span className={styles.bookingsTableDropdown}><span>All</span><AiFillCaretDown /><span className={styles.bookingsTableDropdownTopText}>Filter By Booking Source</span></span>
+                {/* <span className={styles.bookingsTableDropdown}><span>Booking Date</span><ImCalendar /></span> */}
+                <div>
+                    <DatePicker selected={startDateBooking} onChange={(date) => setStartDateBooking(date)} placeholderText="Booking Date"/><ImCalendar />
+                </div>
+                <div>
+                    <DatePicker selected={startDateArrival} onChange={(date) => setStartDateArrival(date)} placeholderText="Arrival Date"/><ImCalendar />
+                </div>
+                <div>
+                    <DatePicker selected={startDateDeparture} onChange={(date) => setStartDateDeparture(date)} placeholderText="Departure Date"/><ImCalendar />
+                </div>
+                {/* <span className={styles.bookingsTableDropdown}><span>Arrival Date</span><ImCalendar /></span> */}
+                {/* <span className={styles.bookingsTableDropdown}><span>Departure Date</span><ImCalendar /></span> */}
                 <button>Reset</button>
             </div>
             <div className={styles.bookingsTable}>
