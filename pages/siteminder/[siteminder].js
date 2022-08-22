@@ -44,6 +44,45 @@ export default function Home() {
     setBulkUpdateModal(!bulkUpdateModal);
   };
 
+  //Current Date
+  const currentDate = new Date().toLocaleDateString().split("/");
+  // const newCurrentDate = [];
+  for (let i = 0; i < currentDate.length; i++) {
+    if (currentDate[i] < 10) {
+      currentDate[i] = 0 + currentDate[i];
+    }
+    // newCurrentDate.push(currentDate[i]);
+  }
+  const currDate = currentDate.reverse();
+  let tempArrival = "";
+  tempArrival = currentDate[2];
+  currentDate[2] = currentDate[1];
+  currentDate[1] = tempArrival;
+  let newCurrDate = currDate.join("-");
+
+  // Sevens Days
+  const sevenDaysDate = new Date();
+  sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
+  const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
+  const newSevenDays = [];
+  for (let i = 0; i < sevenDays.length; i++) {
+    if (sevenDays[i] < 10) {
+      sevenDays[i] = 0 + sevenDays[i];
+    }
+    newSevenDays.push(sevenDays[i]);
+  }
+  const nextSevenDay = sevenDays.reverse();
+  let newTempArr = "";
+  newTempArr = sevenDays[2];
+  sevenDays[2] = sevenDays[1];
+  sevenDays[1] = newTempArr;
+
+  let newSevenDay = sevenDays.join("-");
+
+  // console.log(currDate, nextSevenDay);
+  // const newArr = currDate.split("-");
+  // console.log(newCurrDate, newSevenDay);
+
   useEffect(() => {
     if (siteminder !== undefined) {
       fetch(
@@ -73,8 +112,8 @@ export default function Home() {
   }, [router]);
   // console.log(agodaPropertyId);
 
-  const otaHandler = (id, date) => {
-    const data = { id: id };
+  const otaHandler = (id, newCurrDate, newSevenDay) => {
+    const data = { id: id, fromDate: newCurrDate, toDate: newSevenDay };
     // console.log(id);
     fetch(`http://localhost:5000/propertyData`, {
       method: "POST",
@@ -261,7 +300,11 @@ export default function Home() {
                                 setShowTravelAgencyName(
                                   val.onlineTravelAgencyName
                                 );
-                                otaHandler(val.onlineTravelAgencyPropertyId);
+                                otaHandler(
+                                  val.onlineTravelAgencyPropertyId,
+                                  newCurrDate,
+                                  newSevenDay
+                                );
                               }}
                             >
                               {val.onlineTravelAgencyName}
