@@ -1,0 +1,136 @@
+.container {
+  margin: 2vh;
+}
+
+.secondSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin: 2vh; */
+  /* width: 80%; */
+}
+
+.secondSection > h3 {
+  font-size: 3vh;
+}
+
+.roomTypeheading {
+  width: 50%;
+}
+
+.dateContainer {
+  background-color: blanchedalmond;
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 1vh 0vh;
+  border-radius: 10px;
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  /* text-align: center; */
+  /* flex: 1; */
+  /* margin-right: 10vh; */
+}
+
+.date > h4 {
+  font-size: 2.5vh;
+}
+
+.date > p {
+  font-weight: bold;
+}
+
+.thirdSection {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  margin: 2vh 0vh;
+}
+
+.otaBox {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  /* height: 100%; */
+}
+
+.otaContainer {
+  /* width: 80%; */
+  display: flex;
+  align-items: center;
+  /* text-align: center; */
+  /* height: 100%; */
+}
+
+.ota {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 1vh 0vh;
+  /* margin: 10vh; */
+  width: 80vh;
+  /* margin-right: 5vh; */
+  /* width: 50%; */
+}
+
+.otaImage {
+  height: 6vh;
+  width: 6vh;
+  object-fit: cover;
+  margin: 0vh 2vh;
+}
+
+.otaImage > img {
+  width: 100%;
+}
+
+.otaDesc > h5 {
+  font-size: 2.5vh;
+  font-weight: bold;
+}
+
+.otaDesc > p {
+  font-size: 2vh;
+}
+
+.otaStockPrice {
+  margin-left: 2vh;
+  font-weight: bold;
+  /* margin-top: 0.8vh; */
+}
+
+.otaPriceAvailability {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  /* padding: 1vh 0vh; */
+  /* border: 1px solid black; */
+}
+
+.priceContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 1vh 0vh;
+  font-weight: bold;
+  /* background-color: aqua; */
+  /* border-right: 1px solid black; */
+
+  /* justify-content: space-between; */
+}
