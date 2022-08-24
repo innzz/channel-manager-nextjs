@@ -754,11 +754,13 @@
 }
 
 .date > h4 {
-  font-size: 2vh;
+  font-size: 1.5vh;
+  /* background-color: white; */
 }
 
 .date > p {
   font-weight: bold;
+  font-size: 2vh;
 }
 
 .thirdSection {
@@ -770,7 +772,8 @@
 .otaContainer {
   display: flex;
   align-items: center;
-  border: 1px solid black;
+  border: 1px solid rgb(209, 208, 208);
+  /* background-color: white; */
   padding: 1vh;
   width: 46.5%;
 }
@@ -841,6 +844,7 @@
 
 .pricing > p {
   font-weight: bold;
+  font-size: 2vh;
   /* width: 80%; */
   /* height: 100%; */
 }
