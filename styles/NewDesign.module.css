@@ -50,87 +50,84 @@
 
 .thirdSection {
   display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  margin: 2vh 0vh;
-}
-
-.otaBox {
-  display: flex;
-  align-items: center;
-  width: 50%;
-  /* height: 100%; */
+  justify-content: space-between;
+  margin-top: 2vh;
 }
 
 .otaContainer {
-  /* width: 80%; */
   display: flex;
   align-items: center;
-  /* text-align: center; */
-  /* height: 100%; */
-}
-
-.ota {
-  display: flex;
-  align-items: center;
-  /* justify-content: space-between; */
   border: 1px solid black;
-  border-radius: 10px;
-  padding: 1vh 0vh;
-  /* margin: 10vh; */
-  width: 80vh;
-  /* margin-right: 5vh; */
-  /* width: 50%; */
+  padding: 1vh;
+  width: 47%;
 }
 
 .otaImage {
-  height: 6vh;
-  width: 6vh;
-  object-fit: cover;
-  margin: 0vh 2vh;
+  height: 7vh;
+  width: 7vh;
+  /* margin: 0vh 4vh; */
+  margin-right: 2vh;
 }
 
 .otaImage > img {
+  height: 100%;
   width: 100%;
+  object-fit: contain;
 }
 
-.otaDesc > h5 {
-  font-size: 2.5vh;
-  font-weight: bold;
-}
-
-.otaDesc > p {
+.otaRoomPlans > h3 {
   font-size: 2vh;
-}
-
-.otaStockPrice {
-  margin-left: 2vh;
   font-weight: bold;
-  /* margin-top: 0.8vh; */
 }
 
-.otaPriceAvailability {
-  width: 50%;
+.otaRoomPlans > h4 {
+  font-size: 1.5vh;
+  font-weight: bold;
+}
+
+.stockPriceContainer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   text-align: center;
-  border: 1px solid black;
   border-radius: 10px;
-  /* padding: 1vh 0vh; */
-  /* border: 1px solid black; */
+  width: 52%;
+  /* padding: 1vh; */
 }
 
-.priceContainer {
+.stockPrice {
+  margin-right: 0.5vh;
+  margin-left: -0.5vh;
+}
+.stockPrice > p {
+  font-size: 1.5vh;
+  font-weight: bold;
+  /* margin: 4vh; */
+  /* height: 100%; */
+  /* margin: 1vh; */
+  /* padding: 0vh 2vh; */
+}
+
+.pricing {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  align-items: center;
-  text-align: center;
-  padding: 1vh 0vh;
-  font-weight: bold;
-  /* background-color: aqua; */
-  /* border-right: 1px solid black; */
-
   /* justify-content: space-between; */
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  background-color: blanchedalmond;
+  padding: 1vh 0vh;
+  margin-right: 1vh;
+  border-radius: 10px;
+}
+
+.pricing > p {
+  font-weight: bold;
+  /* width: 80%; */
+  /* height: 100%; */
+}
+
+.borderUnder {
+  border-top: 1px solid black;
+  width: 40%;
 }
