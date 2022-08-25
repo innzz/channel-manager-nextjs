@@ -36,7 +36,10 @@ const NewDesign = () => {
   const [roomDetails, setRoomDetails] = useState([]);
   const [bulkUpdateModal, setBulkUpdateModal] = useState(false);
   const [agodaPropertyId, setAgodaPropertyId] = useState("");
-  const [propertyResult, stePropertyResult] = useState("");
+  const [agodaPropertyResult, setAgodaPropertyResult] = useState("");
+
+  const [bookOneResponse, setBookOneResponse] = useState("");
+
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
@@ -101,7 +104,8 @@ const NewDesign = () => {
       )
         .then((res) => res.json())
         .then((resJson) => {
-          // console.log(resJson)
+          // console.log(resJson);
+          setBookOneResponse(resJson);
           setDropDownValue(resJson.propertiesOnlineTravelAgencies);
           setShowTravelAgencyName(
             resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName
@@ -111,7 +115,102 @@ const NewDesign = () => {
         });
     }
   }, [router]);
-  // console.log(agodaPropertyId);
+
+  // console.log(bookOneResponse.propertiesOnlineTravelAgencies);
+
+  // const [doubleRoomDtosOne, setDoubleRoomDtosOne] = useState("");
+
+  let noPlans = [];
+  let doubleRoomDtos = [];
+  let twinRoomDtos = [];
+
+  let a = Object.keys(roomDetails).map((val, i) => {
+    // return roomDetails[val].onlineTravelAgenciesDto;
+    if (roomDetails[val].name == "Double Room") {
+      doubleRoomDtos.push(roomDetails[val].onlineTravelAgenciesDto);
+      // setDoubleRoomDtosOne(roomDetails[val].onlineTravelAgenciesDto);
+    } else if (roomDetails[val].name == "Twin Room") {
+      twinRoomDtos.push(roomDetails[val].onlineTravelAgenciesDto);
+    } else {
+    }
+    // console.log(roomDetails[val].name);
+  });
+
+  let doubleRoomOta = [];
+
+  for (let i = 0; i < doubleRoomDtos.length; i++) {
+    let kbc = doubleRoomDtos[i];
+    // console.log(kbc);
+    for (let j = 0; j < Object.keys(kbc).length; j++) {
+      // console.log(kbc[j]);
+      doubleRoomOta.push(kbc[j]);
+    }
+  }
+
+  // console.log(roomDetails);
+
+  let roomDetailsOta = [];
+
+  let otaDetailSecond = [];
+
+  let roomDetailsOtaFIlter = Object.keys(roomDetails).map((val, i) => {
+    return roomDetails[val]?.onlineTravelAgenciesDto;
+  });
+
+  let abc = roomDetailsOtaFIlter?.map((val, i) => {
+    console.log(val[i]?.name);
+    // roomDetailsOta.push(val[i]?.name);
+  });
+  // console.log(abc);
+
+  let otaFIlter = dropdownValue.map((val, i) => {
+    const filtered = val.onlineTravelAgencyName;
+    otaDetailSecond.push(filtered);
+  });
+  // console.log(roomDetailsOta, otaDetailSecond);
+
+  const difference = otaDetailSecond.filter((x) => !roomDetailsOta.includes(x));
+  // console.log(difference);
+
+  // console.log(notIncludedProperty[0].onlineTravelAgencyName);
+
+  // const abp = doubleRoomOta.map((key, value) => {
+  //   return ({key.name})
+  // })
+
+  // let c = [];
+  // for (let i = 0; i < a.length; i++) {
+  //   let b = a[i]["onlineTravelAgenciesDto"];
+  //   c.push(b);
+  // }
+  // console.log(c);
+
+  // const obj = bookOneResponse;
+  // console.log(obj);
+
+  // const a = Object.keys(obj).map(function (key, value) {
+  //   obj[key];
+  // });
+  // console.log(a);
+
+  // const obj = Object.keys(bookOneResponse).map((val, i) => {
+  //   return bookOneResponse.roomDtos[0].onlineTravelAgenciesDto[0].name;
+  // });
+  // console.log(obj);
+
+  // let newObj = [];
+
+  // for (let i = 0; i < Object.keys(bookOneResponse).length; i++) {
+  //   let iRes = bookOneResponse.roomDtos;
+  //   newObj.push(iRes);
+  //   // console.log(iRes);
+  //   // for (let j = 0; j < Object.keys(iRes).length; j++) {
+  //   //   let jRes = Object.values(iRes);
+  //   //   console.log(jRes);
+  //   //   // newObj.push(jRes);
+  //   // }
+  // }
+  // console.log(newObj);
 
   const otaHandler = (id, newCurrDate, newSevenDay) => {
     const data = { id: id, fromDate: newCurrDate, toDate: newSevenDay };
@@ -123,7 +222,7 @@ const NewDesign = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        stePropertyResult(data);
+        setAgodaPropertyResult(data);
         console.log("success:", data);
       })
       .catch((error) => {
@@ -153,6 +252,9 @@ const NewDesign = () => {
   return (
     <div className={styles.bigContainer}>
       <NavBar />
+      {/* {aaa.map((val, i) => {
+
+      })} */}
       <div className={styles.container}>
         <div className={styles.topBarButtons}>
           <div className={styles.channelmanagerButton}>
@@ -215,190 +317,100 @@ const NewDesign = () => {
           </div>
         </div>
 
-        <div className={styles.RoomsMainContainer}>
-          <div className={styles.roomTypeHeading}>
-            <h2>Deluxe Room</h2>
-          </div>
-          <div className={styles.secondSection}>
-            <div className={styles.roomTypeheading}>
-              <h3>Deluxe Room with Buffet</h3>
+        {roomDetails.map((val, i) => {
+          return (
+            <div key={i} className={styles.RoomsMainContainer}>
+              <div className={styles.roomTypeHeading}>
+                <h2>{val.name}</h2>
+              </div>
+              <div className={styles.secondSection}>
+                <div className={styles.roomTypeheading}>
+                  <h3>Deluxe Room with Buffet</h3>
+                </div>
+                <div className={styles.dateContainer}>
+                  <div className={styles.date}>
+                    <h4>Tue</h4>
+                    <p>23</p>
+                  </div>
+                  <div className={styles.date}>
+                    <h4>Wed</h4>
+                    <p>24</p>
+                  </div>
+                  <div className={styles.date}>
+                    <h4>Thu</h4>
+                    <p>25</p>
+                  </div>
+                  <div className={styles.date}>
+                    <h4>Fri</h4>
+                    <p>26</p>
+                  </div>
+                  <div className={styles.date}>
+                    <h4>Sat</h4>
+                    <p>27</p>
+                  </div>
+                  <div className={styles.date}>
+                    <h4>Sun</h4>
+                    <p>28</p>
+                  </div>
+                  <div className={styles.date}>
+                    <h4>Mon</h4>
+                    <p>29</p>
+                  </div>
+                </div>
+              </div>
+
+              {val.onlineTravelAgenciesDto.map((val2, j) => {
+                return (
+                  <div key={j} className={styles.thirdSection}>
+                    <div className={styles.otaContainer}>
+                      <div className={styles.otaImage}>
+                        <img src={val2.logoUrl} alt="" />
+                      </div>
+                      <div className={styles.otaRoomPlans}>
+                        <h3>{val2.name}</h3>
+                        <h4>(Deluxe Room - Buffet Combo)</h4>
+                      </div>
+                    </div>
+                    <div className={styles.stockPriceContainer}>
+                      <div className={styles.stockPrice}>
+                        <p>Stock: </p>
+                        <p>Price: </p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                      <div className={styles.pricing}>
+                        <p>10</p>
+                        <p>$10</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className={styles.dateContainer}>
-              <div className={styles.date}>
-                <h4>Tue</h4>
-                <p>23</p>
-              </div>
-              <div className={styles.date}>
-                <h4>Wed</h4>
-                <p>24</p>
-              </div>
-              <div className={styles.date}>
-                <h4>Thu</h4>
-                <p>25</p>
-              </div>
-              <div className={styles.date}>
-                <h4>Fri</h4>
-                <p>26</p>
-              </div>
-              <div className={styles.date}>
-                <h4>Sat</h4>
-                <p>27</p>
-              </div>
-              <div className={styles.date}>
-                <h4>Sun</h4>
-                <p>28</p>
-              </div>
-              <div className={styles.date}>
-                <h4>Mon</h4>
-                <p>29</p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.thirdSection}>
-            <div className={styles.otaContainer}>
-              <div className={styles.otaImage}>
-                <img
-                  src="https://book-one-pos.vercel.app/Logo_Bookone-Vertical-1.svg"
-                  alt=""
-                />
-              </div>
-              <div className={styles.otaRoomPlans}>
-                <h3>BookOne</h3>
-                <h4>(Deluxe Room with Buffet)</h4>
-              </div>
-            </div>
-            <div className={styles.stockPriceContainer}>
-              <div className={styles.stockPrice}>
-                <p>Stock: </p>
-                <p>Price: </p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.thirdSection}>
-            <div className={styles.otaContainer}>
-              <div className={styles.otaImage}>
-                <img
-                  src="https://imgak.mmtcdn.com/pwa_v3/pwa_hotel_assets/header/mmtLogoWhite.png"
-                  alt=""
-                />
-              </div>
-              <div className={styles.otaRoomPlans}>
-                <h3>MakeMyTrip</h3>
-                <h4>(Deluxe Room - Buffet Combo)</h4>
-              </div>
-            </div>
-            <div className={styles.stockPriceContainer}>
-              <div className={styles.stockPrice}>
-                <p>Stock: </p>
-                <p>Price: </p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.thirdSection}>
-            <div className={styles.otaContainer}>
-              <div className={styles.otaImage}>
-                <img
-                  src="https://www.hospitalitynet.org/picture/153071927/siteminder.jpg?t=1634559178"
-                  alt=""
-                />
-              </div>
-              <div className={styles.otaRoomPlans}>
-                <h3>SiteMinder</h3>
-                <h4>(Deluxe Room - Buffet Combo)</h4>
-              </div>
-            </div>
-            <div className={styles.stockPriceContainer}>
-              <div className={styles.stockPrice}>
-                <p>Stock: </p>
-                <p>Price: </p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-              <div className={styles.pricing}>
-                <p>10</p>
-                <p>$10</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

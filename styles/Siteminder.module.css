@@ -784,7 +784,7 @@
   /* margin: 0vh 4vh; */
   margin-right: 2vh;
   background-color: white;
-  padding: 0.5vh;
+  /* padding: 0.5vh; */
   border-radius: 5px;
 }
 
@@ -806,12 +806,18 @@
 
 .stockPriceContainer {
   display: flex;
+  width: 52.5%;
+  align-items: center;
+  /* padding: 1vh; */
+}
+
+.stockPriceContainerOne {
+  display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: center;
   border-radius: 10px;
-  width: 52.5%;
-  /* padding: 1vh; */
+  width: 100%;
 }
 
 .stockPrice {
