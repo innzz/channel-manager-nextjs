@@ -711,6 +711,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* width: 50%; */
   /* margin: 2vh; */
   /* width: 80%; */
 }
@@ -775,7 +776,12 @@
   border: 1px solid rgb(209, 208, 208);
   /* background-color: white; */
   padding: 1vh;
-  width: 46.5%;
+  width: 50%;
+  justify-content: space-between;
+}
+
+.otaInnerContainer{
+  display: flex;
 }
 
 .otaImage {
@@ -806,7 +812,7 @@
 
 .stockPriceContainer {
   display: flex;
-  width: 52.5%;
+  width: 50%;
   align-items: center;
   /* padding: 1vh; */
 }
