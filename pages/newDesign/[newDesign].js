@@ -147,7 +147,10 @@ const NewDesign = () => {
               const date1 = date.toString().split(' ');
               // console.log(resJson.result.properties[0].property[i].$.date)
               // dates.push(resJson.result.properties[0].property[i].$.date)
-              dates.push(`${date1[0]} ${date1[2]}`)
+              dates.push({
+                day: date1[0],
+                date: date1[2]
+              })
               
             }
             setAgodaPropertyResult(resJson.result.properties[0].property)
@@ -282,12 +285,12 @@ const NewDesign = () => {
                 </div>
                 <div className={styles.dateContainer}>
                   {agodaDatesToShow.map((val,i)=>{
-                    const date = val.split(' ');
+                    // const date = val.split(' ');
                     // console.log(val.split(' '))
                     return (
                       <div key={i} className={styles.date}>
-                    <h4>{date[0]}</h4>
-                    <p>{date[1]}</p>
+                    <h4>{val.day}</h4>
+                    <p>{val.date}</p>
                   </div>
                     )
                   })}
