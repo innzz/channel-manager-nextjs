@@ -285,8 +285,6 @@ const NewDesign = () => {
                 </div>
                 <div className={styles.dateContainer}>
                   {agodaDatesToShow.map((val,i)=>{
-                    // const date = val.split(' ');
-                    // console.log(val.split(' '))
                     return (
                       <div key={i} className={styles.date}>
                     <h4>{val.day}</h4>
