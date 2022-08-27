@@ -33,13 +33,14 @@ const Login = () => {
             .then((resJson)=>{
                 if(resJson.token){
                     // router.push(`/siteminder/${resJson.property.id}`);
-                    router.push(`/siteminder/${resJson.property.id}`);
+                    router.push(`/newDesign/${resJson.property.id}`);
                     localStorage.setItem('token',resJson.token);
                 }else{
                      setAlert(true)
                 }
             }) 
     }
+    console.log(".....")
     return (
         <div className={styles.bgimage}>
             <div className={styles.bigContainer}>
