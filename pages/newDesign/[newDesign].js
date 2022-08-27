@@ -106,7 +106,7 @@ const NewDesign = () => {
       )
         .then((res) => res.json())
         .then((resJson) => {
-          // console.log(resJson);
+          console.log(resJson);
           setBookOneResponse(resJson);
           setDropDownValue(resJson.propertiesOnlineTravelAgencies);
           setShowTravelAgencyName(
