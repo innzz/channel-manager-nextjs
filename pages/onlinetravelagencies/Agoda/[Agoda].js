@@ -21,11 +21,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const Agoda = () => {
+const Agoda = ({showTravelAgencyName,setShowTravelAgencyName}) => {
   let router = useRouter();
 
   const { Agoda } = router.query;
-  // console.log(siteminder)
+  // console.log(Agoda)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] = useState(false);
   const [shopModal, setshopModal] = useState(false);
   const [roomType, setRoomType] = useState(false);
@@ -36,7 +36,7 @@ const Agoda = () => {
   const [otas, setOtas] = useState("");
   
   
-  const [showTravelAgencyName, setShowTravelAgencyName] = useState({});
+  // const [showTravelAgencyName, setShowTravelAgencyName] = useState({});
   const [agodaPropertyResult, setAgodaPropertyResult] = useState([]);
   const [agodaDatesToShow, setAgodaDatesToShow] = useState([]);
 
@@ -85,47 +85,40 @@ const Agoda = () => {
 
   let newSevenDay = sevenDays.join("-");
 
+
   // console.log(currDate, nextSevenDay);
   // const newArr = currDate.split("-");
   // console.log(newCurrDate, newSevenDay);
 
-  useEffect(() => {
-    if (Agoda !== undefined) {
-      fetch(
-        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Agoda}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((resJson) => {
-          // console.log(resJson);
-          setBookOneResponse(resJson);
-          setDropDownValue(resJson.propertiesOnlineTravelAgencies);
-          setShowTravelAgencyName(
-            resJson.propertiesOnlineTravelAgencies[2]
-          );
-          setRoomDetails(resJson.roomDtos);
-          setOtas(resJson.propertiesOnlineTravelAgencies);
-        });
-    }
-  }, [Agoda]);
-  // console.log(otas)
-  // console.log(showTravelAgencyName)
-
   useEffect(()=>{
-    // for (let index = 0; index < otas.length; index++) {
-    //   console.log(otas[index])
-      if (showTravelAgencyName.onlineTravelAgencyName == "Agoda") {
-        // router.push(`/onlinetravelagencies/Agoda/${Agoda}`);
-        const data = {fromDate: newCurrDate, toDate: newSevenDay,id: showTravelAgencyName.onlineTravelAgencyPropertyId };
+          fetch(
+            `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Agoda}`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+                "Content-Type": "application/json",
+                APP_ID: "BOOKONE_WEB_APP",
+              },
+            }
+          )
+            .then((res) => res.json())
+            .then((resJson) => {
+              console.log(resJson);
+              setBookOneResponse(resJson);
+              setDropDownValue(resJson.propertiesOnlineTravelAgencies);
+              // console.log(dropdownValue)
+              const selectedOnlineTravelAgency = {};
+              for (let i = 0; i < resJson.propertiesOnlineTravelAgencies.length; i++) {
+                if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'Agoda') {
+                  // setShowTravelAgencyName(
+                  selectedOnlineTravelAgency = resJson.propertiesOnlineTravelAgencies[i]
+                  // );
+                }
+              }
+              const data = {fromDate: newCurrDate, toDate: newSevenDay,id: selectedOnlineTravelAgency.onlineTravelAgencyPropertyId };
         fetch(
           `https://channel-manager-server.herokuapp.com/propertyData`,
           {
@@ -141,64 +134,48 @@ const Agoda = () => {
           }
         )
           .then((res) => res.json())
-          .then((resJson) => {
-            // console.log(resJson.result.properties[0].property);
+          .then((responseJson) => {
+            // console.log(responseJson);
             const dates = [];
-            for (let i = 0; i < resJson.result.properties[0].property.length; i++) {
-              const date = new Date(resJson.result.properties[0].property[i].$.date);
-              // console.log(date.toString().split(' '))
+            for (let i = 0; i < responseJson.result.properties[0].property.length; i++) {
+              const date = new Date(responseJson.result.properties[0].property[i].$.date);
               const date1 = date.toString().split(' ');
-              // console.log(resJson.result.properties[0].property[i].$.date)
-              // dates.push(resJson.result.properties[0].property[i].$.date)
               dates.push({
                 day: date1[0],
                 date: date1[2]
               })
               
             }
-            setAgodaPropertyResult(resJson.result.properties[0].property)
+            setAgodaPropertyResult(responseJson.result.properties[0].property)
             setAgodaDatesToShow(dates);
 
           });
-      }
-      else if (showTravelAgencyName.onlineTravelAgencyName == "SiteMinder"){
+          console.log(resJson)
+              setShowTravelAgencyName(selectedOnlineTravelAgency)
+              setRoomDetails(resJson.roomDtos);
+              setOtas(resJson.propertiesOnlineTravelAgencies);
+            });
+  },[Agoda]);
+
+  // console.log(dropdownValue)
+
+  const changeLocation = (showTravelAgencyName)=>{
+    if (showTravelAgencyName.onlineTravelAgencyName === 'SiteMinder') {
+      setShowTravelAgencyName(showTravelAgencyName)
+        // localStorage.setItem('travelAgency',JSON.stringify(showTravelAgencyName));
         router.push(`/onlinetravelagencies/Siteminder/${Agoda}`);
-      }
-      
-    // }
-  },[showTravelAgencyName]);
-  console.log(bookOneResponse)
+        // setShowTravelAgencyName(JSON.parse(localStorage.getItem('travelAgency')));
+    }
+      // console.log(JSON.parse(localStorage.getItem('travelAgency')));
+  }
+  // console.log(bookOneResponse)
 
   // console.log(agodaDatesToShow);
   // console.log(roomDetails)
   // console.log(otas)
   // console.log(dropdownValue)
-//   console.log(showTravelAgencyName)
+  // console.log('Agoda',showTravelAgencyName)
 
-  // const otaHandler = (id, newCurrDate, newSevenDay) => {
-  //   const data = { id: id, fromDate: newCurrDate, toDate: newSevenDay };
-  //   // console.log(id);
-  //   fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setAgodaPropertyResult(data);
-  //       // console.log("success:", data);
-  //     })
-  //     .catch((error) => {
-  //       // console.error("Error:", error);
-  //     });
-  // };
-  // console.log(propertyResult.result.properties[0].property[0].$.date);
-  // console.log(propertyResult.result.properties[0]);
-
-  // const dateArray = propertyResult.result.properties.map((val, i) => {
-  //   console.log(val);
-  // });
-  // console.log(dateArray);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -242,12 +219,7 @@ const Agoda = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            setShowTravelAgencyName(val);
-                            // otaHandler(
-                            //   val.onlineTravelAgencyPropertyId,
-                            //   newCurrDate,
-                            //   newSevenDay
-                            // );
+                            changeLocation(val)
                           }}
                         >
                           {val.onlineTravelAgencyName}
@@ -280,6 +252,18 @@ const Agoda = () => {
           </div>
         </div>
 
+        <div className={styles.RoomsMainContainer}>
+        <div className={styles.dateContainer}>
+                  {agodaDatesToShow.map((val,i)=>{
+                    return (
+                      <div key={i} className={styles.date}>
+                    <h4>{val.day}</h4>
+                    <p>{val.date}</p>
+                  </div>
+                    )
+                  })}
+      </div>
+        </div>
         {roomDetails.map((val, i) => {
           return (
             <div key={i} className={styles.RoomsMainContainer}>
@@ -290,40 +274,7 @@ const Agoda = () => {
                 <div className={styles.roomTypeheading}>
                   <h3>Deluxe Room with Buffet</h3>
                 </div>
-                <div className={styles.dateContainer}>
-                  {agodaDatesToShow.map((val,i)=>{
-                    return (
-                      <div key={i} className={styles.date}>
-                    <h4>{val.day}</h4>
-                    <p>{val.date}</p>
-                  </div>
-                    )
-                  })}
-                  {/* <div className={styles.date}>
-                    <h4>Wed</h4>
-                    <p>24</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Thu</h4>
-                    <p>25</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Fri</h4>
-                    <p>26</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Sat</h4>
-                    <p>27</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Sun</h4>
-                    <p>28</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Mon</h4>
-                    <p>29</p>
-                  </div> */}
-                </div>
+
               </div>
 
               {val.onlineTravelAgenciesDto.map((val2, j) => {

@@ -32,9 +32,39 @@ const Login = () => {
             .then(res=>res.json())
             .then((resJson)=>{
                 if(resJson.token){
+                    const propertyId = resJson.property.id
                     // router.push(`/siteminder/${resJson.property.id}`);
-                    router.push(`/newDesign/${resJson.property.id}`);
+                    // router.push(`/newDesign/${resJson.property.id}`);
                     localStorage.setItem('token',resJson.token);
+                    fetch(
+                        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${resJson.property.id}`,
+                        {
+                          method: "GET",
+                          headers: {
+                            Accept: "application/json",
+                            Authorization:
+                              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+                            "Content-Type": "application/json",
+                            APP_ID: "BOOKONE_WEB_APP",
+                          },
+                        }
+                      )
+                        .then((res) => res.json())
+                        .then((resJson)=>{
+                            console.log(resJson.propertiesOnlineTravelAgencies)
+                            for (let i = 0; i < resJson.propertiesOnlineTravelAgencies.length; i++) {
+                                if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'Agoda') {
+                                    router.push(`/onlinetravelagencies/Agoda/${propertyId}`);
+                                }
+                                else if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'SiteMinder'){
+                                    router.push(`/onlinetravelagencies/Siteminder/${propertyId}`);
+                                }
+                                else {
+                                    console.log("No property Id Mtached with any Ota")
+                                }
+                                
+                            }
+                        })
                 }else{
                      setAlert(true)
                 }

@@ -21,7 +21,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const Siteminder = () => {
+const Siteminder = ({showTravelAgencyName,setShowTravelAgencyName}) => {
   let router = useRouter();
 
   const { Siteminder } = router.query;
@@ -36,7 +36,6 @@ const Siteminder = () => {
   const [otas, setOtas] = useState("");
   
   
-  const [showTravelAgencyName, setShowTravelAgencyName] = useState({});
   const [SiteminderPropertyResult, setSiteminderPropertyResult] = useState([]);
   const [SiteminderDatesToShow, setSiteminderDatesToShow] = useState([]);
 
@@ -85,119 +84,54 @@ const Siteminder = () => {
 
   let newSevenDay = sevenDays.join("-");
 
-  // console.log(currDate, nextSevenDay);
-  // const newArr = currDate.split("-");
-  // console.log(newCurrDate, newSevenDay);
 
-  useEffect(() => {
-    if (Siteminder !== undefined) {
-      fetch(
-        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Siteminder}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((resJson) => {
-          // console.log(resJson);
-          setBookOneResponse(resJson);
-          setDropDownValue(resJson.propertiesOnlineTravelAgencies);
-          setShowTravelAgencyName(
-            resJson.propertiesOnlineTravelAgencies[2]
-          );
-          setRoomDetails(resJson.roomDtos);
-          setOtas(resJson.propertiesOnlineTravelAgencies);
-        });
-    }
-  }, [Siteminder]);
-  // console.log(otas)
-  // console.log(showTravelAgencyName)
-
-  useEffect(()=>{
-    // for (let index = 0; index < otas.length; index++) {
-    //   console.log(otas[index])
-      if (showTravelAgencyName.onlineTravelAgencyName == "Siteminder") {
-          const data = {fromDate: newCurrDate, toDate: newSevenDay,id: showTravelAgencyName.onlineTravelAgencyPropertyId };
-          fetch(
-              `https://channel-manager-server.herokuapp.com/propertyData`,
-              {
-                  method: "POST",
-                  headers: {
-                      Accept: "application/json",
-                      Authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-                      "Content-Type": "application/json",
-                      APP_ID: "BOOKONE_WEB_APP",
-                    },
-                    body: JSON.stringify(data)
-                }
-        )
-          .then((res) => res.json())
-          .then((resJson) => {
-              // console.log(resJson.result.properties[0].property);
-              const dates = [];
-            for (let i = 0; i < resJson.result.properties[0].property.length; i++) {
-                const date = new Date(resJson.result.properties[0].property[i].$.date);
-                // console.log(date.toString().split(' '))
-                const date1 = date.toString().split(' ');
-                // console.log(resJson.result.properties[0].property[i].$.date)
-                // dates.push(resJson.result.properties[0].property[i].$.date)
-                dates.push({
-                    day: date1[0],
-                    date: date1[2]
-                })
-                
-            }
-            setSiteminderPropertyResult(resJson.result.properties[0].property)
-            setSiteminderDatesToShow(dates);
-            
-        });
-      }
-      else if (showTravelAgencyName.onlineTravelAgencyName == "Agoda"){
-          
+  const changeLocation = (showTravelAgencyName)=>{
+      if (showTravelAgencyName.onlineTravelAgencyName === 'Agoda') {
+        setShowTravelAgencyName(showTravelAgencyName)
+        //   localStorage.setItem('travelAgency',JSON.stringify(showTravelAgencyName));
           router.push(`/onlinetravelagencies/Agoda/${Siteminder}`);
-      }
-      
-      // }
-    },[showTravelAgencyName]);
+          // setShowTravelAgencyName(JSON.parse(localStorage.getItem('travelAgency')));
+        }
+        // console.log(JSON.parse(localStorage.getItem('travelAgency')));
+    }
     
+    useEffect(()=>{
+            fetch(
+                `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Siteminder}`,
+                {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    Authorization:
+                      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+                    "Content-Type": "application/json",
+                    APP_ID: "BOOKONE_WEB_APP",
+                  },
+                }
+              )
+                .then((res) => res.json())
+                .then((resJson) => {
+                  console.log(resJson);
+                  setBookOneResponse(resJson);
+                  setDropDownValue(resJson.propertiesOnlineTravelAgencies);
+                  for (let i = 0; i < resJson.propertiesOnlineTravelAgencies.length; i++) {
+                    if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName == 'SiteMinder') {
+                      setShowTravelAgencyName(
+                        resJson.propertiesOnlineTravelAgencies[i]
+                      );
+                    }
+                  }
+                  setRoomDetails(resJson.roomDtos);
+                  setOtas(resJson.propertiesOnlineTravelAgencies);
+                });
+    },[Siteminder]);
+    
+    // console.log(bookOneResponse)
     // console.log(SiteminderDatesToShow);
     // console.log(roomDetails)
   // console.log(otas)
   // console.log(dropdownValue)
-  // console.log(showTravelAgencyName)
-
-  // const otaHandler = (id, newCurrDate, newSevenDay) => {
-  //   const data = { id: id, fromDate: newCurrDate, toDate: newSevenDay };
-  //   // console.log(id);
-  //   fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setSiteminderPropertyResult(data);
-  //       // console.log("success:", data);
-  //     })
-  //     .catch((error) => {
-  //       // console.error("Error:", error);
-  //     });
-  // };
-  // console.log(propertyResult.result.properties[0].property[0].$.date);
-  // console.log(propertyResult.result.properties[0]);
-
-  // const dateArray = propertyResult.result.properties.map((val, i) => {
-  //   console.log(val);
-  // });
-  // console.log(dateArray);
+//   console.log('travel agency',showTravelAgencyName)
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -214,9 +148,6 @@ const Siteminder = () => {
   return (
     <div className={styles.bigContainer}>
       <NavBar />
-      {/* {aaa.map((val, i) => {
-
-      })} */}
       <div className={styles.container}>
         <div className={styles.topBarButtons}>
           <div className={styles.channelmanagerButton}>
@@ -241,12 +172,7 @@ const Siteminder = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            setShowTravelAgencyName(val);
-                            // otaHandler(
-                            //   val.onlineTravelAgencyPropertyId,
-                            //   newCurrDate,
-                            //   newSevenDay
-                            // );
+                            changeLocation(val);
                           }}
                         >
                           {val.onlineTravelAgencyName}
@@ -279,26 +205,13 @@ const Siteminder = () => {
           </div>
         </div>
 
-        {roomDetails.map((val, i) => {
-          return (
-            <div key={i} className={styles.RoomsMainContainer}>
-              <div className={styles.roomTypeHeading}>
-                <h2>{val.name}</h2>
-              </div>
-              <div className={styles.secondSection}>
-                <div className={styles.roomTypeheading}>
-                  <h3>Deluxe Room with Buffet</h3>
-                </div>
-                <div className={styles.dateContainer}>
-                  {SiteminderDatesToShow.map((val,i)=>{
-                    return (
-                      <div key={i} className={styles.date}>
-                    <h4>{val.day}</h4>
-                    <p>{val.date}</p>
+        <div className={styles.RoomsMainContainer}>
+        <div className={styles.dateContainer}>
+                  <div className={styles.date}>
+                    <h4>Wed</h4>
+                    <p>24</p>
                   </div>
-                    )
-                  })}
-                  {/* <div className={styles.date}>
+                  <div className={styles.date}>
                     <h4>Wed</h4>
                     <p>24</p>
                   </div>
@@ -321,7 +234,18 @@ const Siteminder = () => {
                   <div className={styles.date}>
                     <h4>Mon</h4>
                     <p>29</p>
-                  </div> */}
+                  </div>
+                </div>
+        </div>
+        {roomDetails.map((val, i) => {
+          return (
+            <div key={i} className={styles.RoomsMainContainer}>
+              <div className={styles.roomTypeHeading}>
+                <h2>{val.name}</h2>
+              </div>
+              <div className={styles.secondSection}>
+                <div className={styles.roomTypeheading}>
+                  <h3>Deluxe Room with Buffet</h3>
                 </div>
               </div>
 
