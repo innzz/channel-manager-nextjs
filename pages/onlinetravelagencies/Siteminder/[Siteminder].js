@@ -209,7 +209,10 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
           </div>
         </div>
 
-        <div className={styles.RoomsMainContainer}>
+        <div className={styles.RoomsMainContainerOne}>
+          <div className={styles.dateHeading}>
+            <h3>Dates: </h3>
+          </div>
           <div className={styles.dateContainer}>
             <div className={styles.date}>
               <h4>Wed</h4>
