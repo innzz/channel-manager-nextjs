@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../../styles/Siteminder.module.css";
-import NavBar from "../../components/Navbar";
+import styles from "../../../styles/Siteminder.module.css";
+import NavBar from "../../../components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
 import { FaBed, FaSave } from "react-icons/fa";
@@ -21,10 +21,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const NewDesign = () => {
+const Siteminder = () => {
   let router = useRouter();
 
-  const { newDesign } = router.query;
+  const { Siteminder } = router.query;
   // console.log(siteminder)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] = useState(false);
   const [shopModal, setshopModal] = useState(false);
@@ -37,8 +37,8 @@ const NewDesign = () => {
   
   
   const [showTravelAgencyName, setShowTravelAgencyName] = useState({});
-  const [agodaPropertyResult, setAgodaPropertyResult] = useState([]);
-  const [agodaDatesToShow, setAgodaDatesToShow] = useState([]);
+  const [SiteminderPropertyResult, setSiteminderPropertyResult] = useState([]);
+  const [SiteminderDatesToShow, setSiteminderDatesToShow] = useState([]);
 
   const [bookOneResponse, setBookOneResponse] = useState("");
 
@@ -90,9 +90,9 @@ const NewDesign = () => {
   // console.log(newCurrDate, newSevenDay);
 
   useEffect(() => {
-    if (newDesign !== undefined) {
+    if (Siteminder !== undefined) {
       fetch(
-        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${newDesign}`,
+        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Siteminder}`,
         {
           method: "GET",
           headers: {
@@ -116,56 +116,60 @@ const NewDesign = () => {
           setOtas(resJson.propertiesOnlineTravelAgencies);
         });
     }
-  }, [newDesign]);
+  }, [Siteminder]);
   // console.log(otas)
   // console.log(showTravelAgencyName)
 
   useEffect(()=>{
     // for (let index = 0; index < otas.length; index++) {
     //   console.log(otas[index])
-      if (showTravelAgencyName.onlineTravelAgencyName == "Agoda") {
-        const data = {fromDate: newCurrDate, toDate: newSevenDay,id: showTravelAgencyName.onlineTravelAgencyPropertyId };
-        fetch(
-          `https://channel-manager-server.herokuapp.com/propertyData`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-              "Content-Type": "application/json",
-              APP_ID: "BOOKONE_WEB_APP",
-            },
-            body: JSON.stringify(data)
-          }
+      if (showTravelAgencyName.onlineTravelAgencyName == "Siteminder") {
+          const data = {fromDate: newCurrDate, toDate: newSevenDay,id: showTravelAgencyName.onlineTravelAgencyPropertyId };
+          fetch(
+              `https://channel-manager-server.herokuapp.com/propertyData`,
+              {
+                  method: "POST",
+                  headers: {
+                      Accept: "application/json",
+                      Authorization:
+                      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+                      "Content-Type": "application/json",
+                      APP_ID: "BOOKONE_WEB_APP",
+                    },
+                    body: JSON.stringify(data)
+                }
         )
           .then((res) => res.json())
           .then((resJson) => {
-            // console.log(resJson.result.properties[0].property);
-            const dates = [];
+              // console.log(resJson.result.properties[0].property);
+              const dates = [];
             for (let i = 0; i < resJson.result.properties[0].property.length; i++) {
-              const date = new Date(resJson.result.properties[0].property[i].$.date);
-              // console.log(date.toString().split(' '))
-              const date1 = date.toString().split(' ');
-              // console.log(resJson.result.properties[0].property[i].$.date)
-              // dates.push(resJson.result.properties[0].property[i].$.date)
-              dates.push({
-                day: date1[0],
-                date: date1[2]
-              })
-              
+                const date = new Date(resJson.result.properties[0].property[i].$.date);
+                // console.log(date.toString().split(' '))
+                const date1 = date.toString().split(' ');
+                // console.log(resJson.result.properties[0].property[i].$.date)
+                // dates.push(resJson.result.properties[0].property[i].$.date)
+                dates.push({
+                    day: date1[0],
+                    date: date1[2]
+                })
+                
             }
-            setAgodaPropertyResult(resJson.result.properties[0].property)
-            setAgodaDatesToShow(dates);
-
-          });
+            setSiteminderPropertyResult(resJson.result.properties[0].property)
+            setSiteminderDatesToShow(dates);
+            
+        });
+      }
+      else if (showTravelAgencyName.onlineTravelAgencyName == "Agoda"){
+          
+          router.push(`/onlinetravelagencies/Agoda/${Siteminder}`);
       }
       
-    // }
-  },[showTravelAgencyName]);
-
-  // console.log(agodaDatesToShow);
-  // console.log(roomDetails)
+      // }
+    },[showTravelAgencyName]);
+    
+    // console.log(SiteminderDatesToShow);
+    // console.log(roomDetails)
   // console.log(otas)
   // console.log(dropdownValue)
   // console.log(showTravelAgencyName)
@@ -180,7 +184,7 @@ const NewDesign = () => {
   //   })
   //     .then((res) => res.json())
   //     .then((data) => {
-  //       setAgodaPropertyResult(data);
+  //       setSiteminderPropertyResult(data);
   //       // console.log("success:", data);
   //     })
   //     .catch((error) => {
@@ -286,7 +290,7 @@ const NewDesign = () => {
                   <h3>Deluxe Room with Buffet</h3>
                 </div>
                 <div className={styles.dateContainer}>
-                  {agodaDatesToShow.map((val,i)=>{
+                  {SiteminderDatesToShow.map((val,i)=>{
                     return (
                       <div key={i} className={styles.date}>
                     <h4>{val.day}</h4>
@@ -382,4 +386,4 @@ const NewDesign = () => {
   );
 };
 
-export default NewDesign;
+export default Siteminder;

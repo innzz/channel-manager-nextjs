@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../../styles/Siteminder.module.css";
-import NavBar from "../../components/Navbar";
+import styles from "../../../styles/Siteminder.module.css";
+import NavBar from "../../../components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
 import { FaBed, FaSave } from "react-icons/fa";
@@ -21,10 +21,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const NewDesign = () => {
+const Agoda = () => {
   let router = useRouter();
 
-  const { newDesign } = router.query;
+  const { Agoda } = router.query;
   // console.log(siteminder)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] = useState(false);
   const [shopModal, setshopModal] = useState(false);
@@ -90,9 +90,9 @@ const NewDesign = () => {
   // console.log(newCurrDate, newSevenDay);
 
   useEffect(() => {
-    if (newDesign !== undefined) {
+    if (Agoda !== undefined) {
       fetch(
-        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${newDesign}`,
+        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Agoda}`,
         {
           method: "GET",
           headers: {
@@ -116,7 +116,7 @@ const NewDesign = () => {
           setOtas(resJson.propertiesOnlineTravelAgencies);
         });
     }
-  }, [newDesign]);
+  }, [Agoda]);
   // console.log(otas)
   // console.log(showTravelAgencyName)
 
@@ -124,6 +124,7 @@ const NewDesign = () => {
     // for (let index = 0; index < otas.length; index++) {
     //   console.log(otas[index])
       if (showTravelAgencyName.onlineTravelAgencyName == "Agoda") {
+        // router.push(`/onlinetravelagencies/Agoda/${Agoda}`);
         const data = {fromDate: newCurrDate, toDate: newSevenDay,id: showTravelAgencyName.onlineTravelAgencyPropertyId };
         fetch(
           `https://channel-manager-server.herokuapp.com/propertyData`,
@@ -160,15 +161,19 @@ const NewDesign = () => {
 
           });
       }
+      else if (showTravelAgencyName.onlineTravelAgencyName == "SiteMinder"){
+        router.push(`/onlinetravelagencies/Siteminder/${Agoda}`);
+      }
       
     // }
   },[showTravelAgencyName]);
+  console.log(bookOneResponse)
 
   // console.log(agodaDatesToShow);
   // console.log(roomDetails)
   // console.log(otas)
   // console.log(dropdownValue)
-  // console.log(showTravelAgencyName)
+//   console.log(showTravelAgencyName)
 
   // const otaHandler = (id, newCurrDate, newSevenDay) => {
   //   const data = { id: id, fromDate: newCurrDate, toDate: newSevenDay };
@@ -382,4 +387,4 @@ const NewDesign = () => {
   );
 };
 
-export default NewDesign;
+export default Agoda;
