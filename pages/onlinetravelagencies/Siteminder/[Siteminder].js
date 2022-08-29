@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../../styles/Siteminder.module.css";
+import styles from "../../../styles/Ota.module.css";
 import NavBar from "../../../components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
@@ -21,12 +21,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const Siteminder = ({showTravelAgencyName,setShowTravelAgencyName}) => {
+const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   let router = useRouter();
 
   const { Siteminder } = router.query;
   // console.log(siteminder)
-  const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] = useState(false);
+  const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
+    useState(false);
   const [shopModal, setshopModal] = useState(false);
   const [roomType, setRoomType] = useState(false);
   const [ratePlans, setRatePlans] = useState(false);
@@ -34,8 +35,7 @@ const Siteminder = ({showTravelAgencyName,setShowTravelAgencyName}) => {
   const [roomDetails, setRoomDetails] = useState([]);
   const [bulkUpdateModal, setBulkUpdateModal] = useState(false);
   const [otas, setOtas] = useState("");
-  
-  
+
   const [SiteminderPropertyResult, setSiteminderPropertyResult] = useState([]);
   const [SiteminderDatesToShow, setSiteminderDatesToShow] = useState([]);
 
@@ -84,54 +84,58 @@ const Siteminder = ({showTravelAgencyName,setShowTravelAgencyName}) => {
 
   let newSevenDay = sevenDays.join("-");
 
-
-  const changeLocation = (showTravelAgencyName)=>{
-      if (showTravelAgencyName.onlineTravelAgencyName === 'Agoda') {
-        setShowTravelAgencyName(showTravelAgencyName)
-        //   localStorage.setItem('travelAgency',JSON.stringify(showTravelAgencyName));
-          router.push(`/onlinetravelagencies/Agoda/${Siteminder}`);
-          // setShowTravelAgencyName(JSON.parse(localStorage.getItem('travelAgency')));
-        }
-        // console.log(JSON.parse(localStorage.getItem('travelAgency')));
+  const changeLocation = (showTravelAgencyName) => {
+    if (showTravelAgencyName.onlineTravelAgencyName === "Agoda") {
+      setShowTravelAgencyName(showTravelAgencyName);
+      //   localStorage.setItem('travelAgency',JSON.stringify(showTravelAgencyName));
+      router.push(`/onlinetravelagencies/Agoda/${Siteminder}`);
+      // setShowTravelAgencyName(JSON.parse(localStorage.getItem('travelAgency')));
     }
-    
-    useEffect(()=>{
-            fetch(
-                `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Siteminder}`,
-                {
-                  method: "GET",
-                  headers: {
-                    Accept: "application/json",
-                    Authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-                    "Content-Type": "application/json",
-                    APP_ID: "BOOKONE_WEB_APP",
-                  },
-                }
-              )
-                .then((res) => res.json())
-                .then((resJson) => {
-                  console.log(resJson);
-                  setBookOneResponse(resJson);
-                  setDropDownValue(resJson.propertiesOnlineTravelAgencies);
-                  for (let i = 0; i < resJson.propertiesOnlineTravelAgencies.length; i++) {
-                    if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName == 'SiteMinder') {
-                      setShowTravelAgencyName(
-                        resJson.propertiesOnlineTravelAgencies[i]
-                      );
-                    }
-                  }
-                  setRoomDetails(resJson.roomDtos);
-                  setOtas(resJson.propertiesOnlineTravelAgencies);
-                });
-    },[Siteminder]);
-    
-    // console.log(bookOneResponse)
-    // console.log(SiteminderDatesToShow);
-    // console.log(roomDetails)
+    // console.log(JSON.parse(localStorage.getItem('travelAgency')));
+  };
+
+  useEffect(() => {
+    fetch(
+      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Siteminder}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((resJson) => {
+        console.log(resJson);
+        setBookOneResponse(resJson);
+        setDropDownValue(resJson.propertiesOnlineTravelAgencies);
+        for (
+          let i = 0;
+          i < resJson.propertiesOnlineTravelAgencies.length;
+          i++
+        ) {
+          if (
+            resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName ==
+            "SiteMinder"
+          ) {
+            setShowTravelAgencyName(resJson.propertiesOnlineTravelAgencies[i]);
+          }
+        }
+        setRoomDetails(resJson.roomDtos);
+        setOtas(resJson.propertiesOnlineTravelAgencies);
+      });
+  }, [Siteminder]);
+
+  // console.log(bookOneResponse)
+  // console.log(SiteminderDatesToShow);
+  // console.log(roomDetails)
   // console.log(otas)
   // console.log(dropdownValue)
-//   console.log('travel agency',showTravelAgencyName)
+  //   console.log('travel agency',showTravelAgencyName)
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -206,36 +210,36 @@ const Siteminder = ({showTravelAgencyName,setShowTravelAgencyName}) => {
         </div>
 
         <div className={styles.RoomsMainContainer}>
-        <div className={styles.dateContainer}>
-                  <div className={styles.date}>
-                    <h4>Wed</h4>
-                    <p>24</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Wed</h4>
-                    <p>24</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Thu</h4>
-                    <p>25</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Fri</h4>
-                    <p>26</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Sat</h4>
-                    <p>27</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Sun</h4>
-                    <p>28</p>
-                  </div>
-                  <div className={styles.date}>
-                    <h4>Mon</h4>
-                    <p>29</p>
-                  </div>
-                </div>
+          <div className={styles.dateContainer}>
+            <div className={styles.date}>
+              <h4>Wed</h4>
+              <p>24</p>
+            </div>
+            <div className={styles.date}>
+              <h4>Wed</h4>
+              <p>24</p>
+            </div>
+            <div className={styles.date}>
+              <h4>Thu</h4>
+              <p>25</p>
+            </div>
+            <div className={styles.date}>
+              <h4>Fri</h4>
+              <p>26</p>
+            </div>
+            <div className={styles.date}>
+              <h4>Sat</h4>
+              <p>27</p>
+            </div>
+            <div className={styles.date}>
+              <h4>Sun</h4>
+              <p>28</p>
+            </div>
+            <div className={styles.date}>
+              <h4>Mon</h4>
+              <p>29</p>
+            </div>
+          </div>
         </div>
         {roomDetails.map((val, i) => {
           return (
@@ -252,53 +256,58 @@ const Siteminder = ({showTravelAgencyName,setShowTravelAgencyName}) => {
               {val.onlineTravelAgenciesDto.map((val2, j) => {
                 return (
                   <div key={j}>
-                    {val2.name == showTravelAgencyName.onlineTravelAgencyName ? <div className={styles.thirdSection}>
-                    <div className={styles.otaContainer}>
-                      <div className={styles.otaInnerContainer}>
-                      <div className={styles.otaImage}>
-                        <img src={val2.logoUrl} alt="" />
+                    {val2.name ==
+                    showTravelAgencyName.onlineTravelAgencyName ? (
+                      <div className={styles.thirdSection}>
+                        <div className={styles.otaContainer}>
+                          <div className={styles.otaInnerContainer}>
+                            <div className={styles.otaImage}>
+                              <img src={val2.logoUrl} alt="" />
+                            </div>
+                            <div className={styles.otaRoomPlans}>
+                              <h3>{val2.name}</h3>
+                              <h4>(Deluxe Room - Buffet Combo)</h4>
+                            </div>
+                          </div>
+                          <div className={styles.stockPrice}>
+                            <p>Stock: </p>
+                            <p>Price: </p>
+                          </div>
+                        </div>
+                        <div className={styles.stockPriceContainer}>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className={styles.otaRoomPlans}>
-                        <h3>{val2.name}</h3>
-                        <h4>(Deluxe Room - Buffet Combo)</h4>
-                      </div>
-                      </div>
-                      <div className={styles.stockPrice}>
-                        <p>Stock: </p>
-                        <p>Price: </p>
-                      </div>
-                    </div>
-                    <div className={styles.stockPriceContainer}>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                      <div className={styles.pricing}>
-                        <p>10</p>
-                        <p>$10</p>
-                      </div>
-                    </div>
-                  </div>:''}
+                    ) : (
+                      ""
+                    )}
                   </div>
                 );
               })}
