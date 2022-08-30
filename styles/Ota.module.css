@@ -416,3 +416,8 @@
   border-top: 1px solid black;
   width: 40%;
 }
+
+.input {
+  width: 5vh;
+  /* margin: 0vh 15px; */
+}

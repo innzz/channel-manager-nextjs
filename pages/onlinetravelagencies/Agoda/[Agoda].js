@@ -40,6 +40,40 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   const [agodaPropertyResult, setAgodaPropertyResult] = useState([]);
   const [agodaDatesToShow, setAgodaDatesToShow] = useState([]);
 
+  const [priceField, setPriceField] = useState({
+    state: true,
+    index: -1,
+    value: "",
+  });
+  const [stockField, setStockField] = useState({
+    state: true,
+    index: -1,
+    value: "",
+  });
+
+  const [selectedTextField, setSelectedTextField] = useState("");
+
+  let stockInputHandler = (e) => {
+    if (e.target.name == "stock") {
+      setStockField({
+        state: false,
+        value: e.target.value,
+        index: -1,
+      });
+    }
+    // console.log(stockField);
+  };
+
+  let priceInputhandler = (e) => {
+    if (e.target.name == "price") {
+      setPriceField({
+        state: false,
+        value: e.target.value,
+        index: -1,
+      });
+    }
+  };
+
   const [bookOneResponse, setBookOneResponse] = useState("");
 
   const handleShopModal = () => {
@@ -258,7 +292,25 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
             </span>
             <button className={styles.saveBtn}>
               <FaSave />
-              <span>Save</span>
+              <span
+                onClick={() => {
+                  if (selectedTextField == "stockField") {
+                    setStockField({
+                      state: true,
+                      value: stockField.value,
+                      index: stockField.index,
+                    });
+                  } else if (selectedTextField == "priceField") {
+                    setPriceField({
+                      state: true,
+                      value: priceField.value,
+                      index: priceField.index,
+                    });
+                  }
+                }}
+              >
+                Save
+              </span>
             </button>
           </div>
         </div>
@@ -313,8 +365,54 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                         </div>
                         <div className={styles.stockPriceContainer}>
                           <div className={styles.pricing}>
-                            <p>10</p>
-                            <p>$10</p>
+                            <div className={styles.pricing}>
+                              {stockField.state == true ? (
+                                <p
+                                  onClick={() => {
+                                    setStockField({
+                                      state: false,
+                                      value: "",
+                                      index: -1,
+                                    });
+                                    setSelectedTextField("stockField");
+                                  }}
+                                >
+                                  {stockField.value !== ""
+                                    ? stockField.value
+                                    : "10"}
+                                </p>
+                              ) : (
+                                <input
+                                  name={"stock"}
+                                  value={stockField.value}
+                                  className={styles.input}
+                                  onChange={stockInputHandler}
+                                ></input>
+                              )}
+                            </div>
+                            {priceField.state == true ? (
+                              <p
+                                onClick={() => {
+                                  setPriceField({
+                                    state: false,
+                                    value: "",
+                                    index: -1,
+                                  });
+                                  setSelectedTextField("priceField");
+                                }}
+                              >
+                                {priceField.value !== ""
+                                  ? priceField.value
+                                  : "$10"}
+                              </p>
+                            ) : (
+                              <input
+                                name={"price"}
+                                value={priceField.value}
+                                className={styles.input}
+                                onChange={priceInputhandler}
+                              ></input>
+                            )}
                           </div>
                           <div className={styles.pricing}>
                             <p>10</p>
