@@ -36,6 +36,17 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   const [bulkUpdateModal, setBulkUpdateModal] = useState(false);
   const [otas, setOtas] = useState("");
 
+  const [priceField, setPriceField] = useState({
+    state: false,
+    index: -1,
+    value: "",
+  });
+  const [stockField, setStockField] = useState({
+    state: false,
+    index: -1,
+    value: "",
+  });
+
   const [SiteminderPropertyResult, setSiteminderPropertyResult] = useState([]);
   const [SiteminderDatesToShow, setSiteminderDatesToShow] = useState([]);
 
@@ -48,6 +59,9 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   const handleBulkUpdateModal = () => {
     setBulkUpdateModal(!bulkUpdateModal);
   };
+
+  const priceHandler = () => {};
+  const stockhandler = () => {};
 
   //Current Date
   const currentDate = new Date().toLocaleDateString().split("/");
@@ -145,6 +159,17 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     setRatePlans(!ratePlans);
   };
 
+  let inputHandler = (e) => {
+    if (e.target.name == "stock") {
+      setStockField({
+        state: false,
+        value: e.target.value,
+        index: -1,
+      });
+    }
+    console.log(stockField);
+  };
+
   const handleRatesAvailiblityDropDown = () => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
@@ -204,7 +229,17 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
             </span>
             <button className={styles.saveBtn}>
               <FaSave />
-              <span>Save</span>
+              <span
+                onClick={() =>
+                  setStockField({
+                    state: true,
+                    value: stockField.value,
+                    index: stockField.index,
+                  })
+                }
+              >
+                Save
+              </span>
             </button>
           </div>
         </div>
@@ -279,7 +314,26 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                         </div>
                         <div className={styles.stockPriceContainer}>
                           <div className={styles.pricing}>
-                            <p>10</p>
+                            {stockField.state == true ? (
+                              <p
+                                onClick={() =>
+                                  setStockField({
+                                    state: false,
+                                    value: "",
+                                    index: -1,
+                                  })
+                                }
+                              >
+                                {stockField.value}
+                              </p>
+                            ) : (
+                              <input
+                                name={"stock"}
+                                value={stockField.value}
+                                className={styles.input}
+                                onChange={inputHandler}
+                              ></input>
+                            )}
                             <p>$10</p>
                           </div>
                           <div className={styles.pricing}>
