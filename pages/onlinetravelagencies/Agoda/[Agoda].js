@@ -39,6 +39,8 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   // const [showTravelAgencyName, setShowTravelAgencyName] = useState({});
   const [agodaPropertyResult, setAgodaPropertyResult] = useState([]);
   const [agodaDatesToShow, setAgodaDatesToShow] = useState([]);
+  const [selectedTextField, setSelectedTextField] = useState([]);
+  const [bookOneResponse, setBookOneResponse] = useState("");
 
   const [priceField, setPriceField] = useState({
     state: true,
@@ -51,30 +53,65 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     value: "",
   });
 
-  const [selectedTextField, setSelectedTextField] = useState("");
 
   let stockInputHandler = (e) => {
+    console.log(e)
     if (e.target.name == "stock") {
       setStockField({
         state: false,
         value: e.target.value,
-        index: -1,
+        index: stockField.index,
       });
     }
-    // console.log(stockField);
   };
+  // console.log(stockField);
 
   let priceInputhandler = (e) => {
     if (e.target.name == "price") {
       setPriceField({
         state: false,
         value: e.target.value,
-        index: -1,
+        index: priceField.index,
       });
     }
   };
 
-  const [bookOneResponse, setBookOneResponse] = useState("");
+  const [StockPriceDummyArray,setStockPriceDummyArray] = useState([
+    {
+      stock: 10,
+      price: "30"
+    },
+    {
+      stock: 15,
+      price: "30"
+    },
+    {
+      stock: 20,
+      price: "30"
+    },
+    {
+      stock: 15,
+      price: "30"
+    },
+    {
+      stock: 11,
+      price: "20"
+    },
+    {
+      stock: 10,
+      price: "35"
+    },
+    {
+      stock: 12,
+      price: "30"
+    }
+  ]);
+
+  useEffect(()=>{
+    setStockPriceDummyArray(StockPriceDummyArray);
+  },[StockPriceDummyArray])
+  // console.log(StockPriceDummyArray)
+
 
   const handleShopModal = () => {
     setshopModal(!shopModal);
@@ -139,7 +176,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     )
       .then((res) => res.json())
       .then((resJson) => {
-        console.log(resJson);
+        // console.log(resJson);
         setBookOneResponse(resJson);
         setDropDownValue(resJson.propertiesOnlineTravelAgencies);
         // console.log(dropdownValue)
@@ -196,7 +233,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
             setAgodaPropertyResult(responseJson.result.properties[0].property);
             setAgodaDatesToShow(dates);
           });
-        console.log(resJson);
+        // console.log(resJson);
         setShowTravelAgencyName(selectedOnlineTravelAgency);
         setRoomDetails(resJson.roomDtos);
         setOtas(resJson.propertiesOnlineTravelAgencies);
@@ -234,6 +271,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
+  // console.log(selectedTextField)
   return (
     <div className={styles.bigContainer}>
       <NavBar />
@@ -294,19 +332,37 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
               <FaSave />
               <span
                 onClick={() => {
-                  if (selectedTextField == "stockField") {
+                  console.log("Func")
+                  if (selectedTextField.includes("priceField","stockField")) {
                     setStockField({
-                      state: true,
-                      value: stockField.value,
-                      index: stockField.index,
-                    });
-                  } else if (selectedTextField == "priceField") {
-                    setPriceField({
-                      state: true,
-                      value: priceField.value,
-                      index: priceField.index,
-                    });
-                  }
+                          state: true,
+                          value: stockField.value,
+                          index: stockField.index,
+                        });
+                        setPriceField({
+                          state: true,
+                          value: priceField.value,
+                          index: priceField.index,
+                        });
+                        setSelectedTextField([]);
+                      }
+                      else if (selectedTextField.includes("priceField") || selectedTextField.includes("stockField")){
+                        if (selectedTextField.includes("priceField")) {
+                          setPriceField({
+                            state: true,
+                            value: priceField.value,
+                            index: priceField.index,
+                          });
+                        }
+                        else {
+                          setStockField({
+                          state: true,
+                          value: stockField.value,
+                          index: stockField.index,
+                          });
+                        }
+                        setSelectedTextField([]);
+                      }
                 }}
               >
                 Save
@@ -364,57 +420,72 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                           </div>
                         </div>
                         <div className={styles.stockPriceContainer}>
-                          <div className={styles.pricing}>
-                            <div className={styles.pricing}>
-                              {stockField.state == true ? (
-                                <p
-                                  onClick={() => {
-                                    setStockField({
-                                      state: false,
-                                      value: "",
-                                      index: -1,
-                                    });
-                                    setSelectedTextField("stockField");
-                                  }}
-                                >
-                                  {stockField.value !== ""
-                                    ? stockField.value
-                                    : "10"}
-                                </p>
-                              ) : (
+                          {
+                            StockPriceDummyArray.map((val,i)=>{
+                              // console.log(i, stockField.index)
+                              return (
+                                <div key={i} className={styles.pricing}>
+                              {stockField.state == false && i == stockField.index  ? (
                                 <input
                                   name={"stock"}
                                   value={stockField.value}
                                   className={styles.input}
                                   onChange={stockInputHandler}
                                 ></input>
-                              )}
-                            </div>
-                            {priceField.state == true ? (
+                              )
+                            :
+                            (
                               <p
                                 onClick={() => {
-                                  setPriceField({
+                                  setStockField({
                                     state: false,
                                     value: "",
-                                    index: -1,
+                                    index: i,
                                   });
-                                  setSelectedTextField("priceField");
+                                  if (!selectedTextField.includes('stockField')) {
+                                    setSelectedTextField([...selectedTextField,"stockField"]);
+                                  }
                                 }}
                               >
-                                {priceField.value !== ""
-                                  ? priceField.value
-                                  : "$10"}
+                                {stockField.value !== "" && stockField.index == i 
+                                  ? `${StockPriceDummyArray[i].stock = stockField.value}`
+                                  : val.stock}
                               </p>
-                            ) : (
+                            )
+                            }
+                            {priceField.state == false && i == priceField.index ? 
+                            (
                               <input
                                 name={"price"}
                                 value={priceField.value}
                                 className={styles.input}
                                 onChange={priceInputhandler}
                               ></input>
+                            )
+                            :
+                            (
+                              <p
+                                onClick={() => {
+                                  setPriceField({
+                                    state: false,
+                                    value: "",
+                                    index: i,
+                                  });
+                                  if (!selectedTextField.includes('priceField')) {
+                                    setSelectedTextField([...selectedTextField,"priceField"]);
+                                  }
+                                }}
+                              >
+                                ${priceField.value !== "" && priceField.index == i 
+                                  ? `${StockPriceDummyArray[i].price = priceField.value}`
+                                  : val.price}
+                              </p>
                             )}
                           </div>
-                          <div className={styles.pricing}>
+                              )
+                            })
+                          }
+                          {/* <div className={styles.pricing}>
                             <p>10</p>
                             <p>$10</p>
                           </div>
@@ -437,7 +508,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                           <div className={styles.pricing}>
                             <p>10</p>
                             <p>$10</p>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     ) : (
