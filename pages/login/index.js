@@ -60,7 +60,7 @@ const Login = () => {
                                     router.push(`/onlinetravelagencies/Siteminder/${propertyId}`);
                                 }
                                 else {
-                                    console.log("No property Id Mtached with any Ota")
+                                    // console.alert("No id matched with any Ota")
                                 }
                                 
                             }

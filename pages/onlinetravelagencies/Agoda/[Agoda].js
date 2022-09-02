@@ -173,7 +173,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
 
   const changeLocation = (showTravelAgencyName) => {
     if (showTravelAgencyName.onlineTravelAgencyName === "SiteMinder") {
-      setShowTravelAgencyName(showTravelAgencyName);
+      // setShowTravelAgencyName(showTravelAgencyName);
       // localStorage.setItem('travelAgency',JSON.stringify(showTravelAgencyName));
       router.push(`/onlinetravelagencies/Siteminder/${Agoda}`);
       // setShowTravelAgencyName(JSON.parse(localStorage.getItem('travelAgency')));
