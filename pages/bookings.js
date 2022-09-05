@@ -11,6 +11,7 @@ import {BsThreeDotsVertical} from 'react-icons/bs';
 import { Col, Row } from 'react-bootstrap';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { useRouter } from 'next/router'
 
 const Bookings = ()=> {
     const [bookingsResponse, setBookingsResponse] = useState([]);
@@ -29,7 +30,7 @@ const Bookings = ()=> {
     const [bookingStatus, setBookingStatus] = useState('All');
     const [bookingSource, setBookingSource] = useState('All');
     // console.log(startDateArrival)
-
+    const router = useRouter()
     useEffect(() => {
         let newDateArrival = startDateArrival.toLocaleDateString().split('/').reverse();
         for (let index = 0; index < newDateArrival.length; index++) {
@@ -113,7 +114,7 @@ const Bookings = ()=> {
     <Navbar />
     <div className={styles.bookingsMainContainer}>
         <div className={styles.bookingsSearchSection}>
-            <span className={styles.bookingsSearchSectionBookingsMngmtSpan}><Link href={'/siteminder/237'}><BiArrowBack className={styles.bookingsSearchSectionBookingsMngmtIcon} /></Link>Booking Management</span>
+            <span className={styles.bookingsSearchSectionBookingsMngmtSpan}><Link href={'/onlinetravelagencies/Agoda/237'}><BiArrowBack className={styles.bookingsSearchSectionBookingsMngmtIcon} /></Link>Booking Management</span>
             <span className={styles.bookingsSearchSectionBookingsInputSpan}><BiSearch className={styles.bookingsSearchSectionIcon} size={26}/><input className={styles.bookingsSearchSectionInput} placeholder='Search bookings' /></span>
         </div>
         <div className={styles.bookingsTableSection}>
