@@ -53,14 +53,20 @@ const Login = () => {
                         .then((resJson)=>{
                             console.log(resJson.propertiesOnlineTravelAgencies)
                             for (let i = 0; i < resJson.propertiesOnlineTravelAgencies.length; i++) {
+                                // if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'Agoda') {
+                                //     router.push(`/onlinetravelagencies/AgodaId/${propertyId}`);
+                                // }
                                 if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'Agoda') {
                                     router.push(`/onlinetravelagencies/Agoda/${propertyId}`);
                                 }
                                 else if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'SiteMinder'){
                                     router.push(`/onlinetravelagencies/Siteminder/${propertyId}`);
                                 }
+                                else if (resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName === 'MakeMyTrip'){
+                                    router.push(`/onlinetravelagencies/MakeMyTrip/${propertyId}`);
+                                }
                                 else {
-                                    // console.alert("No id matched with any Ota")
+                                    console.log("No id matched with any Ota")
                                 }
                                 
                             }
@@ -70,7 +76,7 @@ const Login = () => {
                 }
             }) 
     }
-    console.log(".....")
+    // console.log(".....")
     return (
         <div className={styles.bgimage}>
             <div className={styles.bigContainer}>
