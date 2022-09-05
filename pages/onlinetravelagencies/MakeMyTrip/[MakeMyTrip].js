@@ -21,10 +21,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
+const MakeMyTrip = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   let router = useRouter();
 
-  const { Agoda } = router.query;
+  const { MakeMyTrip } = router.query;
   // console.log(Agoda)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
     useState(false);
@@ -46,71 +46,83 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     state: true,
     index: -1,
     value: "",
+    row: -1
   });
   const [stockField, setStockField] = useState({
     state: true,
-    index: -1,
+    index: [],
     value: "",
+    row: -1
   });
 
 
-  let stockInputHandler = (e) => {
-    console.log(e)
-    if (e.target.name == "stock") {
+  let stockInputHandler = (e,index,row) => {
+    // console.log(index,row)
+    // let updationIndexes = stockField.index;
+    if (e.target.name == "stock" && stockField.index.includes(index) && stockField.row == row) {
       setStockField({
         state: false,
         value: e.target.value,
         index: stockField.index,
+        row: stockField.row
       });
-    }
-  };
-  // console.log(stockField);
 
-  let priceInputhandler = (e) => {
-    if (e.target.name == "price") {
-      setPriceField({
-        state: false,
-        value: e.target.value,
-        index: priceField.index,
-      });
+      StockPriceDummyArray[index].stock = e.target.value;
+      
     }
-  };
+    // console.log(updationIndexes);
+};
+// console.log(stockField);
 
-  const [StockPriceDummyArray,setStockPriceDummyArray] = useState([
-    {
-      stock: 10,
+let priceInputhandler = (e,index,row) => {
+    if (e.target.name == "price" && priceField.index.includes(index) && priceField.row == row) {
+        setPriceField({
+            state: false,
+            value: e.target.value,
+            index: priceField.index,
+            row: priceField.row
+        });
+        StockPriceDummyArray[index].price = e.target.value;
+        }
+    };
+    
+    const [StockPriceDummyArray,setStockPriceDummyArray] = useState([
+        {
+            stock: 10,
+            price: "30"
+        },
+        {
+            stock: 15,
       price: "30"
     },
     {
-      stock: 15,
-      price: "30"
+        stock: 20,
+        price: "30"
     },
     {
-      stock: 20,
-      price: "30"
+        stock: 15,
+        price: "30"
     },
     {
-      stock: 15,
-      price: "30"
+        stock: 11,
+        price: "20"
     },
     {
-      stock: 11,
-      price: "20"
+        stock: 10,
+        price: "35"
     },
     {
-      stock: 10,
-      price: "35"
-    },
-    {
-      stock: 12,
-      price: "30"
+        stock: 12,
+        price: "30"
     }
-  ]);
+]);
 
-  useEffect(()=>{
+console.log(stockField);
+console.log(StockPriceDummyArray)
+useEffect(()=>{
     setStockPriceDummyArray(StockPriceDummyArray);
-  },[StockPriceDummyArray])
-  // console.log(StockPriceDummyArray)
+},[StockPriceDummyArray])
+// console.log(StockPriceDummyArray)
 
 
   const handleShopModal = () => {
@@ -162,7 +174,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
 
   useEffect(() => {
     fetch(
-      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${Agoda}`,
+      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${MakeMyTrip}`,
       {
         method: "GET",
         headers: {
@@ -188,7 +200,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
         ) {
           if (
             resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName ===
-            "Agoda"
+            "MakeMyTrip"
           ) {
             // setShowTravelAgencyName(
             selectedOnlineTravelAgency =
@@ -203,53 +215,50 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
         };
 
 
-        fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((res) => res.json())
-          .then((responseJson) => {
-            // console.log(responseJson);
-            const dates = [];
-            for (
-              let i = 0;
-              i < responseJson.result.properties[0].property.length;
-              i++
-            ) {
-              const date = new Date(
-                responseJson.result.properties[0].property[i].$.date
-              );
-              const date1 = date.toString().split(" ");
-              dates.push({
-                day: date1[0],
-                date: date1[2],
-              });
-            }
-            setAgodaPropertyResult(responseJson.result.properties[0].property);
-            setAgodaDatesToShow(dates);
-          });
+        // fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     Authorization:
+        //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+        //     "Content-Type": "application/json",
+        //     APP_ID: "BOOKONE_WEB_APP",
+        //   },
+        //   body: JSON.stringify(data),
+        // })
+        //   .then((res) => res.json())
+        //   .then((responseJson) => {
+        //     // console.log(responseJson);
+        //     const dates = [];
+        //     for (
+        //       let i = 0;
+        //       i < responseJson.result.properties[0].property.length;
+        //       i++
+        //     ) {
+        //       const date = new Date(
+        //         responseJson.result.properties[0].property[i].$.date
+        //       );
+        //       const date1 = date.toString().split(" ");
+        //       dates.push({
+        //         day: date1[0],
+        //         date: date1[2],
+        //       });
+        //     }
+        //     setAgodaPropertyResult(responseJson.result.properties[0].property);
+        //     setAgodaDatesToShow(dates);
+        //   });
         // console.log(resJson);
         setShowTravelAgencyName(selectedOnlineTravelAgency);
         setRoomDetails(resJson.roomDtos);
         setOtas(resJson.propertiesOnlineTravelAgencies);
       });
-  }, [Agoda]);
+  }, [MakeMyTrip]);
 
   // console.log(dropdownValue)
 
   const changeLocation = (showTravelAgencyName) => {
     if (showTravelAgencyName.onlineTravelAgencyName === "SiteMinder") {
-      // setShowTravelAgencyName(showTravelAgencyName);
-      // localStorage.setItem('travelAgency',JSON.stringify(showTravelAgencyName));
       router.push(`/onlinetravelagencies/Siteminder/${Agoda}`);
-      // setShowTravelAgencyName(JSON.parse(localStorage.getItem('travelAgency')));
     }
     // console.log(JSON.parse(localStorage.getItem('travelAgency')));
   };
@@ -273,7 +282,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
-  // console.log(selectedTextField)
+
   return (
     <div className={styles.bigContainer}>
       <NavBar />
@@ -340,11 +349,13 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                           state: true,
                           value: stockField.value,
                           index: stockField.index,
+                          row: stockField.row
                         });
                         setPriceField({
                           state: true,
                           value: priceField.value,
                           index: priceField.index,
+                          row: priceField.row
                         });
                         setSelectedTextField([]);
                       }
@@ -354,6 +365,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                             state: true,
                             value: priceField.value,
                             index: priceField.index,
+                            row: stockField.row
                           });
                         }
                         else {
@@ -361,10 +373,17 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                           state: true,
                           value: stockField.value,
                           index: stockField.index,
+                          row: priceField.row
                           });
                         }
                         setSelectedTextField([]);
                       }
+                      setStockField({
+                        state: false,
+                        value: '',
+                        index: [],
+                        row: []
+                        });
                 }}
               >
                 Save
@@ -386,6 +405,34 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                 </div>
               );
             })}
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
+            <div className={styles.date}>
+                  <h4>Mon</h4>
+                  <p>13</p>
+                </div>
           </div>
         </div>
         {roomDetails.map((val, i) => {
@@ -519,6 +566,119 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                   </div>
                 );
               })}
+              <div>
+                      <div className={styles.thirdSection}>
+                        <div className={styles.otaContainer}>
+                          <div className={styles.otaInnerContainer}>
+                            <div className={styles.otaImage}>
+                              <img src="" alt="dummy" />
+                            </div>
+                            <div className={styles.otaRoomPlans}>
+                              <h3>hahahah</h3>
+                              <h4>(Deluxe Room - Buffet Combo)</h4>
+                            </div>
+                          </div>
+                          <div className={styles.stockPrice}>
+                            <p>Stock: </p>
+                            <p>Price: </p>
+                          </div>
+                        </div>
+                        <div className={styles.stockPriceContainer}>
+                          {
+                            StockPriceDummyArray.map((val,j)=>{
+                              // console.log(i, stockField.index)
+                              return (
+                                <div key={j} className={styles.pricing}>
+                              {stockField.state == false && stockField.index.includes(j) && stockField.row == i  ? (
+                                <input
+                                  name={"stock"}
+                                  value={stockField.value}
+                                  className={styles.input}
+                                  onChange={(e)=>stockInputHandler(e,j,i)}
+                                ></input>
+                              )
+                            :
+                            (
+                              <p
+                                onClick={() => {
+                                  setStockField({
+                                    state: false,
+                                    value: '',
+                                    index: [...stockField.index,j],
+                                    row: i
+                                  });
+                                  if (!selectedTextField.includes('stockField')) {
+                                    setSelectedTextField([...selectedTextField,"stockField"]);
+                                  }
+                                }}
+                              >
+                                {stockField.value !== "" && stockField.index.includes(j) && stockField.row == i
+                                  ? `${StockPriceDummyArray[j].stock = stockField.value}`
+                                  : val.stock}
+                              </p>
+                            )
+                            }
+                            {priceField.state == false && priceField.index.includes(j) && priceField.row == i ? 
+                            (
+                              <input
+                                name={"price"}
+                                value={priceField.value}
+                                className={styles.input}
+                                onChange={(e)=>priceInputhandler(e,j,i)}
+                              ></input>
+                            )
+                            :
+                            (
+                              <p
+                                onClick={() => {
+                                  setPriceField({
+                                    state: false,
+                                    value: "",
+                                    index: [...stockField.index,j],
+                                    row: i
+                                  });
+                                  if (!selectedTextField.includes('priceField')) {
+                                    setSelectedTextField([...selectedTextField,"priceField"]);
+                                  }
+                                }}
+                              >
+                                ${priceField.value !== "" && priceField.index.includes(j) && priceField.row == i
+                                  ? `${StockPriceDummyArray[j].price = priceField.value}`
+                                  : val.price}
+                              </p>
+                            )}
+                          </div>
+                              )
+                            })
+                          }
+                          {/* <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div>
+                          <div className={styles.pricing}>
+                            <p>10</p>
+                            <p>$10</p>
+                          </div> */}
+                        </div>
+                      </div>
+                    
+                  </div>
             </div>
           );
         })}
@@ -527,4 +687,4 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
   );
 };
 
-export default Agoda;
+export default MakeMyTrip;

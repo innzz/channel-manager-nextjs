@@ -377,3 +377,59 @@ const Siteminder = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
 };
 
 export default Siteminder;
+
+
+
+export async function getStaticPaths() {
+  const res = await fetch(
+   "https://api.bookonelocal.in/api-bookone/api/organisation/1/properties",
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY2MjM1MDUyOCwiZXhwIjoxNjYyNzgyNTI4fQ.vqgyvrlAS78mqdbIsaPlissypDn_ISVqctARKG5w0YE",
+        APP_ID: "BOOKONE_WEB_APP",
+        User_Id:"1",
+        
+      },
+    }
+  );
+  const data = await res.json()
+  // console.log(data.name)
+  const d = data.map((val)=>{
+    return val.name
+  })
+  console.log(d)
+  // const mapping = data.map((val, i) => {
+    
+  //     if(val.id > "600"){
+  //       console.log(true)
+  //     }
+  //     else{
+  //       console.log(false)
+  //     }
+    
+  // })
+  // console.log(mapping)
+  
+  // setDataOne(data)
+  const paths = data.map((a)=>{
+    return {
+      params : {Siteminder: a.id.toString()}
+    }
+  })
+  return {
+    paths,
+    fallback: false, // false or 'blocking'
+  };
+}
+
+export async function getStaticProps(context) {
+  console.log(context)
+  return {
+    props: {
+      
+    }, // will be passed to the page component as props
+  }
+}
