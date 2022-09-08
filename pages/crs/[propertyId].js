@@ -35,6 +35,7 @@ export default function PropertyId() {
   const [seventhDayDate, setSeventhDayDate] = useState("");
   const [roomDetailsToShow, setRoomDetailsToShow] = useState("");
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
+  const [filteredPlan, setFilteredPlanName] = useState({});
   const [token, setToken] = useState("");
   const handleShopModal = () => {
     setshopModal(!shopModal);
@@ -151,6 +152,7 @@ export default function PropertyId() {
   //   console.log(sevenDaysDataOfRoom);
   //   console.log(roomDetailsToShow);
   //   console.log(roomDetails);
+  console.log(filteredPlan);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -407,9 +409,20 @@ export default function PropertyId() {
                       ratePlans ? { display: "block" } : { display: "none" }
                     }
                   >
-                    <li>Bar</li>
-                    <li>Honeymoon</li>
-                    <li>Bed & Breakfast</li>
+                    {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
+                      (dropdownPlan, dropKey) => {
+                        return (
+                          <li
+                            key={dropKey}
+                            onClick={() => {
+                              setFilteredPlanName(dropdownPlan);
+                            }}
+                          >
+                            {dropdownPlan.name}
+                          </li>
+                        );
+                      }
+                    )}
                   </div>
                 </button>
                 <div className={styles.inputItem}>
