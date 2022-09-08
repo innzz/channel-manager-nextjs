@@ -35,7 +35,7 @@ export default function PropertyId() {
   const [seventhDayDate, setSeventhDayDate] = useState("");
   const [roomDetailsToShow, setRoomDetailsToShow] = useState("");
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
-  const [filteredPlan, setFilteredPlanName] = useState({});
+  const [filteredPlan, setFilteredPlanName] = useState('');
   const [token, setToken] = useState("");
   const handleShopModal = () => {
     setshopModal(!shopModal);
@@ -385,6 +385,7 @@ export default function PropertyId() {
                           onClick={() => {
                             setRoomDetailsToShow(val);
                             getSevenDaysDataOfRoom(token, val.bookoneRoomId);
+                            setFilteredPlanName('');
                           }}
                         >
                           {val.name}
@@ -501,7 +502,64 @@ export default function PropertyId() {
                         {sevenDaysDataOfRoom[0].roomRatePlans.map(
                           (planName, key) => {
                             return (
-                              <Row className={styles.content} key={key}>
+                              <>{
+                                filteredPlan === '' ? 
+                                <Row className={styles.content} key={key}>
+                                <Col className={styles.Icon}></Col>
+                                <Col className={styles.leftSection}>
+                                  {planName.name}
+                                  <AiFillThunderbolt
+                                    size={15}
+                                    style={{
+                                      marginTop: "5px",
+                                      color: "#2494d1",
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={styles.midSection}>
+                                  Plan Rates
+                                </Col>
+                                <Col className={styles.rightSection}>
+                                  <Row className={styles.data}>
+                                    {sevenDaysDataOfRoom?.map(
+                                      (planRatesOfSevenDays) => {
+                                        return (
+                                          <>
+                                            {planRatesOfSevenDays?.roomRatePlans?.map(
+                                              (plansRatesToShow, keyi) => {
+                                                return (
+                                                  <>
+                                                    {planName.name ==
+                                                      plansRatesToShow.name && (
+                                                      <Col
+                                                        key={keyi}
+                                                        className={styles.col}
+                                                      >
+                                                        ₹ {
+                                                          plansRatesToShow.amount
+                                                        }
+                                                      </Col>
+                                                    )}
+                                                  </>
+                                                );
+                                              }
+                                            )}
+                                          </>
+                                        );
+                                      }
+                                    )}
+                                    {/* <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col> */}
+                                  </Row>
+                                </Col>
+                              </Row>
+                               : 
+                               <>{
+                                filteredPlan.name === planName.name && <Row className={styles.content} key={key}>
                                 <Col className={styles.Icon}></Col>
                                 <Col className={styles.leftSection}>
                                   {planName.name}
@@ -554,6 +612,8 @@ export default function PropertyId() {
                                   </Row>
                                 </Col>
                               </Row>
+                              }</>
+                              }</>
                             );
                           }
                         )}
