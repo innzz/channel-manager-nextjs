@@ -404,7 +404,7 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                             </div>
                           </div>
                           <div className={styles.stockPrice}>
-                            <p>Stock: </p>
+                            <p>Availibility: </p>
                             <p>Price: </p>
                           </div>
                         </div>

@@ -692,6 +692,7 @@ const MakeMyTrip = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                           <div className={styles.pricing}>
                             <p>10</p>
                             <p>$10</p>
+                            
                           </div>
                           <div className={styles.pricing}>
                             <p>10</p>
