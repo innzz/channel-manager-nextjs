@@ -30,10 +30,10 @@ function NavBar() {
       </Col>
       <Col className={styles.navItem}>
         <div className={styles.links}>
-          <Link href="#" className={styles.link}>
-            CRM
+          <Link href="/login" className={styles.link}>
+            CRS
           </Link>
-          <Link href="#" className={styles.link}>
+          <Link href="/login" className={styles.link}>
             CM
           </Link>
         </div>

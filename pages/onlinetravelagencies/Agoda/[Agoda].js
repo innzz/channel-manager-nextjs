@@ -2,20 +2,9 @@ import React from "react";
 import styles from "../../../styles/Ota.module.css";
 import NavBar from "../../../components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col } from "react-bootstrap";
-import { FaBed, FaSave } from "react-icons/fa";
-import { AiFillThunderbolt, AiFillCaretDown } from "react-icons/ai";
-import { MdOutlineArrowDropDown, MdSystemUpdateAlt } from "react-icons/md";
-import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
-import { BiSearch } from "react-icons/bi";
-import { TiTick } from "react-icons/ti";
-import { GoTriangleRight } from "react-icons/go";
-import {
-  MdKeyboardArrowLeft,
-  MdKeyboardArrowRight,
-  MdArrowDropDown,
-} from "react-icons/md";
-import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
+import { FaSave } from "react-icons/fa";
+import { AiFillCaretDown } from "react-icons/ai";
+import { MdSystemUpdateAlt } from "react-icons/md";
 import { GrRotateLeft } from "react-icons/gr";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -53,9 +42,8 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     value: "",
   });
 
-
   let stockInputHandler = (e) => {
-    console.log(e)
+    console.log(e);
     if (e.target.name == "stock") {
       setStockField({
         state: false,
@@ -76,42 +64,41 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
     }
   };
 
-  const [StockPriceDummyArray,setStockPriceDummyArray] = useState([
+  const [StockPriceDummyArray, setStockPriceDummyArray] = useState([
     {
       stock: 10,
-      price: "30"
+      price: "30",
     },
     {
       stock: 15,
-      price: "30"
+      price: "30",
     },
     {
       stock: 20,
-      price: "30"
+      price: "30",
     },
     {
       stock: 15,
-      price: "30"
+      price: "30",
     },
     {
       stock: 11,
-      price: "20"
+      price: "20",
     },
     {
       stock: 10,
-      price: "35"
+      price: "35",
     },
     {
       stock: 12,
-      price: "30"
-    }
+      price: "30",
+    },
   ]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setStockPriceDummyArray(StockPriceDummyArray);
-  },[StockPriceDummyArray])
+  }, [StockPriceDummyArray]);
   // console.log(StockPriceDummyArray)
-
 
   const handleShopModal = () => {
     setshopModal(!shopModal);
@@ -201,7 +188,6 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
           toDate: newSevenDay,
           id: selectedOnlineTravelAgency.onlineTravelAgencyPropertyId,
         };
-
 
         fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
           method: "POST",
@@ -334,37 +320,38 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
               <FaSave />
               <span
                 onClick={() => {
-                  console.log("Func")
-                  if (selectedTextField.includes("priceField","stockField")) {
+                  console.log("Func");
+                  if (selectedTextField.includes("priceField", "stockField")) {
                     setStockField({
-                          state: true,
-                          value: stockField.value,
-                          index: stockField.index,
-                        });
-                        setPriceField({
-                          state: true,
-                          value: priceField.value,
-                          index: priceField.index,
-                        });
-                        setSelectedTextField([]);
-                      }
-                      else if (selectedTextField.includes("priceField") || selectedTextField.includes("stockField")){
-                        if (selectedTextField.includes("priceField")) {
-                          setPriceField({
-                            state: true,
-                            value: priceField.value,
-                            index: priceField.index,
-                          });
-                        }
-                        else {
-                          setStockField({
-                          state: true,
-                          value: stockField.value,
-                          index: stockField.index,
-                          });
-                        }
-                        setSelectedTextField([]);
-                      }
+                      state: true,
+                      value: stockField.value,
+                      index: stockField.index,
+                    });
+                    setPriceField({
+                      state: true,
+                      value: priceField.value,
+                      index: priceField.index,
+                    });
+                    setSelectedTextField([]);
+                  } else if (
+                    selectedTextField.includes("priceField") ||
+                    selectedTextField.includes("stockField")
+                  ) {
+                    if (selectedTextField.includes("priceField")) {
+                      setPriceField({
+                        state: true,
+                        value: priceField.value,
+                        index: priceField.index,
+                      });
+                    } else {
+                      setStockField({
+                        state: true,
+                        value: stockField.value,
+                        index: stockField.index,
+                      });
+                    }
+                    setSelectedTextField([]);
+                  }
                 }}
               >
                 Save
@@ -417,76 +404,89 @@ const Agoda = ({ showTravelAgencyName, setShowTravelAgencyName }) => {
                             </div>
                           </div>
                           <div className={styles.stockPrice}>
-                            <p>Stock: </p>
+                            <p>Availibility: </p>
                             <p>Price: </p>
                           </div>
                         </div>
                         <div className={styles.stockPriceContainer}>
-                          {
-                            StockPriceDummyArray.map((val,i)=>{
-                              // console.log(i, stockField.index)
-                              return (
-                                <div key={i} className={styles.pricing}>
-                              {stockField.state == false && i == stockField.index  ? (
-                                <input
-                                  name={"stock"}
-                                  value={stockField.value}
-                                  className={styles.input}
-                                  onChange={stockInputHandler}
-                                ></input>
-                              )
-                            :
-                            (
-                              <p
-                                onClick={() => {
-                                  setStockField({
-                                    state: false,
-                                    value: "",
-                                    index: i,
-                                  });
-                                  if (!selectedTextField.includes('stockField')) {
-                                    setSelectedTextField([...selectedTextField,"stockField"]);
-                                  }
-                                }}
-                              >
-                                {stockField.value !== "" && stockField.index == i 
-                                  ? `${StockPriceDummyArray[i].stock = stockField.value}`
-                                  : val.stock}
-                              </p>
-                            )
-                            }
-                            {priceField.state == false && i == priceField.index ? 
-                            (
-                              <input
-                                name={"price"}
-                                value={priceField.value}
-                                className={styles.input}
-                                onChange={priceInputhandler}
-                              ></input>
-                            )
-                            :
-                            (
-                              <p
-                                onClick={() => {
-                                  setPriceField({
-                                    state: false,
-                                    value: "",
-                                    index: i,
-                                  });
-                                  if (!selectedTextField.includes('priceField')) {
-                                    setSelectedTextField([...selectedTextField,"priceField"]);
-                                  }
-                                }}
-                              >
-                                ${priceField.value !== "" && priceField.index == i 
-                                  ? `${StockPriceDummyArray[i].price = priceField.value}`
-                                  : val.price}
-                              </p>
-                            )}
-                          </div>
-                              )
-                            })
-                          }
+                          {StockPriceDummyArray.map((val, i) => {
+                            // console.log(i, stockField.index)
+                            return (
+                              <div key={i} className={styles.pricing}>
+                                {stockField.state == false &&
+                                i == stockField.index ? (
+                                  <input
+                                    name={"stock"}
+                                    value={stockField.value}
+                                    className={styles.input}
+                                    onChange={stockInputHandler}
+                                  ></input>
+                                ) : (
+                                  <p
+                                    onClick={() => {
+                                      setStockField({
+                                        state: false,
+                                        value: "",
+                                        index: i,
+                                      });
+                                      if (
+                                        !selectedTextField.includes(
+                                          "stockField"
+                                        )
+                                      ) {
+                                        setSelectedTextField([
+                                          ...selectedTextField,
+                                          "stockField",
+                                        ]);
+                                      }
+                                    }}
+                                  >
+                                    {stockField.value !== "" &&
+                                    stockField.index == i
+                                      ? `${(StockPriceDummyArray[i].stock =
+                                          stockField.value)}`
+                                      : val.stock}
+                                  </p>
+                                )}
+                                {priceField.state == false &&
+                                i == priceField.index ? (
+                                  <input
+                                    name={"price"}
+                                    value={priceField.value}
+                                    className={styles.input}
+                                    onChange={priceInputhandler}
+                                  ></input>
+                                ) : (
+                                  <p
+                                    onClick={() => {
+                                      setPriceField({
+                                        state: false,
+                                        value: "",
+                                        index: i,
+                                      });
+                                      if (
+                                        !selectedTextField.includes(
+                                          "priceField"
+                                        )
+                                      ) {
+                                        setSelectedTextField([
+                                          ...selectedTextField,
+                                          "priceField",
+                                        ]);
+                                      }
+                                    }}
+                                  >
+                                    $
+                                    {priceField.value !== "" &&
+                                    priceField.index == i
+                                      ? `${(StockPriceDummyArray[i].price =
+                                          priceField.value)}`
+                                      : val.price}
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          })}
                           {/* <div className={styles.pricing}>
                             <p>10</p>
                             <p>$10</p>
