@@ -475,7 +475,7 @@ export default function PropertyId() {
                           {sevenDaysDataOfRoom.map((roomPrice, keyj) => {
                             return (
                               <Col className={styles.col} key={keyj}>
-                                {roomPrice.price}
+                                ₹ {roomPrice.price}
                               </Col>
                             );
                           })}
@@ -519,7 +519,7 @@ export default function PropertyId() {
                                                         key={keyi}
                                                         className={styles.col}
                                                       >
-                                                        {
+                                                        ₹ {
                                                           plansRatesToShow.amount
                                                         }
                                                       </Col>
