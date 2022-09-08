@@ -35,7 +35,7 @@ export default function PropertyId() {
   const [seventhDayDate, setSeventhDayDate] = useState("");
   const [roomDetailsToShow, setRoomDetailsToShow] = useState("");
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
-  const [filteredPlan, setFilteredPlanName] = useState({});
+  const [filteredPlan, setFilteredPlanName] = useState("");
   const [token, setToken] = useState("");
   const handleShopModal = () => {
     setshopModal(!shopModal);
@@ -385,6 +385,7 @@ export default function PropertyId() {
                           onClick={() => {
                             setRoomDetailsToShow(val);
                             getSevenDaysDataOfRoom(token, val.bookoneRoomId);
+                            setFilteredPlanName("");
                           }}
                         >
                           {val.name}
@@ -412,14 +413,16 @@ export default function PropertyId() {
                     {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
                       (dropdownPlan, dropKey) => {
                         return (
-                          <li
-                            key={dropKey}
-                            onClick={() => {
-                              setFilteredPlanName(dropdownPlan);
-                            }}
-                          >
-                            {dropdownPlan.name}
-                          </li>
+                          <>
+                            <li
+                              key={dropKey}
+                              onClick={() => {
+                                setFilteredPlanName(dropdownPlan);
+                              }}
+                            >
+                              {dropdownPlan.name}
+                            </li>
+                          </>
                         );
                       }
                     )}
@@ -501,59 +504,118 @@ export default function PropertyId() {
                         {sevenDaysDataOfRoom[0].roomRatePlans.map(
                           (planName, key) => {
                             return (
-                              <Row className={styles.content} key={key}>
-                                <Col className={styles.Icon}></Col>
-                                <Col className={styles.leftSection}>
-                                  {planName.name}
-                                  <AiFillThunderbolt
-                                    size={15}
-                                    style={{
-                                      marginTop: "5px",
-                                      color: "#2494d1",
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={styles.midSection}>
-                                  Plan Rates
-                                </Col>
-                                <Col className={styles.rightSection}>
-                                  <Row className={styles.data}>
-                                    {sevenDaysDataOfRoom.map(
-                                      (planRatesOfSevenDays) => {
-                                        return (
-                                          <>
-                                            {planRatesOfSevenDays.roomRatePlans.map(
-                                              (plansRatesToShow, keyi) => {
+                              <>
+                                {filteredPlan == "" ? (
+                                  <Row className={styles.content} key={key}>
+                                    <Col className={styles.Icon}></Col>
+                                    <Col className={styles.leftSection}>
+                                      {planName.name}
+                                      <AiFillThunderbolt
+                                        size={15}
+                                        style={{
+                                          marginTop: "5px",
+                                          color: "#2494d1",
+                                        }}
+                                      />
+                                    </Col>
+                                    <Col className={styles.midSection}>
+                                      Plan Rates
+                                    </Col>
+                                    <Col className={styles.rightSection}>
+                                      <Row className={styles.data}>
+                                        {sevenDaysDataOfRoom.map(
+                                          (planRatesOfSevenDays) => {
+                                            return (
+                                              <>
+                                                {planRatesOfSevenDays.roomRatePlans.map(
+                                                  (plansRatesToShow, keyi) => {
+                                                    return (
+                                                      <>
+                                                        {planName.name ==
+                                                          plansRatesToShow.name && (
+                                                          <Col
+                                                            key={keyi}
+                                                            className={
+                                                              styles.col
+                                                            }
+                                                          >
+                                                            ₹{" "}
+                                                            {
+                                                              plansRatesToShow.amount
+                                                            }
+                                                          </Col>
+                                                        )}
+                                                      </>
+                                                    );
+                                                  }
+                                                )}
+                                              </>
+                                            );
+                                          }
+                                        )}
+                                      </Row>
+                                    </Col>
+                                  </Row>
+                                ) : (
+                                  <>
+                                    {planName.name == filteredPlan.name && (
+                                      <Row className={styles.content} key={key}>
+                                        <Col className={styles.Icon}></Col>
+                                        <Col className={styles.leftSection}>
+                                          {planName.name}
+                                          <AiFillThunderbolt
+                                            size={15}
+                                            style={{
+                                              marginTop: "5px",
+                                              color: "#2494d1",
+                                            }}
+                                          />
+                                        </Col>
+                                        <Col className={styles.midSection}>
+                                          Plan Rates
+                                        </Col>
+                                        <Col className={styles.rightSection}>
+                                          <Row className={styles.data}>
+                                            {sevenDaysDataOfRoom.map(
+                                              (planRatesOfSevenDays) => {
                                                 return (
                                                   <>
-                                                    {planName.name ==
-                                                      plansRatesToShow.name && (
-                                                      <Col
-                                                        key={keyi}
-                                                        className={styles.col}
-                                                      >
-                                                        ₹ {
-                                                          plansRatesToShow.amount
-                                                        }
-                                                      </Col>
+                                                    {planRatesOfSevenDays.roomRatePlans.map(
+                                                      (
+                                                        plansRatesToShow,
+                                                        keyi
+                                                      ) => {
+                                                        return (
+                                                          <>
+                                                            {planName.name ==
+                                                              plansRatesToShow.name && (
+                                                              <Col
+                                                                key={keyi}
+                                                                className={
+                                                                  styles.col
+                                                                }
+                                                              >
+                                                                ₹{" "}
+                                                                {
+                                                                  plansRatesToShow.amount
+                                                                }
+                                                              </Col>
+                                                            )}
+                                                          </>
+                                                        );
+                                                      }
                                                     )}
                                                   </>
                                                 );
                                               }
                                             )}
-                                          </>
-                                        );
-                                      }
+                                          </Row>
+                                        </Col>
+                                      </Row>
                                     )}
-                                    {/* <Col className={styles.col}>10</Col>
-                                    <Col className={styles.col}>10</Col>
-                                    <Col className={styles.col}>10</Col>
-                                    <Col className={styles.col}>10</Col>
-                                    <Col className={styles.col}>10</Col>
-                                    <Col className={styles.col}>10</Col> */}
-                                  </Row>
-                                </Col>
-                              </Row>
+                                  </>
+                                )}
+                              </>
                             );
                           }
                         )}
