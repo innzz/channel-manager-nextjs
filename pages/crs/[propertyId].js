@@ -1,18 +1,14 @@
 import styles from "../../styles/Siteminder.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
-import { FaBed, FaSave } from "react-icons/fa";
-import { AiFillThunderbolt, AiFillCaretDown } from "react-icons/ai";
-import { MdOutlineArrowDropDown, MdSystemUpdateAlt } from "react-icons/md";
+import { FaBed } from "react-icons/fa";
+import { AiFillThunderbolt } from "react-icons/ai";
+import { MdOutlineArrowDropDown } from "react-icons/md";
 import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { GoTriangleRight } from "react-icons/go";
-import {
-  MdKeyboardArrowLeft,
-  MdKeyboardArrowRight,
-  MdArrowDropDown,
-} from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
 import { useState, useEffect } from "react";
@@ -20,22 +16,26 @@ import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 
-export default function Home() {
+export default function PropertyId() {
   let router = useRouter();
+  //   let token = localStorage.getItem("token");
+  //   console.log(token);
+  //   console.log(router);
 
   const { propertyId } = router.query;
   // console.log(siteminder)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
     useState(false);
   const [shopModal, setshopModal] = useState(false);
-  const [showTravelAgencyName, setShowTravelAgencyName] = useState("");
   const [roomType, setRoomType] = useState(false);
   const [ratePlans, setRatePlans] = useState(false);
-  const [dropdownValue, setDropDownValue] = useState([]);
   const [roomDetails, setRoomDetails] = useState([]);
   const [bulkUpdateModal, setBulkUpdateModal] = useState(false);
-  const [agodaPropertyId, setAgodaPropertyId] = useState("");
-  const [propertyResult, stePropertyResult] = useState("");
+  const [currentDate, setCurrentdate] = useState("");
+  const [seventhDayDate, setSeventhDayDate] = useState("");
+  const [roomDetailsToShow, setRoomDetailsToShow] = useState("");
+  const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
+  const [token, setToken] = useState("");
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
@@ -45,54 +45,94 @@ export default function Home() {
   };
 
   //Current Date
-  const currentDate = new Date().toLocaleDateString().split("/");
-  // const newCurrentDate = [];
-  for (let i = 0; i < currentDate.length; i++) {
-    if (currentDate[i] < 10) {
-      currentDate[i] = 0 + currentDate[i];
+  const getCurrentDateFunction = () => {
+    const currentDate = new Date().toLocaleDateString().split("/");
+    // const currentDateNew = [];
+    for (let i = 0; i < currentDate.length; i++) {
+      if (currentDate[i] < 10) {
+        currentDate[i] = 0 + currentDate[i];
+      }
     }
-    // newCurrentDate.push(currentDate[i]);
-  }
-  const currDate = currentDate.reverse();
-  let tempArrival = "";
-  tempArrival = currentDate[2];
-  currentDate[2] = currentDate[1];
-  currentDate[1] = tempArrival;
-  let newCurrDate = currDate.join("-");
+    const currDate = currentDate.reverse();
+    let tempArrival = "";
+    tempArrival = currentDate[2];
+    currentDate[2] = currentDate[1];
+    currentDate[1] = tempArrival;
+
+    let currentDateNew = currDate.join("-");
+    return currentDateNew;
+  };
 
   // Sevens Days
-  const sevenDaysDate = new Date();
-  sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
-  const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
-  const newSevenDays = [];
-  for (let i = 0; i < sevenDays.length; i++) {
-    if (sevenDays[i] < 10) {
-      sevenDays[i] = 0 + sevenDays[i];
+  const getSevenDaysAfterDate = () => {
+    const sevenDaysDate = new Date();
+    sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
+    const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
+    const newSevenDays = [];
+    for (let i = 0; i < sevenDays.length; i++) {
+      if (sevenDays[i] < 10) {
+        sevenDays[i] = 0 + sevenDays[i];
+      }
+      newSevenDays.push(sevenDays[i]);
     }
-    newSevenDays.push(sevenDays[i]);
-  }
-  const nextSevenDay = sevenDays.reverse();
-  let newTempArr = "";
-  newTempArr = sevenDays[2];
-  sevenDays[2] = sevenDays[1];
-  sevenDays[1] = newTempArr;
+    const newSevenDaysDate = sevenDays.reverse();
+    let newTempArr = "";
+    newTempArr = sevenDays[2];
+    sevenDays[2] = sevenDays[1];
+    sevenDays[1] = newTempArr;
 
-  let newSevenDay = sevenDays.join("-");
+    let seventhDayDate = sevenDays.join("-");
+    return seventhDayDate;
+  };
 
-  // console.log(currDate, nextSevenDay);
+  // Seven Days Data of a Specific Room
+  const getSevenDaysDataOfRoom = async (token, roomId) => {
+    // console.log(token, roomId);
+    let res = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getNext7daysRatesAndAvailabilityForRoom?PropertyId=${propertyId}&RoomId=${roomId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+      }
+    );
+    let resJson = await res.json();
+    setSevenDaysDataofRooms(resJson);
+    // console.log(resJson);
+  };
+
+  console.log(sevenDaysDataOfRoom);
+
+  //   sevenDaysDataOfRoom.forEach((element) => {
+  //     console.log(element.date);
+  //   });
+
+  // console.log(currDate, newSevenDaysDate);
   // const newArr = currDate.split("-");
-  // console.log(newCurrDate, newSevenDay);
+  // console.log(newCurrentDaye, newSevenDay);
+  console.log(roomDetails);
+
+  //   console.log(roomDetailsToShow);
 
   useEffect(() => {
     if (propertyId !== undefined) {
+      let currentDateFuncResponse = getCurrentDateFunction();
+      let seventhDayDateFuncResponse = getSevenDaysAfterDate();
+      setCurrentdate(currentDateFuncResponse);
+      setSeventhDayDate(seventhDayDateFuncResponse);
+      let tokenRes = localStorage.getItem("token");
+      setToken(tokenRes);
       fetch(
         `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${propertyId}`,
         {
           method: "GET",
           headers: {
             Accept: "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+            Authorization: `Bearer ${tokenRes}`,
             "Content-Type": "application/json",
             APP_ID: "BOOKONE_WEB_APP",
           },
@@ -100,25 +140,17 @@ export default function Home() {
       )
         .then((res) => res.json())
         .then((resJson) => {
-          // console.log(resJson)
-          setDropDownValue(resJson.propertiesOnlineTravelAgencies);
-          setShowTravelAgencyName(
-            resJson.propertiesOnlineTravelAgencies[0]?.onlineTravelAgencyName
-          );
           setRoomDetails(resJson.roomDtos);
-          setAgodaPropertyId(resJson.propertiesOnlineTravelAgencies);
+          getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
+          setRoomDetailsToShow(resJson?.roomDtos[0]);
+          //   console.log(sevenDayData);
+          //   console.log(resJson);
         });
     }
   }, [router]);
-  // console.log(agodaPropertyId);
-
-  // console.log(propertyResult.result.properties[0].property[0].$.date);
-  // console.log(propertyResult.result.properties[0]);
-
-  // const dateArray = propertyResult.result.properties.map((val, i) => {
-  //   console.log(val);
-  // });
-  // console.log(dateArray);
+  //   console.log(sevenDaysDataOfRoom);
+  //   console.log(roomDetailsToShow);
+  //   console.log(roomDetails);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -151,7 +183,7 @@ export default function Home() {
                     style={{ marginRight: "10px" }}
                   />
                   <MdKeyboardArrowLeft />
-                  Jul 5, 2022
+                  {currentDate}
                   <MdKeyboardArrowRight />
                   <AiOutlineDoubleRight
                     size={15}
@@ -161,41 +193,63 @@ export default function Home() {
               </Col>
               <Col className={styles.dates}>
                 <Row className={styles.dateCards}>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
-                  <Col className={styles.dateCard}>
-                    <span>Mon</span>
-                    <span className={styles.boldDateText}>03</span>
-                    <span>JUL</span>
-                  </Col>
+                  {sevenDaysDataOfRoom.map((val, i) => {
+                    let date = new Date(val.date);
+
+                    return (
+                      <Col className={styles.dateCard} key={i}>
+                        <span>
+                          {date.getDay() == 1
+                            ? "MON"
+                            : date.getDay() == 2
+                            ? "TUE"
+                            : date.getDay() == 3
+                            ? "WED"
+                            : date.getDay() == 4
+                            ? "THU"
+                            : date.getDay() == 5
+                            ? "FRI"
+                            : date.getDay() == 6
+                            ? "SAT"
+                            : date.getDay() == 0
+                            ? "SUN"
+                            : "NO DAY"}
+                        </span>
+                        <span className={styles.boldDateText}>
+                          {date.getDate() < 10
+                            ? "0" + date.getDate()
+                            : date.getDate()}
+                        </span>
+                        <span>
+                          {date.getMonth() == 0
+                            ? "JAN"
+                            : date.getMonth() == 1
+                            ? "FEB"
+                            : date.getMonth() == 2
+                            ? "MAR"
+                            : date.getMonth() == 3
+                            ? "APR"
+                            : date.getMonth() == 4
+                            ? "MAY"
+                            : date.getMonth() == 5
+                            ? "JUN"
+                            : date.getMonth() == 6
+                            ? "JUL"
+                            : date.getMonth() == 7
+                            ? "AUG"
+                            : date.getMonth() == 8
+                            ? "SEP"
+                            : date.getMonth() == 9
+                            ? "NOV"
+                            : date.getMonth() == 10
+                            ? "OCT"
+                            : date.getMonth() == 11
+                            ? "NOV"
+                            : "NO MONTH"}
+                        </span>
+                      </Col>
+                    );
+                  })}
                 </Row>
               </Col>
             </Row>
@@ -323,7 +377,17 @@ export default function Home() {
                     }
                   >
                     {roomDetails?.map((val, i) => {
-                      return <li key={i}>{val.name}</li>;
+                      return (
+                        <li
+                          key={i}
+                          onClick={() => {
+                            setRoomDetailsToShow(val);
+                            getSevenDaysDataOfRoom(token, val.bookoneRoomId);
+                          }}
+                        >
+                          {val.name}
+                        </li>
+                      );
                     })}
                   </div>
                 </button>
@@ -366,54 +430,125 @@ export default function Home() {
           </div>
           {roomDetails?.map((val, i) => {
             return (
-              <div key={i} className={styles.item}>
-                <Row className={styles.heading}>
-                  <Col className={styles.Icon}>
-                    <FaBed size={18} style={{ marginTop: "5px" }} />
-                  </Col>
-                  <Col className={styles.leftSection}>
-                    <span>{val.name}</span>
-                    <AiFillThunderbolt
-                      size={15}
-                      style={{ marginTop: "5px", color: "#2494d1" }}
-                    />
-                  </Col>
-                  <Col className={styles.midSection}>Avail</Col>
-                  <Col className={styles.rightSection}>
-                    <Row className={styles.data}>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
+              <>
+                {val.name == roomDetailsToShow?.name && (
+                  <div key={i} className={styles.item}>
+                    <Row className={styles.heading}>
+                      <Col className={styles.Icon}>
+                        <FaBed size={18} style={{ marginTop: "5px" }} />
+                      </Col>
+                      <Col className={styles.leftSection}>
+                        <span>{val.name}</span>
+                        <AiFillThunderbolt
+                          size={15}
+                          style={{ marginTop: "5px", color: "#2494d1" }}
+                        />
+                      </Col>
+                      <Col className={styles.midSection}>Avail</Col>
+                      <Col className={styles.rightSection}>
+                        <Row className={styles.data}>
+                          {sevenDaysDataOfRoom.map((avail) => {
+                            return (
+                              <>
+                                {val.name == avail.roomName && (
+                                  <Col className={styles.col} key={avail.id}>
+                                    {avail.noOfAvailable}
+                                  </Col>
+                                )}
+                              </>
+                            );
+                          })}
+                        </Row>
+                      </Col>
                     </Row>
-                  </Col>
-                </Row>
-                <Row className={styles.content}>
-                  <Col className={styles.Icon}></Col>
-                  <Col className={styles.leftSection}>
-                    Rath Yatra Plan (Rath Yatra Special)
-                    <AiFillThunderbolt
-                      size={15}
-                      style={{ marginTop: "5px", color: "#2494d1" }}
-                    />
-                  </Col>
-                  <Col className={styles.midSection}>Avail</Col>
-                  <Col className={styles.rightSection}>
-                    <Row className={styles.data}>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
-                      <Col className={styles.col}>10</Col>
+                    <Row className={styles.content}>
+                      <Col className={styles.Icon}></Col>
+                      <Col
+                        className={styles.leftSection}
+                        style={{ border: "none" }}
+                      >
+                        Room Price
+                      </Col>
+                      <Col className={styles.midSection}></Col>
+                      <Col className={styles.rightSection}>
+                        <Row className={styles.data}>
+                          {sevenDaysDataOfRoom.map((roomPrice, keyj) => {
+                            return (
+                              <Col className={styles.col} key={keyj}>
+                                {roomPrice.price}
+                              </Col>
+                            );
+                          })}
+                        </Row>
+                      </Col>
                     </Row>
-                  </Col>
-                </Row>
-              </div>
+
+                    {val.name === sevenDaysDataOfRoom[0]?.roomName && (
+                      <>
+                        {sevenDaysDataOfRoom[0].roomRatePlans.map(
+                          (planName, key) => {
+                            return (
+                              <Row className={styles.content} key={key}>
+                                <Col className={styles.Icon}></Col>
+                                <Col className={styles.leftSection}>
+                                  {planName.name}
+                                  <AiFillThunderbolt
+                                    size={15}
+                                    style={{
+                                      marginTop: "5px",
+                                      color: "#2494d1",
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={styles.midSection}>
+                                  Plan Rates
+                                </Col>
+                                <Col className={styles.rightSection}>
+                                  <Row className={styles.data}>
+                                    {sevenDaysDataOfRoom.map(
+                                      (planRatesOfSevenDays) => {
+                                        return (
+                                          <>
+                                            {planRatesOfSevenDays.roomRatePlans.map(
+                                              (plansRatesToShow, keyi) => {
+                                                return (
+                                                  <>
+                                                    {planName.name ==
+                                                      plansRatesToShow.name && (
+                                                      <Col
+                                                        key={keyi}
+                                                        className={styles.col}
+                                                      >
+                                                        {
+                                                          plansRatesToShow.amount
+                                                        }
+                                                      </Col>
+                                                    )}
+                                                  </>
+                                                );
+                                              }
+                                            )}
+                                          </>
+                                        );
+                                      }
+                                    )}
+                                    {/* <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col> */}
+                                  </Row>
+                                </Col>
+                              </Row>
+                            );
+                          }
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </>
             );
           })}
         </div>
