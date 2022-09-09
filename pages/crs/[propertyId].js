@@ -106,12 +106,13 @@ export default function PropertyId() {
       );
       let resJson = await res.json();
       setSevenDaysDataofRooms(resJson);
-      setNoOfDays(7);
+      setNoOfDays(14);
     };
     
     //This function will set Previuos Seven Days Data of Specific Room
     const getPreviousSevenDaysDataOfRooms = async (propertyId,roomId)=>{
-      if (noOfDays >= 21) {
+      console.log(noOfDays)
+      if (noOfDays >= 21 ) {
         setNoOfDays(noOfDays - 7)
       }
       let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays-14);
@@ -155,26 +156,26 @@ export default function PropertyId() {
           roomId: roomId,
           toDate: seventhDayDateFuncResponse
         }
-    let nextSevenDaysRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
+        let nextSevenDaysRes = await fetch(
+          `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
             APP_ID: "BOOKONE_WEB_APP",
           },
           body: JSON.stringify(data)
         }
-      );
-      let nextSevenDaysResponse = await nextSevenDaysRes.json();
+        );
+        let nextSevenDaysResponse = await nextSevenDaysRes.json();
       let nextSevenDaysResponseJson = nextSevenDaysResponse;
       console.log(nextSevenDaysResponseJson)
       setCurrentdate(currentDateFuncResponse)
       setSevenDaysDataofRooms(nextSevenDaysResponseJson)
   }
-
+  
   //This function will set Refreshed Seven Days Data of Specific Room
   const getRefreshedSevenDaysDataOfRooms = async (roomId)=>{
     let currentDateFuncResponse = getCurrentDateFunction();
@@ -187,22 +188,23 @@ export default function PropertyId() {
     }
     let refreshedSevenDaysRes = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-          body: JSON.stringify(data)
-        }
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data)
+      }
       );
       let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
       let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
       setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
       setCurrentdate(currentDateFuncResponse)
-  }
+      setNoOfDays(14);
+    }
   
   // console.log(sevenDaysDataOfRoom);
   
@@ -511,12 +513,6 @@ export default function PropertyId() {
                     )}
                   </div>
                 </button>
-                <div className={styles.inputItem}>
-                  <span>
-                    <BiSearch size={15} style={{ marginBottom: "1px" }} />
-                  </span>
-                  <input placeholder="Search room Rates" />
-                </div>
                 <span>Clear all filters</span>
               </Col>
               <Col className={styles.rightlinkText}>
@@ -665,11 +661,12 @@ export default function PropertyId() {
                                       (planRatesOfSevenDays) => {
                                         return (
                                           <>
-                                            {planRatesOfSevenDays.roomRatePlans.map(
+                                            {
+                                            planRatesOfSevenDays.roomRatePlans.map(
                                               (plansRatesToShow, keyi) => {
                                                 return (
                                                   <>
-                                                    {planName.name ==
+                                                    {planName.name ===
                                                       plansRatesToShow.name && (
                                                       <Col
                                                         key={keyi}
