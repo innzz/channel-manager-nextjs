@@ -15,9 +15,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
+import { DatePicker } from "antd";
+import "antd/dist/antd.css";
+import moment from "moment";
 
 export default function PropertyId() {
   let router = useRouter();
+
   //   let token = localStorage.getItem("token");
   //   console.log(token);
   //   console.log(router);
@@ -35,17 +39,19 @@ export default function PropertyId() {
   const [seventhDayDate, setSeventhDayDate] = useState("");
   const [roomDetailsToShow, setRoomDetailsToShow] = useState("");
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
-  const [filteredPlan, setFilteredPlanName] = useState('');
+  const [filteredPlan, setFilteredPlanName] = useState("");
   const [token, setToken] = useState("");
   const [noOfDays, setNoOfDays] = useState(7);
+  let [fromDatePicker, setFromDatePicker] = useState("");
+  let [endDatePicker, setEndDatePicker] = useState("");
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
-  
+
   const handleBulkUpdateModal = () => {
     setBulkUpdateModal(!bulkUpdateModal);
   };
-  
+
   //It will give Current Date
   const getCurrentDateFunction = () => {
     const currentDate = new Date().toLocaleDateString().split("/");
@@ -60,11 +66,11 @@ export default function PropertyId() {
     tempArrival = currentDate[2];
     currentDate[2] = currentDate[1];
     currentDate[1] = tempArrival;
-    
+
     let currentDateNew = currDate.join("-");
     return currentDateNew;
   };
-  
+
   // It will give seventh Day Date from Current Date
   const getSevenDaysAfterDate = (noOfDays) => {
     const sevenDaysDate = new Date();
@@ -82,15 +88,15 @@ export default function PropertyId() {
     newTempArr = sevenDays[2];
     sevenDays[2] = sevenDays[1];
     sevenDays[1] = newTempArr;
-    
+
     let seventhDayDate = sevenDays.join("-");
     return seventhDayDate;
   };
-  
+
   // This function will set seven Days Data of a Specific Room
   const getSevenDaysDataOfRoom = async (token, roomId) => {
     let currentDateFuncResponse = getCurrentDateFunction();
-    setCurrentdate(currentDateFuncResponse)
+    setCurrentdate(currentDateFuncResponse);
     // console.log(token, roomId);
     let res = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/getNext7daysRatesAndAvailabilityForRoom?PropertyId=${propertyId}&RoomId=${roomId}`,
@@ -103,89 +109,116 @@ export default function PropertyId() {
           APP_ID: "BOOKONE_WEB_APP",
         },
       }
-      );
-      let resJson = await res.json();
-      setSevenDaysDataofRooms(resJson);
-      setNoOfDays(14);
+    );
+    let resJson = await res.json();
+    setSevenDaysDataofRooms(resJson);
+    setNoOfDays(14);
+  };
+
+  //This function will set Previuos Seven Days Data of Specific Room
+  const getPreviousSevenDaysDataOfRooms = async (propertyId, roomId) => {
+    if (noOfDays >= 21) {
+      setNoOfDays(noOfDays - 7);
+    }
+    let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays - 14);
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays - 7);
+    const data = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: seventhDayDateFuncResponse,
     };
-    
-    //This function will set Previuos Seven Days Data of Specific Room
-    const getPreviousSevenDaysDataOfRooms = async (propertyId,roomId)=>{
-      console.log(noOfDays)
-      if (noOfDays >= 21 ) {
-        setNoOfDays(noOfDays - 7)
+    let previousSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
       }
-      let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays-14);
-      let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays-7);
-      const data = {
-        fromDate: currentDateFuncResponse,
-        propertyId: propertyId,
-        roomId: roomId,
-        toDate: seventhDayDateFuncResponse
+    );
+    let previousSevenDaysResponse = await previousSevenDaysRes.json();
+    let previousSevenDaysResponseJson = previousSevenDaysResponse;
+    setCurrentdate(currentDateFuncResponse);
+    setSevenDaysDataofRooms(previousSevenDaysResponseJson);
+
+    // }
+  };
+
+  //This function will set User specific dates Data of Specific Room
+  const getDatePickerDataOfRooms = async (startDate, endDate) => {
+    setNoOfDays(7);
+    const data = {
+      fromDate: startDate,
+      propertyId: propertyId,
+      roomId: sevenDaysDataOfRoom[0].roomId,
+      toDate: endDate,
+    };
+    let datePickerDataRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
       }
-      let previousSevenDaysRes = await fetch(
-        `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-          body: JSON.stringify(data)
-        }
-        );
-        let previousSevenDaysResponse = await previousSevenDaysRes.json();
-        let previousSevenDaysResponseJson = previousSevenDaysResponse;
-        setCurrentdate(currentDateFuncResponse)
-        setSevenDaysDataofRooms(previousSevenDaysResponseJson)
-        
-        // }
+    );
+    let datePickerDataResponse = await datePickerDataRes.json();
+    let datePickerDataResponseJson = datePickerDataResponse;
+    // console.log(datePickerDataResponseJson);
+    setCurrentdate(startDate);
+    setSevenDaysDataofRooms(datePickerDataResponseJson);
+  };
+
+    //This function will set Next seven dates Data of Specific Room
+  const getNextSevenDaysDataOfRooms = async (propertyId, roomId) => {
+    let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays);
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays + 7);
+    setNoOfDays(noOfDays + 7);
+    const data = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: seventhDayDateFuncResponse,
+    };
+    let nextSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
       }
-      
-      
-      //This function will set Next Seven Days Data of Specific Room
-      const getNextSevenDaysDataOfRooms = async (propertyId,roomId)=>{
-        let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays);
-        let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays + 7);
-        setNoOfDays(noOfDays + 7);
-        const data = {
-          fromDate: currentDateFuncResponse,
-          propertyId: propertyId,
-          roomId: roomId,
-          toDate: seventhDayDateFuncResponse
-        }
-        let nextSevenDaysRes = await fetch(
-          `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-          body: JSON.stringify(data)
-        }
-        );
-        let nextSevenDaysResponse = await nextSevenDaysRes.json();
-      let nextSevenDaysResponseJson = nextSevenDaysResponse;
-      console.log(nextSevenDaysResponseJson)
-      setCurrentdate(currentDateFuncResponse)
-      setSevenDaysDataofRooms(nextSevenDaysResponseJson)
-  }
-  
+    );
+    let nextSevenDaysResponse = await nextSevenDaysRes.json();
+    let nextSevenDaysResponseJson = nextSevenDaysResponse;
+    console.log(nextSevenDaysResponseJson);
+    setCurrentdate(currentDateFuncResponse);
+    setSevenDaysDataofRooms(nextSevenDaysResponseJson);
+  };
+
   //This function will set Refreshed Seven Days Data of Specific Room
-  const getRefreshedSevenDaysDataOfRooms = async (roomId)=>{
+  const getRefreshedSevenDaysDataOfRooms = async (roomId) => {
     let currentDateFuncResponse = getCurrentDateFunction();
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
     const data = {
       fromDate: currentDateFuncResponse,
       propertyId: propertyId,
       roomId: roomId,
-      toDate: seventhDayDateFuncResponse
-    }
+      toDate: seventhDayDateFuncResponse,
+    };
     let refreshedSevenDaysRes = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
       {
@@ -196,18 +229,18 @@ export default function PropertyId() {
           "Content-Type": "application/json",
           APP_ID: "BOOKONE_WEB_APP",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       }
-      );
-      let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
-      let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
-      setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
-      setCurrentdate(currentDateFuncResponse)
-      setNoOfDays(14);
-    }
-  
+    );
+    let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
+    let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
+    setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
+    setCurrentdate(currentDateFuncResponse);
+    setNoOfDays(14);
+  };
+
   // console.log(sevenDaysDataOfRoom);
-  
+
   useEffect(() => {
     if (propertyId !== undefined) {
       let currentDateFuncResponse = getCurrentDateFunction();
@@ -252,6 +285,9 @@ export default function PropertyId() {
   const handleRatesAvailiblityDropDown = () => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
+
+  // console.log(fromDatePicker, endDatePicker);
+
   return (
     <div className={styles.outerContainer}>
       <Navbar />
@@ -261,22 +297,61 @@ export default function PropertyId() {
           <meta name="description" content="Generated by create next app" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+
         <div className={styles.table}>
           <div className={styles.topBar}>
             <Row className={styles.dateSection}>
               <Col className={styles.dateSelector}>
+                <Col>
+                  <span>From: </span>
+                  <DatePicker
+                  size="small"
+                    onChange={(value) => {
+                      const fromDate = moment(value).format("YYYY-MM-DD");
+                      setCurrentdate(fromDate);
+                    }}
+                  />
+                  <span>To: </span>
+                  <DatePicker
+                    placeholder="End Date"
+                    size="small"
+                    onChange={(value) => {
+                      const endDate = moment(value).format("YYYY-MM-DD");
+                      setSeventhDayDate(endDate);
+                    }}
+                  />
+                  <button className={styles.findRatesButton} onClick={()=>{getDatePickerDataOfRooms(currentDate,seventhDayDate)}}>SEARCH</button>
+                </Col>
                 <span>
-                  <GrRotateLeft onClick={()=>{getRefreshedSevenDaysDataOfRooms(sevenDaysDataOfRoom[0].roomId)}} size={15} style={{ marginRight: "10px" }} />
+                  <GrRotateLeft
+                    onClick={() => {
+                      getRefreshedSevenDaysDataOfRooms(
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                    }}
+                    size={15}
+                    style={{ marginRight: "10px" }}
+                  />
                   <AiOutlineDoubleLeft
                     size={15}
                     style={{ marginRight: "10px" }}
-                    onClick={()=> {getPreviousSevenDaysDataOfRooms(propertyId,sevenDaysDataOfRoom[0].roomId)}} 
+                    onClick={() => {
+                      getPreviousSevenDaysDataOfRooms(
+                        propertyId,
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                    }}
                   />
                   {currentDate}
                   <AiOutlineDoubleRight
                     size={15}
                     style={{ marginLeft: "10px" }}
-                    onClick={()=> {getNextSevenDaysDataOfRooms(propertyId,sevenDaysDataOfRoom[0].roomId)}} 
+                    onClick={() => {
+                      getNextSevenDaysDataOfRooms(
+                        propertyId,
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                    }}
                   />
                 </span>
               </Col>
@@ -472,7 +547,7 @@ export default function PropertyId() {
                           onClick={() => {
                             setRoomDetailsToShow(val);
                             getSevenDaysDataOfRoom(token, val.bookoneRoomId);
-                            setFilteredPlanName('');
+                            setFilteredPlanName("");
                           }}
                         >
                           {val.name}
@@ -513,6 +588,12 @@ export default function PropertyId() {
                     )}
                   </div>
                 </button>
+                <div className={styles.inputItem}>
+                  <span>
+                    <BiSearch size={15} style={{ marginBottom: "1px" }} />
+                  </span>
+                  <input placeholder="Search room Rates" />
+                </div>
                 <span>Clear all filters</span>
               </Col>
               <Col className={styles.rightlinkText}>
@@ -583,119 +664,130 @@ export default function PropertyId() {
                         {sevenDaysDataOfRoom[0].roomRatePlans.map(
                           (planName, key) => {
                             return (
-                              <>{
-                                filteredPlan === '' ? 
-                                <Row className={styles.content} key={key}>
-                                <Col className={styles.Icon}></Col>
-                                <Col className={styles.leftSection}>
-                                  {planName.name}
-                                  <AiFillThunderbolt
-                                    size={15}
-                                    style={{
-                                      marginTop: "5px",
-                                      color: "#2494d1",
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={styles.midSection}>
-                                  Plan Rates
-                                </Col>
-                                <Col className={styles.rightSection}>
-                                  <Row className={styles.data}>
-                                    {sevenDaysDataOfRoom?.map(
-                                      (planRatesOfSevenDays) => {
-                                        return (
-                                          <>
-                                            {planRatesOfSevenDays?.roomRatePlans?.map(
-                                              (plansRatesToShow, keyi) => {
-                                                return (
-                                                  <>
-                                                    {planName.name ==
-                                                      plansRatesToShow.name && (
-                                                      <Col
-                                                        key={keyi}
-                                                        className={styles.col}
-                                                      >
-                                                        ₹ {
-                                                          plansRatesToShow.amount
-                                                        }
-                                                      </Col>
-                                                    )}
-                                                  </>
-                                                );
-                                              }
-                                            )}
-                                          </>
-                                        );
-                                      }
-                                    )}
-                                    {/* <Col className={styles.col}>10</Col>
+                              <>
+                                {filteredPlan === "" ? (
+                                  <Row className={styles.content} key={key}>
+                                    <Col className={styles.Icon}></Col>
+                                    <Col className={styles.leftSection}>
+                                      {planName.name}
+                                      <AiFillThunderbolt
+                                        size={15}
+                                        style={{
+                                          marginTop: "5px",
+                                          color: "#2494d1",
+                                        }}
+                                      />
+                                    </Col>
+                                    <Col className={styles.midSection}>
+                                      Plan Rates
+                                    </Col>
+                                    <Col className={styles.rightSection}>
+                                      <Row className={styles.data}>
+                                        {sevenDaysDataOfRoom?.map(
+                                          (planRatesOfSevenDays) => {
+                                            return (
+                                              <>
+                                                {planRatesOfSevenDays?.roomRatePlans?.map(
+                                                  (plansRatesToShow, keyi) => {
+                                                    return (
+                                                      <>
+                                                        {planName.name ==
+                                                          plansRatesToShow.name && (
+                                                          <Col
+                                                            key={keyi}
+                                                            className={
+                                                              styles.col
+                                                            }
+                                                          >
+                                                            ₹{" "}
+                                                            {
+                                                              plansRatesToShow.amount
+                                                            }
+                                                          </Col>
+                                                        )}
+                                                      </>
+                                                    );
+                                                  }
+                                                )}
+                                              </>
+                                            );
+                                          }
+                                        )}
+                                        {/* <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col> */}
+                                      </Row>
+                                    </Col>
                                   </Row>
-                                </Col>
-                              </Row>
-                               : 
-                               <>{
-                                filteredPlan.name === planName.name && <Row className={styles.content} key={key}>
-                                <Col className={styles.Icon}></Col>
-                                <Col className={styles.leftSection}>
-                                  {planName.name}
-                                  <AiFillThunderbolt
-                                    size={15}
-                                    style={{
-                                      marginTop: "5px",
-                                      color: "#2494d1",
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={styles.midSection}>
-                                  Plan Rates
-                                </Col>
-                                <Col className={styles.rightSection}>
-                                  <Row className={styles.data}>
-                                    {sevenDaysDataOfRoom.map(
-                                      (planRatesOfSevenDays) => {
-                                        return (
-                                          <>
-                                            {
-                                            planRatesOfSevenDays.roomRatePlans.map(
-                                              (plansRatesToShow, keyi) => {
+                                ) : (
+                                  <>
+                                    {filteredPlan.name === planName.name && (
+                                      <Row className={styles.content} key={key}>
+                                        <Col className={styles.Icon}></Col>
+                                        <Col className={styles.leftSection}>
+                                          {planName.name}
+                                          <AiFillThunderbolt
+                                            size={15}
+                                            style={{
+                                              marginTop: "5px",
+                                              color: "#2494d1",
+                                            }}
+                                          />
+                                        </Col>
+                                        <Col className={styles.midSection}>
+                                          Plan Rates
+                                        </Col>
+                                        <Col className={styles.rightSection}>
+                                          <Row className={styles.data}>
+                                            {sevenDaysDataOfRoom.map(
+                                              (planRatesOfSevenDays) => {
                                                 return (
                                                   <>
-                                                    {planName.name ===
-                                                      plansRatesToShow.name && (
-                                                      <Col
-                                                        key={keyi}
-                                                        className={styles.col}
-                                                      >
-                                                        ₹ {
-                                                          plansRatesToShow.amount
-                                                        }
-                                                      </Col>
+                                                    {planRatesOfSevenDays.roomRatePlans.map(
+                                                      (
+                                                        plansRatesToShow,
+                                                        keyi
+                                                      ) => {
+                                                        return (
+                                                          <>
+                                                            {planName.name ==
+                                                              plansRatesToShow.name && (
+                                                              <Col
+                                                                key={keyi}
+                                                                className={
+                                                                  styles.col
+                                                                }
+                                                              >
+                                                                ₹{" "}
+                                                                {
+                                                                  plansRatesToShow.amount
+                                                                }
+                                                              </Col>
+                                                            )}
+                                                          </>
+                                                        );
+                                                      }
                                                     )}
                                                   </>
                                                 );
                                               }
                                             )}
-                                          </>
-                                        );
-                                      }
-                                    )}
-                                    {/* <Col className={styles.col}>10</Col>
+                                            {/* <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col>
                                     <Col className={styles.col}>10</Col> */}
-                                  </Row>
-                                </Col>
-                              </Row>
-                              }</>
-                              }</>
+                                          </Row>
+                                        </Col>
+                                      </Row>
+                                    )}
+                                  </>
+                                )}
+                              </>
                             );
                           }
                         )}
