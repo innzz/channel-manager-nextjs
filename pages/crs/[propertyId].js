@@ -15,9 +15,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
+import { DatePicker } from "antd";
+import "antd/dist/antd.css";
+import moment from "moment";
 
 export default function PropertyId() {
   let router = useRouter();
+
   //   let token = localStorage.getItem("token");
   //   console.log(token);
   //   console.log(router);
@@ -37,6 +41,9 @@ export default function PropertyId() {
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
   const [filteredPlan, setFilteredPlanName] = useState("");
   const [token, setToken] = useState("");
+  const [noOfDays, setNoOfDays] = useState(7);
+  let [fromDatePicker, setFromDatePicker] = useState("");
+  let [endDatePicker, setEndDatePicker] = useState("");
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
@@ -45,7 +52,7 @@ export default function PropertyId() {
     setBulkUpdateModal(!bulkUpdateModal);
   };
 
-  //Current Date
+  //It will give Current Date
   const getCurrentDateFunction = () => {
     const currentDate = new Date().toLocaleDateString().split("/");
     // const currentDateNew = [];
@@ -64,10 +71,10 @@ export default function PropertyId() {
     return currentDateNew;
   };
 
-  // Sevens Days
-  const getSevenDaysAfterDate = () => {
+  // It will give seventh Day Date from Current Date
+  const getSevenDaysAfterDate = (noOfDays) => {
     const sevenDaysDate = new Date();
-    sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
+    sevenDaysDate.setDate(sevenDaysDate.getDate() + noOfDays);
     const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
     const newSevenDays = [];
     for (let i = 0; i < sevenDays.length; i++) {
@@ -86,8 +93,10 @@ export default function PropertyId() {
     return seventhDayDate;
   };
 
-  // Seven Days Data of a Specific Room
+  // This function will set seven Days Data of a Specific Room
   const getSevenDaysDataOfRoom = async (token, roomId) => {
+    let currentDateFuncResponse = getCurrentDateFunction();
+    setCurrentdate(currentDateFuncResponse);
     // console.log(token, roomId);
     let res = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/getNext7daysRatesAndAvailabilityForRoom?PropertyId=${propertyId}&RoomId=${roomId}`,
@@ -103,28 +112,110 @@ export default function PropertyId() {
     );
     let resJson = await res.json();
     setSevenDaysDataofRooms(resJson);
-    // console.log(resJson);
+    setNoOfDays(14);
   };
 
-  console.log(sevenDaysDataOfRoom);
+  //This function will set Previuos Seven Days Data of Specific Room
+  const getPreviousSevenDaysDataOfRooms = async (propertyId, roomId) => {
+    if (noOfDays >= 21) {
+      setNoOfDays(noOfDays - 7);
+    }
+    let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays - 14);
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays - 7);
+    const data = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: seventhDayDateFuncResponse,
+    };
+    let previousSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    let previousSevenDaysResponse = await previousSevenDaysRes.json();
+    let previousSevenDaysResponseJson = previousSevenDaysResponse;
+    setCurrentdate(currentDateFuncResponse);
+    setSevenDaysDataofRooms(previousSevenDaysResponseJson);
 
-  //   sevenDaysDataOfRoom.forEach((element) => {
-  //     console.log(element.date);
-  //   });
+    // }
+  };
 
-  // console.log(currDate, newSevenDaysDate);
-  // const newArr = currDate.split("-");
-  // console.log(newCurrentDaye, newSevenDay);
-  console.log(roomDetails);
+  //This function will set Next Seven Days Data of Specific Room
+  const getNextSevenDaysDataOfRooms = async (propertyId, roomId) => {
+    let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays);
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays + 7);
+    setNoOfDays(noOfDays + 7);
+    const data = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: seventhDayDateFuncResponse,
+    };
+    let nextSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    let nextSevenDaysResponse = await nextSevenDaysRes.json();
+    let nextSevenDaysResponseJson = nextSevenDaysResponse;
+    console.log(nextSevenDaysResponseJson);
+    setCurrentdate(currentDateFuncResponse);
+    setSevenDaysDataofRooms(nextSevenDaysResponseJson);
+  };
 
-  //   console.log(roomDetailsToShow);
+  //This function will set Refreshed Seven Days Data of Specific Room
+  const getRefreshedSevenDaysDataOfRooms = async (roomId) => {
+    let currentDateFuncResponse = getCurrentDateFunction();
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+    const data = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: seventhDayDateFuncResponse,
+    };
+    let refreshedSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
+    let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
+    setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
+    setCurrentdate(currentDateFuncResponse);
+    setNoOfDays(14);
+  };
+
+  // console.log(sevenDaysDataOfRoom);
 
   useEffect(() => {
     if (propertyId !== undefined) {
       let currentDateFuncResponse = getCurrentDateFunction();
-      let seventhDayDateFuncResponse = getSevenDaysAfterDate();
       setCurrentdate(currentDateFuncResponse);
-      setSeventhDayDate(seventhDayDateFuncResponse);
       let tokenRes = localStorage.getItem("token");
       setToken(tokenRes);
       fetch(
@@ -152,7 +243,7 @@ export default function PropertyId() {
   //   console.log(sevenDaysDataOfRoom);
   //   console.log(roomDetailsToShow);
   //   console.log(roomDetails);
-  console.log(filteredPlan);
+  // console.log(filteredPlan);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -165,6 +256,9 @@ export default function PropertyId() {
   const handleRatesAvailiblityDropDown = () => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
+
+  console.log(fromDatePicker, endDatePicker);
+
   return (
     <div className={styles.outerContainer}>
       <Navbar />
@@ -174,22 +268,59 @@ export default function PropertyId() {
           <meta name="description" content="Generated by create next app" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+
         <div className={styles.table}>
           <div className={styles.topBar}>
             <Row className={styles.dateSection}>
               <Col className={styles.dateSelector}>
+                <Col>
+                  <span>From: </span>
+                  <DatePicker
+                    onChange={(value) => {
+                      const fromDate = moment(value).format("YYYY-MM-DD");
+                      setFromDatePicker(fromDate);
+                    }}
+                  />
+                  <span>To: </span>
+                  <DatePicker
+                    placeholder="End Date"
+                    onChange={(value) => {
+                      const endDate = moment(value).format("YYYY-MM-DD");
+                      setEndDatePicker(endDate);
+                    }}
+                  />
+                  <button className={styles.findRatesButton}>Find Rates</button>
+                </Col>
                 <span>
-                  <GrRotateLeft size={15} style={{ marginRight: "10px" }} />
-                  <AiOutlineDoubleLeft
+                  <GrRotateLeft
+                    onClick={() => {
+                      getRefreshedSevenDaysDataOfRooms(
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                    }}
                     size={15}
                     style={{ marginRight: "10px" }}
                   />
-                  <MdKeyboardArrowLeft />
+                  <AiOutlineDoubleLeft
+                    size={15}
+                    style={{ marginRight: "10px" }}
+                    onClick={() => {
+                      getPreviousSevenDaysDataOfRooms(
+                        propertyId,
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                    }}
+                  />
                   {currentDate}
-                  <MdKeyboardArrowRight />
                   <AiOutlineDoubleRight
                     size={15}
                     style={{ marginLeft: "10px" }}
+                    onClick={() => {
+                      getNextSevenDaysDataOfRooms(
+                        propertyId,
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                    }}
                   />
                 </span>
               </Col>
@@ -242,11 +373,11 @@ export default function PropertyId() {
                             : date.getMonth() == 8
                             ? "SEP"
                             : date.getMonth() == 9
-                            ? "NOV"
-                            : date.getMonth() == 10
                             ? "OCT"
-                            : date.getMonth() == 11
+                            : date.getMonth() == 10
                             ? "NOV"
+                            : date.getMonth() == 11
+                            ? "DEC"
                             : "NO MONTH"}
                         </span>
                       </Col>
@@ -413,16 +544,14 @@ export default function PropertyId() {
                     {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
                       (dropdownPlan, dropKey) => {
                         return (
-                          <>
-                            <li
-                              key={dropKey}
-                              onClick={() => {
-                                setFilteredPlanName(dropdownPlan);
-                              }}
-                            >
-                              {dropdownPlan.name}
-                            </li>
-                          </>
+                          <li
+                            key={dropKey}
+                            onClick={() => {
+                              setFilteredPlanName(dropdownPlan);
+                            }}
+                          >
+                            {dropdownPlan.name}
+                          </li>
                         );
                       }
                     )}
@@ -505,7 +634,7 @@ export default function PropertyId() {
                           (planName, key) => {
                             return (
                               <>
-                                {filteredPlan == "" ? (
+                                {filteredPlan === "" ? (
                                   <Row className={styles.content} key={key}>
                                     <Col className={styles.Icon}></Col>
                                     <Col className={styles.leftSection}>
@@ -523,11 +652,11 @@ export default function PropertyId() {
                                     </Col>
                                     <Col className={styles.rightSection}>
                                       <Row className={styles.data}>
-                                        {sevenDaysDataOfRoom.map(
+                                        {sevenDaysDataOfRoom?.map(
                                           (planRatesOfSevenDays) => {
                                             return (
                                               <>
-                                                {planRatesOfSevenDays.roomRatePlans.map(
+                                                {planRatesOfSevenDays?.roomRatePlans?.map(
                                                   (plansRatesToShow, keyi) => {
                                                     return (
                                                       <>
@@ -553,12 +682,18 @@ export default function PropertyId() {
                                             );
                                           }
                                         )}
+                                        {/* <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col> */}
                                       </Row>
                                     </Col>
                                   </Row>
                                 ) : (
                                   <>
-                                    {planName.name == filteredPlan.name && (
+                                    {filteredPlan.name === planName.name && (
                                       <Row className={styles.content} key={key}>
                                         <Col className={styles.Icon}></Col>
                                         <Col className={styles.leftSection}>
@@ -609,6 +744,12 @@ export default function PropertyId() {
                                                 );
                                               }
                                             )}
+                                            {/* <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col>
+                                    <Col className={styles.col}>10</Col> */}
                                           </Row>
                                         </Col>
                                       </Row>
