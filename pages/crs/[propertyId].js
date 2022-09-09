@@ -37,15 +37,16 @@ export default function PropertyId() {
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
   const [filteredPlan, setFilteredPlanName] = useState('');
   const [token, setToken] = useState("");
+  const [noOfDays, setNoOfDays] = useState(7);
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
-
+  
   const handleBulkUpdateModal = () => {
     setBulkUpdateModal(!bulkUpdateModal);
   };
-
-  //Current Date
+  
+  //It will give Current Date
   const getCurrentDateFunction = () => {
     const currentDate = new Date().toLocaleDateString().split("/");
     // const currentDateNew = [];
@@ -59,15 +60,15 @@ export default function PropertyId() {
     tempArrival = currentDate[2];
     currentDate[2] = currentDate[1];
     currentDate[1] = tempArrival;
-
+    
     let currentDateNew = currDate.join("-");
     return currentDateNew;
   };
-
-  // Sevens Days
-  const getSevenDaysAfterDate = () => {
+  
+  // It will give seventh Day Date from Current Date
+  const getSevenDaysAfterDate = (noOfDays) => {
     const sevenDaysDate = new Date();
-    sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
+    sevenDaysDate.setDate(sevenDaysDate.getDate() + noOfDays);
     const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
     const newSevenDays = [];
     for (let i = 0; i < sevenDays.length; i++) {
@@ -81,13 +82,15 @@ export default function PropertyId() {
     newTempArr = sevenDays[2];
     sevenDays[2] = sevenDays[1];
     sevenDays[1] = newTempArr;
-
+    
     let seventhDayDate = sevenDays.join("-");
     return seventhDayDate;
   };
-
-  // Seven Days Data of a Specific Room
+  
+  // This function will set seven Days Data of a Specific Room
   const getSevenDaysDataOfRoom = async (token, roomId) => {
+    let currentDateFuncResponse = getCurrentDateFunction();
+    setCurrentdate(currentDateFuncResponse)
     // console.log(token, roomId);
     let res = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/getNext7daysRatesAndAvailabilityForRoom?PropertyId=${propertyId}&RoomId=${roomId}`,
@@ -100,31 +103,113 @@ export default function PropertyId() {
           APP_ID: "BOOKONE_WEB_APP",
         },
       }
-    );
-    let resJson = await res.json();
-    setSevenDaysDataofRooms(resJson);
-    // console.log(resJson);
-  };
+      );
+      let resJson = await res.json();
+      setSevenDaysDataofRooms(resJson);
+      setNoOfDays(7);
+    };
+    
+    //This function will set Previuos Seven Days Data of Specific Room
+    const getPreviousSevenDaysDataOfRooms = async (propertyId,roomId)=>{
+      if (noOfDays >= 21) {
+        setNoOfDays(noOfDays - 7)
+      }
+      let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays-14);
+      let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays-7);
+      const data = {
+        fromDate: currentDateFuncResponse,
+        propertyId: propertyId,
+        roomId: roomId,
+        toDate: seventhDayDateFuncResponse
+      }
+      let previousSevenDaysRes = await fetch(
+        `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            APP_ID: "BOOKONE_WEB_APP",
+          },
+          body: JSON.stringify(data)
+        }
+        );
+        let previousSevenDaysResponse = await previousSevenDaysRes.json();
+        let previousSevenDaysResponseJson = previousSevenDaysResponse;
+        setCurrentdate(currentDateFuncResponse)
+        setSevenDaysDataofRooms(previousSevenDaysResponseJson)
+        
+        // }
+      }
+      
+      
+      //This function will set Next Seven Days Data of Specific Room
+      const getNextSevenDaysDataOfRooms = async (propertyId,roomId)=>{
+        let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays);
+        let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays + 7);
+        setNoOfDays(noOfDays + 7);
+        const data = {
+          fromDate: currentDateFuncResponse,
+          propertyId: propertyId,
+          roomId: roomId,
+          toDate: seventhDayDateFuncResponse
+        }
+    let nextSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            APP_ID: "BOOKONE_WEB_APP",
+          },
+          body: JSON.stringify(data)
+        }
+      );
+      let nextSevenDaysResponse = await nextSevenDaysRes.json();
+      let nextSevenDaysResponseJson = nextSevenDaysResponse;
+      console.log(nextSevenDaysResponseJson)
+      setCurrentdate(currentDateFuncResponse)
+      setSevenDaysDataofRooms(nextSevenDaysResponseJson)
+  }
 
-  console.log(sevenDaysDataOfRoom);
-
-  //   sevenDaysDataOfRoom.forEach((element) => {
-  //     console.log(element.date);
-  //   });
-
-  // console.log(currDate, newSevenDaysDate);
-  // const newArr = currDate.split("-");
-  // console.log(newCurrentDaye, newSevenDay);
-  console.log(roomDetails);
-
-  //   console.log(roomDetailsToShow);
-
+  //This function will set Refreshed Seven Days Data of Specific Room
+  const getRefreshedSevenDaysDataOfRooms = async (roomId)=>{
+    let currentDateFuncResponse = getCurrentDateFunction();
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+    const data = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: seventhDayDateFuncResponse
+    }
+    let refreshedSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            APP_ID: "BOOKONE_WEB_APP",
+          },
+          body: JSON.stringify(data)
+        }
+      );
+      let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
+      let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
+      setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
+      setCurrentdate(currentDateFuncResponse)
+  }
+  
+  // console.log(sevenDaysDataOfRoom);
+  
   useEffect(() => {
     if (propertyId !== undefined) {
       let currentDateFuncResponse = getCurrentDateFunction();
-      let seventhDayDateFuncResponse = getSevenDaysAfterDate();
       setCurrentdate(currentDateFuncResponse);
-      setSeventhDayDate(seventhDayDateFuncResponse);
       let tokenRes = localStorage.getItem("token");
       setToken(tokenRes);
       fetch(
@@ -152,7 +237,7 @@ export default function PropertyId() {
   //   console.log(sevenDaysDataOfRoom);
   //   console.log(roomDetailsToShow);
   //   console.log(roomDetails);
-  console.log(filteredPlan);
+  // console.log(filteredPlan);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -179,17 +264,17 @@ export default function PropertyId() {
             <Row className={styles.dateSection}>
               <Col className={styles.dateSelector}>
                 <span>
-                  <GrRotateLeft size={15} style={{ marginRight: "10px" }} />
+                  <GrRotateLeft onClick={()=>{getRefreshedSevenDaysDataOfRooms(sevenDaysDataOfRoom[0].roomId)}} size={15} style={{ marginRight: "10px" }} />
                   <AiOutlineDoubleLeft
                     size={15}
                     style={{ marginRight: "10px" }}
+                    onClick={()=> {getPreviousSevenDaysDataOfRooms(propertyId,sevenDaysDataOfRoom[0].roomId)}} 
                   />
-                  <MdKeyboardArrowLeft />
                   {currentDate}
-                  <MdKeyboardArrowRight />
                   <AiOutlineDoubleRight
                     size={15}
                     style={{ marginLeft: "10px" }}
+                    onClick={()=> {getNextSevenDaysDataOfRooms(propertyId,sevenDaysDataOfRoom[0].roomId)}} 
                   />
                 </span>
               </Col>
@@ -242,11 +327,11 @@ export default function PropertyId() {
                             : date.getMonth() == 8
                             ? "SEP"
                             : date.getMonth() == 9
-                            ? "NOV"
-                            : date.getMonth() == 10
                             ? "OCT"
-                            : date.getMonth() == 11
+                            : date.getMonth() == 10
                             ? "NOV"
+                            : date.getMonth() == 11
+                            ? "DEC"
                             : "NO MONTH"}
                         </span>
                       </Col>
