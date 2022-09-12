@@ -11,7 +11,8 @@ import { Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import styles from "../styles/Navbar.module.css";
 import { MdSystemUpdateAlt } from "react-icons/md";
-function NavBar() {
+function NavBar(props) {
+  console.log(props.propertyId);
   const [bthList, setBthList] = useState(false);
   const bookOneTextHotel = () => {
     setBthList(!bthList);
@@ -65,7 +66,7 @@ function NavBar() {
               <MdSupportAgent height={50} width={50} />
               <span>Support</span>
             </li>
-            <Link href={"/bookings"}>
+            <Link href={`/bookings/${props.propertyId}`}>
               <li>
                 <MdSupportAgent height={50} width={50} />
                 <span>Bookings</span>

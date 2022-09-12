@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import styles from '../styles/Bookings.module.css';
+import Navbar from '../../components/Navbar';
+import styles from '../../styles/Bookings.module.css';
 import Link from 'next/link';
 import { useEffect,useState } from 'react';
 import {BiArrowBack,BiSearch} from 'react-icons/bi';
@@ -31,7 +31,10 @@ const Bookings = ()=> {
     const [bookingSource, setBookingSource] = useState('All');
     // console.log(startDateArrival)
     const router = useRouter()
+    
+  const { bookingId } = router.query;
     useEffect(() => {
+        console.log(bookingId);
         let newDateArrival = startDateArrival.toLocaleDateString().split('/').reverse();
         for (let index = 0; index < newDateArrival.length; index++) {
             if (newDateArrival[index] < 10) {
@@ -114,7 +117,7 @@ const Bookings = ()=> {
     <Navbar />
     <div className={styles.bookingsMainContainer}>
         <div className={styles.bookingsSearchSection}>
-            <span className={styles.bookingsSearchSectionBookingsMngmtSpan}><Link href={'/onlinetravelagencies/Agoda/237'}><BiArrowBack className={styles.bookingsSearchSectionBookingsMngmtIcon} /></Link>Booking Management</span>
+            <span className={styles.bookingsSearchSectionBookingsMngmtSpan}><Link href={`/crs/${bookingId}`}><BiArrowBack className={styles.bookingsSearchSectionBookingsMngmtIcon} /></Link>Booking Management</span>
             <span className={styles.bookingsSearchSectionBookingsInputSpan}><BiSearch className={styles.bookingsSearchSectionIcon} size={26}/><input className={styles.bookingsSearchSectionInput} placeholder='Search bookings' /></span>
         </div>
         <div className={styles.bookingsTableSection}>
