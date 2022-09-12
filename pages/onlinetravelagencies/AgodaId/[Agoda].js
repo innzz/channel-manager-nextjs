@@ -552,177 +552,177 @@ Agodaid }) => {
 
 export default Agoda;
 
-export async function getStaticPaths() {
-  const res = await fetch(
-   "https://api.bookonelocal.in/api-bookone/api/organisation/1/properties",
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY2MjM1MDUyOCwiZXhwIjoxNjYyNzgyNTI4fQ.vqgyvrlAS78mqdbIsaPlissypDn_ISVqctARKG5w0YE",
-        APP_ID: "BOOKONE_WEB_APP",
-        User_Id:"1",
+// export async function getStaticPaths() {
+//   const res = await fetch(
+//    "https://api.bookonelocal.in/api-bookone/api/organisation/1/properties",
+//     {
+//       method: "GET",
+//       headers: {
+//         Accept: "application/json",
+//         Authorization:
+//         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY2MjM1MDUyOCwiZXhwIjoxNjYyNzgyNTI4fQ.vqgyvrlAS78mqdbIsaPlissypDn_ISVqctARKG5w0YE",
+//         APP_ID: "BOOKONE_WEB_APP",
+//         User_Id:"1",
         
-      },
-    }
-  );
-  const data = await res.json()
-  const d = data.map((val)=>{
-    return val.name
-  })
-  const paths = data.map((a)=>{
-    return {
-      params : {Agoda: a.id.toString()}
-    }
-  })
-  return {
-    paths,
-    fallback: false, // false or 'blocking'
-  };
-}
+//       },
+//     }
+//   );
+//   const data = await res.json()
+//   const d = data?.map((val)=>{
+//     return val.name
+//   })
+//   const paths = data?.map((a)=>{
+//     return {
+//       params : {Agoda: a.id.toString()}
+//     }
+//   })
+//   return {
+//     paths,
+//     fallback: false, // false or 'blocking'
+//   };
+// }
 
-export async function getStaticProps(context) {
-  // console.log(context.params.Agoda);
-  let Agodaid = context.params.Agoda;
-  let bookOneResponseSp = {};
-  let dropDownValueSp;
-  let agodaPropertyResultSp;
-  let agodaDatesToShowSp;
-  let showTravelAgencyNameSp;
-  let roomDetailsSp;
-  let otasSp;
-  const currentDate = new Date().toLocaleDateString().split("/");
-  // const newCurrentDate = [];
-  for (let i = 0; i < currentDate.length; i++) {
-    if (currentDate[i] < 10) {
-      currentDate[i] = 0 + currentDate[i];
-    }
-    // newCurrentDate.push(currentDate[i]);
-  }
-  const currDate = currentDate.reverse();
-  let tempArrival = "";
-  tempArrival = currentDate[2];
-  currentDate[2] = currentDate[1];
-  currentDate[1] = tempArrival;
-  let newCurrDate = currDate.join("-");
+// export async function getStaticProps(context) {
+//   // console.log(context.params.Agoda);
+//   let Agodaid = context.params.Agoda;
+//   let bookOneResponseSp = {};
+//   let dropDownValueSp;
+//   let agodaPropertyResultSp;
+//   let agodaDatesToShowSp;
+//   let showTravelAgencyNameSp;
+//   let roomDetailsSp;
+//   let otasSp;
+//   const currentDate = new Date().toLocaleDateString().split("/");
+//   // const newCurrentDate = [];
+//   for (let i = 0; i < currentDate.length; i++) {
+//     if (currentDate[i] < 10) {
+//       currentDate[i] = 0 + currentDate[i];
+//     }
+//     // newCurrentDate.push(currentDate[i]);
+//   }
+//   const currDate = currentDate.reverse();
+//   let tempArrival = "";
+//   tempArrival = currentDate[2];
+//   currentDate[2] = currentDate[1];
+//   currentDate[1] = tempArrival;
+//   let newCurrDate = currDate.join("-");
 
-  // Sevens Days
-  const sevenDaysDate = new Date();
-  sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
-  const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
-  const newSevenDays = [];
-  for (let i = 0; i < sevenDays.length; i++) {
-    if (sevenDays[i] < 10) {
-      sevenDays[i] = 0 + sevenDays[i];
-    }
-    newSevenDays.push(sevenDays[i]);
-  }
-  const nextSevenDay = sevenDays.reverse();
-  let newTempArr = "";
-  newTempArr = sevenDays[2];
-  sevenDays[2] = sevenDays[1];
-  sevenDays[1] = newTempArr;
+//   // Sevens Days
+//   const sevenDaysDate = new Date();
+//   sevenDaysDate.setDate(sevenDaysDate.getDate() + 6);
+//   const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
+//   const newSevenDays = [];
+//   for (let i = 0; i < sevenDays.length; i++) {
+//     if (sevenDays[i] < 10) {
+//       sevenDays[i] = 0 + sevenDays[i];
+//     }
+//     newSevenDays.push(sevenDays[i]);
+//   }
+//   const nextSevenDay = sevenDays.reverse();
+//   let newTempArr = "";
+//   newTempArr = sevenDays[2];
+//   sevenDays[2] = sevenDays[1];
+//   sevenDays[1] = newTempArr;
   
-  let newSevenDay = sevenDays.join("-");
-  bookOneResponseSp =  fetch(
-    `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${context.params.Agoda}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-        "Content-Type": "application/json",
-        APP_ID: "BOOKONE_WEB_APP",
-      },
-    }
-  )
-    .then((res) => res.json())
-    .then((resJson) => {
-      let response = {};
-      // console.log(resJson);
-      // setBookOneResponse(resJson);
-      // setDropDownValue(resJson.propertiesOnlineTravelAgencies);
-      response.bookOneResponseSp = resJson;
-      // console.log(bookOneResponseSp);
-      response.dropDownValueSp = resJson.propertiesOnlineTravelAgencies;
-      // console.log(dropdownValue)
-      let selectedOnlineTravelAgency = {};
-      for (
-        let i = 0;
-        i < resJson.propertiesOnlineTravelAgencies.length;
-        i++
-      ) {
-        if (
-          resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName ===
-          "Agoda"
-        ) {
-          // setShowTravelAgencyName(
-            selectedOnlineTravelAgency =
-            resJson.propertiesOnlineTravelAgencies[i];
-          // );
-        }
-      }
-      const data = {
-        fromDate: newCurrDate,
-        toDate: newSevenDay,
-        id: selectedOnlineTravelAgency.onlineTravelAgencyPropertyId,
-      };
-      fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((responseJson) => {
-          // console.log(responseJson);
-          const dates = [];
-          for (
-            let i = 0;
-            i < responseJson.result.properties[0].property.length;
-            i++
-          ) {
-            const date = new Date(
-              responseJson.result.properties[0].property[i].$.date
-            );
-            const date1 = date.toString().split(" ");
-            dates.push({
-              day: date1[0],
-              date: date1[2],
-            });
-          }
-          // setAgodaPropertyResult(responseJson.result.properties[0].property);
-          // setAgodaDatesToShow(dates);
-          response.agodaPropertyResultSp = responseJson.result.properties[0].property;
-          response.agodaDatesToShowSp = dates;
-        });
-      // console.log(resJson);
-      // setShowTravelAgencyName(selectedOnlineTravelAgency);
-      // setRoomDetails(resJson.roomDtos);
-      // setOtas(resJson.propertiesOnlineTravelAgencies);
-      response.showTravelAgencyNameSp = selectedOnlineTravelAgency;
-      response.roomDetailsSp = resJson.roomDtos;
-      response.otasSp = resJson.propertiesOnlineTravelAgencies;
+//   let newSevenDay = sevenDays.join("-");
+//   bookOneResponseSp =  fetch(
+//     `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${context.params.Agoda}`,
+//     {
+//       method: "GET",
+//       headers: {
+//         Accept: "application/json",
+//         Authorization:
+//           "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+//         "Content-Type": "application/json",
+//         APP_ID: "BOOKONE_WEB_APP",
+//       },
+//     }
+//   )
+//     .then((res) => res.json())
+//     .then((resJson) => {
+//       let response = {};
+//       // console.log(resJson);
+//       // setBookOneResponse(resJson);
+//       // setDropDownValue(resJson.propertiesOnlineTravelAgencies);
+//       response.bookOneResponseSp = resJson;
+//       // console.log(bookOneResponseSp);
+//       response.dropDownValueSp = resJson.propertiesOnlineTravelAgencies;
+//       // console.log(dropdownValue)
+//       let selectedOnlineTravelAgency = {};
+//       for (
+//         let i = 0;
+//         i < resJson.propertiesOnlineTravelAgencies.length;
+//         i++
+//       ) {
+//         if (
+//           resJson.propertiesOnlineTravelAgencies[i].onlineTravelAgencyName ===
+//           "Agoda"
+//         ) {
+//           // setShowTravelAgencyName(
+//             selectedOnlineTravelAgency =
+//             resJson.propertiesOnlineTravelAgencies[i];
+//           // );
+//         }
+//       }
+//       const data = {
+//         fromDate: newCurrDate,
+//         toDate: newSevenDay,
+//         id: selectedOnlineTravelAgency.onlineTravelAgencyPropertyId,
+//       };
+//       fetch(`https://channel-manager-server.herokuapp.com/propertyData`, {
+//         method: "POST",
+//         headers: {
+//           Accept: "application/json",
+//           Authorization:
+//             "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29rb25ldGVzdGJ1c2luZXNzQGdtYWlsLmNvbSIsInNjb3BlcyI6IlJPTEVfUFJPUF9BRE1JTiIsImlhdCI6MTY1ODg5Njk5OCwiZXhwIjoxNjU5MzI4OTk4fQ.yJpc1N9tn_q345k3hZHLapQaeXVO23xlWkbQwhPx7XI",
+//           "Content-Type": "application/json",
+//           APP_ID: "BOOKONE_WEB_APP",
+//         },
+//         body: JSON.stringify(data),
+//       })
+//         .then((res) => res.json())
+//         .then((responseJson) => {
+//           // console.log(responseJson);
+//           const dates = [];
+//           for (
+//             let i = 0;
+//             i < responseJson.result.properties[0].property.length;
+//             i++
+//           ) {
+//             const date = new Date(
+//               responseJson.result.properties[0].property[i].$.date
+//             );
+//             const date1 = date.toString().split(" ");
+//             dates.push({
+//               day: date1[0],
+//               date: date1[2],
+//             });
+//           }
+//           // setAgodaPropertyResult(responseJson.result.properties[0].property);
+//           // setAgodaDatesToShow(dates);
+//           response.agodaPropertyResultSp = responseJson.result.properties[0].property;
+//           response.agodaDatesToShowSp = dates;
+//         });
+//       // console.log(resJson);
+//       // setShowTravelAgencyName(selectedOnlineTravelAgency);
+//       // setRoomDetails(resJson.roomDtos);
+//       // setOtas(resJson.propertiesOnlineTravelAgencies);
+//       response.showTravelAgencyNameSp = selectedOnlineTravelAgency;
+//       response.roomDetailsSp = resJson.roomDtos;
+//       response.otasSp = resJson.propertiesOnlineTravelAgencies;
 
-      return response;
-    }); 
-    return {
-      props: {
-        // bookOneResponseSp,
-        // dropDownValueSp,
-        // agodaPropertyResultSp,
-        // agodaDatesToShowSp,
-        // showTravelAgencyNameSp,
-        // roomDetailsSp,
-        // otasSp,
-        Agodaid
-      }, // will be passed to the page component as props
-    }
-}
+//       return response;
+//     }); 
+//     return {
+//       props: {
+//         // bookOneResponseSp,
+//         // dropDownValueSp,
+//         // agodaPropertyResultSp,
+//         // agodaDatesToShowSp,
+//         // showTravelAgencyNameSp,
+//         // roomDetailsSp,
+//         // otasSp,
+//         Agodaid
+//       }, // will be passed to the page component as props
+//     }
+// }
