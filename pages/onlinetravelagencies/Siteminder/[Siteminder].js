@@ -397,10 +397,10 @@ export async function getStaticPaths() {
   );
   const data = await res.json()
   // console.log(data.name)
-  const d = data.map((val)=>{
-    return val.name
-  })
-  console.log(d)
+  // const d = data?.map((val)=>{
+  //   return val.name
+  // })
+  // console.log(d)
   // const mapping = data.map((val, i) => {
     
   //     if(val.id > "600"){
@@ -414,7 +414,7 @@ export async function getStaticPaths() {
   // console.log(mapping)
   
   // setDataOne(data)
-  const paths = data.map((a)=>{
+  const paths = data?.map((a)=>{
     return {
       params : {Siteminder: a.id.toString()}
     }
@@ -426,7 +426,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  console.log(context)
+  // console.log(context)
   return {
     props: {
       
