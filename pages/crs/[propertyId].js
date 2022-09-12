@@ -42,8 +42,8 @@ export default function PropertyId() {
   const [filteredPlan, setFilteredPlanName] = useState("");
   const [token, setToken] = useState("");
   const [noOfDays, setNoOfDays] = useState(7);
-  let [fromDatePicker, setFromDatePicker] = useState("");
-  let [endDatePicker, setEndDatePicker] = useState("");
+  const [updationRoom, setUpdationRoom] = useState({});
+  const [updationRoomState, setUpdationRoomState] = useState(false);
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
@@ -238,8 +238,65 @@ export default function PropertyId() {
     setCurrentdate(currentDateFuncResponse);
     setNoOfDays(14);
   };
-
-  // console.log(sevenDaysDataOfRoom);
+  
+  
+  //This function will update room rates and availablity of a specific room
+  const updateRatesandAvailablity = async (room)=>{
+    const data = {...room,updateType:"Availability",channelManagerUpdateType:"AVAILABILITY_UPDATE"};
+    console.log(data)
+    let updateRatesAndAvailablityRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/updateAvailability`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+      )
+    let updateRatesAndAvailablityResponse = await updateRatesAndAvailablityRes.json();
+    let updateRatesAndAvailablityJson = updateRatesAndAvailablityResponse;
+    // console.log(updateRatesAndAvailablityJson)
+    fetch(
+      `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${propertyId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((resJson) => {
+        setRoomDetails(resJson.roomDtos);
+        getSevenDaysDataOfRoom(token, resJson?.roomDtos[0].bookoneRoomId);
+        setRoomDetailsToShow(resJson?.roomDtos[0]);
+        //   console.log(sevenDayData);
+        //   console.log(resJson);
+      });
+    
+    setUpdationRoom({});
+    setUpdationRoomState(false);
+  }
+  
+  const handleUpdationOfRoomRatesAndAvailablity = (e) => {
+     if (e.target.name === "price") {
+      // console.log("func ")
+      setUpdationRoom({...updationRoom,price: +e.target.value})
+     }
+     else if (e.target.name === "noOfAvailable") {
+      // console.log("func ")
+      setUpdationRoom({...updationRoom,noOfAvailable: +e.target.value})
+     }
+  };
+  
+  // console.log(updationRoom);
 
   useEffect(() => {
     if (propertyId !== undefined) {
@@ -421,108 +478,6 @@ export default function PropertyId() {
           <div className={styles.buttonGroup}>
             <Row>
               <Col className={styles.buttons}>
-                <button
-                  onClick={handleRatesAvailiblityDropDown}
-                  className={`${styles.buttonHover} ${styles.button} `}
-                >
-                  All Rates & Availablity
-                  <span>
-                    <MdOutlineArrowDropDown
-                      size={22}
-                      style={{ marginBottom: "2px" }}
-                    />
-                  </span>
-                  {allRatesAvailiblityDropDown ? (
-                    <div className={styles.allRatesDropdownBtn}>
-                      <h6>Room & Rates View</h6>
-                      <div className={styles.roomsRatesButtons}>
-                        <Row className={styles.roomsRatesButtonsRow}>
-                          <Col className={styles.roomsRatesButtonsColLeft}>
-                            <span
-                              className={styles.roomsRatesButtonsColLeftIcon}
-                            >
-                              <TiTick size={20} />
-                            </span>
-                            <span>ALL RATES & AVAILABLITY</span>
-                          </Col>
-                          <Col className={styles.roomsRatesButtonsColRight}>
-                            <BsFillStarFill />
-                          </Col>
-                        </Row>
-                        <Row className={styles.roomsRatesButtonsRow}>
-                          <Col className={styles.roomsRatesButtonsColLeft}>
-                            <span
-                              className={styles.roomsRatesButtonsColLeftIcon}
-                            >
-                              <TiTick size={20} />
-                            </span>
-                            <span>ALL RATES & AVAILABLITY</span>
-                          </Col>
-                          <Col className={styles.roomsRatesButtonsColRight}>
-                            <BsFillStarFill />
-                          </Col>
-                        </Row>
-                        <Row className={styles.roomsRatesButtonsRow}>
-                          <Col className={styles.roomsRatesButtonsColLeft}>
-                            <span
-                              className={styles.roomsRatesButtonsColLeftIcon}
-                            >
-                              <TiTick size={20} />
-                            </span>
-                            <span>ALL RATES & AVAILABLITY</span>
-                          </Col>
-                          <Col className={styles.roomsRatesButtonsColRight}>
-                            <BsFillStarFill />
-                          </Col>
-                        </Row>
-                      </div>
-                      <h6 className={styles.channelsViewText}>Channels View</h6>
-                      <div className={styles.channelViewButtons}>
-                        <Row className={styles.roomsRatesButtonsRow}>
-                          <Col className={styles.roomsRatesButtonsColLeft}>
-                            <span
-                              className={styles.roomsRatesButtonsColLeftIcon}
-                            >
-                              <TiTick size={20} color={"transparent"} />
-                            </span>
-                            <span>ALL RATES & AVAILABLITY</span>
-                          </Col>
-                          <Col
-                            className={styles.roomsRatesButtonsColRight}
-                          ></Col>
-                        </Row>
-                        <Row className={styles.roomsRatesButtonsRow}>
-                          <Col className={styles.roomsRatesButtonsColLeft}>
-                            <span
-                              className={styles.roomsRatesButtonsColLeftIcon}
-                            >
-                              <TiTick size={20} color={"transparent"} />
-                            </span>
-                            <span>ALL RATES & AVAILABLITY</span>
-                          </Col>
-                          <Col
-                            className={styles.roomsRatesButtonsColRight}
-                          ></Col>
-                        </Row>
-                        <Row className={styles.roomsRatesButtonsRow}>
-                          <Col className={styles.roomsRatesButtonsColLeft}>
-                            <span
-                              className={styles.roomsRatesButtonsColLeftIcon}
-                            >
-                              <TiTick size={20} color={"transparent"} />
-                            </span>
-                            <span>ALL RATES & AVAILABLITY</span>
-                          </Col>
-                          <Col
-                            className={styles.roomsRatesButtonsColRight}
-                          ></Col>
-                        </Row>
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </button>
                 <button onClick={handleRoomTypesDrop} className={styles.button}>
                   <FaBed
                     style={{ marginRight: "8px", marginBottom: "2px" }}
@@ -588,12 +543,6 @@ export default function PropertyId() {
                     )}
                   </div>
                 </button>
-                <div className={styles.inputItem}>
-                  <span>
-                    <BiSearch size={15} style={{ marginBottom: "1px" }} />
-                  </span>
-                  <input placeholder="Search room Rates" />
-                </div>
                 <span>Clear all filters</span>
               </Col>
               <Col className={styles.rightlinkText}>
@@ -604,6 +553,26 @@ export default function PropertyId() {
               </Col>
             </Row>
           </div>
+          <Row className={styles.content}>
+                      <Col className={styles.Icon}></Col>
+                      <Col
+                        className={styles.leftSection}
+                        style={{ border: "none" }}
+                      > 
+                      </Col>
+                      <Col className={styles.midSection}  style={{ border: "none" }}></Col>
+                      <Col className={styles.rightSection}>
+                        <Row className={styles.data}>
+                          {sevenDaysDataOfRoom.map((room, keyj) => {
+                            return (
+                              <Col className={styles.col} style={{border: "none"}} key={keyj} >
+                                {updationRoomState === true && updationRoom.id === room.id ? <span onClick={()=>updateRatesandAvailablity(updationRoom)}>Save</span> :<span onClick={()=>{setUpdationRoom(room);setUpdationRoomState(true)}}>Edit</span>}
+                              </Col>
+                            );
+                          })}
+                        </Row>
+                      </Col>
+            </Row>
           {roomDetails?.map((val, i) => {
             return (
               <>
@@ -628,7 +597,8 @@ export default function PropertyId() {
                               <>
                                 {val.name == avail.roomName && (
                                   <Col className={styles.col} key={avail.id}>
-                                    {avail.noOfAvailable}
+                                    {/* {avail.noOfAvailable} */}
+                                    {updationRoomState === true && updationRoom.id === avail.id ?<input type="text" name="noOfAvailable" placeholder={updationRoom.noOfAvailable} className={styles.availabilityInput} value={updationRoom.noOfAvailable} onChange={handleUpdationOfRoomRatesAndAvailablity} />: avail.noOfAvailable}
                                   </Col>
                                 )}
                               </>
@@ -649,9 +619,10 @@ export default function PropertyId() {
                       <Col className={styles.rightSection}>
                         <Row className={styles.data}>
                           {sevenDaysDataOfRoom.map((roomPrice, keyj) => {
+                            // console.log(roomPrice)
                             return (
                               <Col className={styles.col} key={keyj}>
-                                ₹ {roomPrice.price}
+                                {updationRoomState === true && updationRoom.id === roomPrice.id ?<input type="text" name="price" placeholder={updationRoom.price} className={styles.ratesInput} value={updationRoom.price} onChange={handleUpdationOfRoomRatesAndAvailablity} />: `₹ ${roomPrice.price}`}
                               </Col>
                             );
                           })}
@@ -691,18 +662,10 @@ export default function PropertyId() {
                                                   (plansRatesToShow, keyi) => {
                                                     return (
                                                       <>
-                                                        {planName.name ==
-                                                          plansRatesToShow.name && (
-                                                          <Col
-                                                            key={keyi}
-                                                            className={
-                                                              styles.col
-                                                            }
-                                                          >
-                                                            ₹{" "}
-                                                            {
-                                                              plansRatesToShow.amount
-                                                            }
+                                                        {planName.name == plansRatesToShow.name && (
+                                                          <Col key={keyi} className={styles.col}>
+                                                            {/* {plansRatesToShow.amount} */}
+                                                            {updationRoomState === true && updationRoom.id === planRatesOfSevenDays.id ?<input type="text" name={plansRatesToShow.name} placeholder={plansRatesToShow.amount} className={styles.plansInput} />: plansRatesToShow.amount}
                                                           </Col>
                                                         )}
                                                       </>
