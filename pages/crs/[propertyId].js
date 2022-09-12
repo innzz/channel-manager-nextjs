@@ -290,7 +290,7 @@ export default function PropertyId() {
 
   return (
     <div className={styles.outerContainer}>
-      <Navbar />
+      <Navbar propertyId={propertyId} />
       <div className={styles.container}>
         <Head>
           <title>MMT Channel Manager</title>
