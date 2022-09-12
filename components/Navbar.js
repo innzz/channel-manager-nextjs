@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import styles from "../styles/Navbar.module.css";
 import { MdSystemUpdateAlt } from "react-icons/md";
 function NavBar(props) {
-  console.log(props.propertyId);
+  console.log(props.bookingId);
   const [bthList, setBthList] = useState(false);
   const bookOneTextHotel = () => {
     setBthList(!bthList);
@@ -66,16 +66,18 @@ function NavBar(props) {
               <MdSupportAgent height={50} width={50} />
               <span>Support</span>
             </li>
-            <Link href={`/bookings/${props.propertyId}`}>
+            <Link href={`/bookings/${props.bookingId}`}>
               <li>
                 <MdSupportAgent height={50} width={50} />
                 <span>Bookings</span>
               </li>
             </Link>
-            <li>
-              <AiOutlineLogout height={50} width={50} />
-              <span>Logout</span>
-            </li>
+            <Link href="/">
+              <li>
+                <AiOutlineLogout height={50} width={50} />
+                <span>Logout</span>
+              </li>
+            </Link>
           </div>
           {/* </div> */}
         </div>
