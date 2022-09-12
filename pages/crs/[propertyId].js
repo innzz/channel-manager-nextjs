@@ -487,7 +487,7 @@ export default function PropertyId() {
               </Col>
             </Row>
           </div>
-          <div className={styles.buttonGroup}>
+          {/* <div className={styles.buttonGroup}>
             <Row>
               <Col className={styles.buttons}>
                 <button onClick={handleRoomTypesDrop} className={styles.button}>
@@ -559,6 +559,7 @@ export default function PropertyId() {
                       getRefreshedSevenDaysDataOfRooms(
                         sevenDaysDataOfRoom[0].roomId
                       );
+                      setFilteredPlanName('')
                     }}>Clear all filters</span>
               </Col>
               <Col className={styles.rightlinkText}>
@@ -568,7 +569,7 @@ export default function PropertyId() {
                 </div>
               </Col>
             </Row>
-          </div>
+          </div> */}
           <Row className={styles.content}>
                       <Col className={styles.Icon}></Col>
                       <Col
@@ -787,6 +788,89 @@ export default function PropertyId() {
               </>
             );
           })}
+          <div className={styles.buttonGroup}>
+            <Row>
+              <Col className={styles.buttons}>
+                <button onClick={handleRoomTypesDrop} className={styles.button}>
+                  <FaBed
+                    style={{ marginRight: "8px", marginBottom: "2px" }}
+                    size={15}
+                  />
+                  All Room Types
+                  <MdOutlineArrowDropDown
+                    size={22}
+                    style={{ marginLeft: "2px", marginBottom: "2px" }}
+                  />
+                  <div
+                    className={styles.roomTypeDrop}
+                    onMouseLeave={handleRoomTypesDrop}
+                    style={
+                      roomType ? { display: "block" } : { display: "none" }
+                    }
+                  >
+                    {roomDetails?.map((val, i) => {
+                      return (
+                        <li
+                          key={i}
+                          onClick={() => {
+                            setRoomDetailsToShow(val);
+                            getSevenDaysDataOfRoom(token, val.bookoneRoomId);
+                            setFilteredPlanName("");
+                          }}
+                        >
+                          {val.name}
+                        </li>
+                      );
+                    })}
+                  </div>
+                </button>
+                <button className={styles.button} onClick={handleRateDrop}>
+                  <BsFillTagFill
+                    style={{ marginRight: "8px", marginBottom: "2px" }}
+                  />
+                  All Rates Plans
+                  <MdOutlineArrowDropDown
+                    size={22}
+                    style={{ marginLeft: "2px", marginBottom: "4px" }}
+                  />
+                  <div
+                    className={styles.ratePlanDrop}
+                    onMouseLeave={handleRateDrop}
+                    style={
+                      ratePlans ? { display: "block" } : { display: "none" }
+                    }
+                  >
+                    {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
+                      (dropdownPlan, dropKey) => {
+                        return (
+                          <li
+                            key={dropKey}
+                            onClick={() => {
+                              setFilteredPlanName(dropdownPlan);
+                            }}
+                          >
+                            {dropdownPlan.name}
+                          </li>
+                        );
+                      }
+                    )}
+                  </div>
+                </button>
+                <span style={{cursor: "pointer"}} onClick={() => {
+                      getRefreshedSevenDaysDataOfRooms(
+                        sevenDaysDataOfRoom[0].roomId
+                      );
+                      setFilteredPlanName('')
+                    }}>Clear all filters</span>
+              </Col>
+              <Col className={styles.rightlinkText}>
+                <div className={styles.linkText}>
+                  <GoTriangleRight size={20} style={{ marginBottom: "3px" }} />
+                  <span>Quick Tour - Inventory Grid</span>
+                </div>
+              </Col>
+            </Row>
+          </div>
         </div>
       </div>
     </div>
