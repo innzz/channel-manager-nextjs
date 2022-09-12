@@ -75,7 +75,7 @@
 }
 
 .dates {
-  flex: 6.8;
+  flex: 8;
   border-top: 1px solid #cee4f8;
   border-bottom: 1px solid #cee4f8;
   padding: 0;
@@ -83,12 +83,14 @@
 
 .dateCards {
   margin: 0;
+  width: 65vw;
 }
 
 .dateSelector {
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
-  flex: 5.2;
+  flex: 4;
   border-right: 1px solid #eaf5ff;
   border-bottom: 1px solid #cee4f8;
   align-items: center;
@@ -231,6 +233,8 @@
   padding: 6px 0;
   border-right: 1px solid #ddd;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
 }
 .Icon {
   flex: 0.2;
@@ -243,7 +247,7 @@
   padding-right: 0;
   padding-left: 0;
   padding: 6px 0;
-  border-right: 1px solid #ddd;
+  height: min-content;
 }
 .leftSectionTop {
   display: flex;
@@ -256,10 +260,13 @@
 }
 .midSection {
   flex: 1;
-  margin-left: 10px;
+  /* margin-left: 10px; */
+  padding-left: 10px;
+  text-align: center;
   padding-right: 0;
   padding: 6px 0;
   border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
 .midSectionTop {
   flex: 2;
@@ -278,6 +285,7 @@
 }
 .rightSection > .data {
   justify-content: space-between;
+  width: 65vw;
   margin: 0;
 }
 
@@ -701,6 +709,64 @@
 .ratesInput, .plansInput, .availabilityInput{
   width: 50px;
   border: #0061b9;
+  margin: auto;
+}
+
+.editButton{
+  background-color: #00427d;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.saveButton {
+  background-color: #5cb85c;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancelButton {
+  background-color: red;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.roomsAndPlansPrices{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.roomsAndPlansPricesSpan{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  font-weight: 600;
+  border-top: 1px solid #ddd;
+
+}
+
+.roomsAndPlansPricesSpan > span{
+  font-size: 10px;
+  font-weight: 700;
+  background: #136794;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+  word-wrap: break-word;
 }
 
 /* New Design */
