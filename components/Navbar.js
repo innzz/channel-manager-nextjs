@@ -40,7 +40,7 @@ function NavBar(props) {
         </div>
       </Col>
       <Col className={styles.profileButtonColumn}>
-        <div className={styles.profileButton} onClick={bookOneTextHotel}>
+        <div className={`${styles.profileButton} flex`} onClick={bookOneTextHotel}>
           BookOne test Hotel
           <span>
             <IoMdArrowDropdown size={25} />
@@ -55,26 +55,26 @@ function NavBar(props) {
             onMouseLeave={bookOneTextHotel}
             style={bthList ? { display: "block" } : { display: "none" }}
           >
-            <li>
-              <CgProfile height={50} width={50} /> <span>My Account</span>
+            <li className="flex gap-2">
+              <CgProfile className="h-6" /> <span>My Account</span>
             </li>
-            <li>
-              <TbNotes height={50} width={50} />
+            <li  className="flex gap-2">
+              <TbNotes className="h-6" />
               <span>Terms & Condition </span>
             </li>
-            <li>
-              <MdSupportAgent height={50} width={50} />
+            <li  className="flex gap-2">
+              <MdSupportAgent className="h-6" />
               <span>Support</span>
             </li>
             <Link href={`/bookings/${props.bookingId}`}>
-              <li>
-                <MdSupportAgent height={50} width={50} />
+              <li  className="flex gap-2">
+                <MdSupportAgent className="h-6" />
                 <span>Bookings</span>
               </li>
             </Link>
             <Link href="/">
-              <li>
-                <AiOutlineLogout height={50} width={50} />
+              <li  className="flex gap-2">
+                <AiOutlineLogout className="h-6" />
                 <span>Logout</span>
               </li>
             </Link>
