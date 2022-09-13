@@ -8,7 +8,7 @@ import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { GoTriangleRight } from "react-icons/go";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight,MdModeEditOutline } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdModeEditOutline } from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
 import { IoIosSave } from "react-icons/io";
@@ -182,7 +182,7 @@ export default function PropertyId() {
     setNextPrevArrows(false);
   };
 
-    //This function will set Next seven dates Data of Specific Room
+  //This function will set Next seven dates Data of Specific Room
   const getNextSevenDaysDataOfRooms = async (propertyId, roomId) => {
     let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays);
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays + 7);
@@ -243,11 +243,11 @@ export default function PropertyId() {
     setNoOfDays(14);
     setNextPrevArrows(true)
   };
-  
-  
+
+
   //This function will update room rates and availablity of a specific room
-  const updateRatesandAvailablity = async (room)=>{
-    const data = {...room,updateType:"Availability",channelManagerUpdateType:"AVAILABILITY_UPDATE"};
+  const updateRatesandAvailablity = async (room) => {
+    const data = { ...room, updateType: "Availability", channelManagerUpdateType: "AVAILABILITY_UPDATE" };
     console.log(data)
     let updateRatesAndAvailablityRes = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/updateAvailability`,
@@ -261,48 +261,48 @@ export default function PropertyId() {
         },
         body: JSON.stringify(data),
       }
-      )
-      let currentDateFuncResponse = getCurrentDateFunction();
-      let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
-      const dataRefreshed = {
-        fromDate: currentDateFuncResponse,
-        propertyId: propertyId,
-        roomId: room.roomId,
-        toDate: seventhDayDateFuncResponse,
-      };
-      let refreshedSevenDaysRes = await fetch(
-        `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-          body: JSON.stringify(dataRefreshed),
-        }
-      );
-      let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
-      let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
-      setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
-    
+    )
+    let currentDateFuncResponse = getCurrentDateFunction();
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+    const dataRefreshed = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyId,
+      roomId: room.roomId,
+      toDate: seventhDayDateFuncResponse,
+    };
+    let refreshedSevenDaysRes = await fetch(
+      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(dataRefreshed),
+      }
+    );
+    let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
+    let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
+    setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
+
     setUpdationRoom({});
     setUpdationRoomState(false);
   }
-  
+
   //it will handle the object of room to post the data to update room details
   const handleUpdationOfRoomRatesAndAvailablity = (e) => {
-     if (e.target.name === "price") {
+    if (e.target.name === "price") {
       // console.log("func ")
-      setUpdationRoom({...updationRoom,price: +e.target.value})
-     }
-     else if (e.target.name === "noOfAvailable") {
+      setUpdationRoom({ ...updationRoom, price: +e.target.value })
+    }
+    else if (e.target.name === "noOfAvailable") {
       // console.log("func ")
-      setUpdationRoom({...updationRoom,noOfAvailable: +e.target.value})
-     }
+      setUpdationRoom({ ...updationRoom, noOfAvailable: +e.target.value })
+    }
   };
-  
+
   // console.log(updationRoom);
   // console.log(sevenDaysDataOfRoom);
 
@@ -368,28 +368,28 @@ export default function PropertyId() {
             <Row className={styles.dateSection}>
               <Col className={styles.dateSelector}>
                 <Col>
-                  <div style={{display: "flex", justifyContent: "center"}}>
-                  <span>From: </span>
-                  <DatePicker
-                  size="small"
-                    onChange={(value) => {
-                      const fromDate = moment(value).format("YYYY-MM-DD");
-                      setCurrentdate(fromDate);
-                    }}
-                  />
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <span>From: </span>
+                    <DatePicker
+                      size="small"
+                      onChange={(value) => {
+                        const fromDate = moment(value).format("YYYY-MM-DD");
+                        setCurrentdate(fromDate);
+                      }}
+                    />
                   </div>
-                  <div style={{display: "flex", justifyContent: "center"}}>
-                  <span>To: </span>
-                  <DatePicker
-                    placeholder="End Date"
-                    size="small"
-                    onChange={(value) => {
-                      const endDate = moment(value).format("YYYY-MM-DD");
-                      setSeventhDayDate(endDate);
-                    }}
-                  />
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <span>To: </span>
+                    <DatePicker
+                      placeholder="End Date"
+                      size="small"
+                      onChange={(value) => {
+                        const endDate = moment(value).format("YYYY-MM-DD");
+                        setSeventhDayDate(endDate);
+                      }}
+                    />
                   </div>
-                  <button className={styles.findRatesButton} onClick={()=>{getDatePickerDataOfRooms(currentDate,seventhDayDate)}}>SEARCH</button>
+                  <button className={styles.findRatesButton} onClick={() => { getDatePickerDataOfRooms(currentDate, seventhDayDate) }}>SEARCH</button>
                 </Col>
                 <span>
                   <GrRotateLeft
@@ -435,18 +435,18 @@ export default function PropertyId() {
                           {date.getDay() == 1
                             ? "MON"
                             : date.getDay() == 2
-                            ? "TUE"
-                            : date.getDay() == 3
-                            ? "WED"
-                            : date.getDay() == 4
-                            ? "THU"
-                            : date.getDay() == 5
-                            ? "FRI"
-                            : date.getDay() == 6
-                            ? "SAT"
-                            : date.getDay() == 0
-                            ? "SUN"
-                            : "NO DAY"}
+                              ? "TUE"
+                              : date.getDay() == 3
+                                ? "WED"
+                                : date.getDay() == 4
+                                  ? "THU"
+                                  : date.getDay() == 5
+                                    ? "FRI"
+                                    : date.getDay() == 6
+                                      ? "SAT"
+                                      : date.getDay() == 0
+                                        ? "SUN"
+                                        : "NO DAY"}
                         </span>
                         <span className={styles.boldDateText}>
                           {date.getDate() < 10
@@ -457,28 +457,28 @@ export default function PropertyId() {
                           {date.getMonth() == 0
                             ? "JAN"
                             : date.getMonth() == 1
-                            ? "FEB"
-                            : date.getMonth() == 2
-                            ? "MAR"
-                            : date.getMonth() == 3
-                            ? "APR"
-                            : date.getMonth() == 4
-                            ? "MAY"
-                            : date.getMonth() == 5
-                            ? "JUN"
-                            : date.getMonth() == 6
-                            ? "JUL"
-                            : date.getMonth() == 7
-                            ? "AUG"
-                            : date.getMonth() == 8
-                            ? "SEP"
-                            : date.getMonth() == 9
-                            ? "OCT"
-                            : date.getMonth() == 10
-                            ? "NOV"
-                            : date.getMonth() == 11
-                            ? "DEC"
-                            : "NO MONTH"}
+                              ? "FEB"
+                              : date.getMonth() == 2
+                                ? "MAR"
+                                : date.getMonth() == 3
+                                  ? "APR"
+                                  : date.getMonth() == 4
+                                    ? "MAY"
+                                    : date.getMonth() == 5
+                                      ? "JUN"
+                                      : date.getMonth() == 6
+                                        ? "JUL"
+                                        : date.getMonth() == 7
+                                          ? "AUG"
+                                          : date.getMonth() == 8
+                                            ? "SEP"
+                                            : date.getMonth() == 9
+                                              ? "OCT"
+                                              : date.getMonth() == 10
+                                                ? "NOV"
+                                                : date.getMonth() == 11
+                                                  ? "DEC"
+                                                  : "NO MONTH"}
                         </span>
                       </Col>
                     );
@@ -571,25 +571,25 @@ export default function PropertyId() {
             </Row>
           </div> */}
           <Row className={styles.content}>
-                      <Col className={styles.Icon}></Col>
-                      <Col
-                        className={styles.leftSection}
-                        style={{ border: "none" }}
-                      > 
-                      </Col>
-                      <Col className={styles.midSection}  style={{ border: "none" }}></Col>
-                      <Col className={styles.rightSection}>
-                        <Row className={styles.data}>
-                          {sevenDaysDataOfRoom.map((room, keyj) => {
-                            return (
-                              <Col className={styles.col} style={{border: "none"}} key={keyj} >
-                                {updationRoomState === true && updationRoom.id === room.id ? <div style={{display: "flex",justifyContent: "space-evenly", alignItems: "center"}}><span onClick={()=>updateRatesandAvailablity(updationRoom)} className={styles.saveButton}><IoIosSave size={20} /></span><span onClick={()=>{setUpdationRoom({});setUpdationRoomState(false)}} className={styles.cancelButton}><GiCancel size={20} /></span></div> :""}
-                              </Col>
-                            );
-                          })}
-                        </Row>
-                      </Col>
-            </Row>
+            <Col className={styles.Icon}></Col>
+            <Col
+              className={styles.leftSection}
+              style={{ border: "none" }}
+            >
+            </Col>
+            <Col className={styles.midSection} style={{ border: "none" }}></Col>
+            <Col className={styles.rightSection}>
+              <Row className={styles.data}>
+                {sevenDaysDataOfRoom.map((room, keyj) => {
+                  return (
+                    <Col className={styles.col} style={{ border: "none" }} key={keyj} >
+                      {updationRoomState === true && updationRoom.id === room.id ? <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center" }}><span onClick={() => updateRatesandAvailablity(updationRoom)} className={styles.saveButton}><IoIosSave size={20} /></span><span onClick={() => { setUpdationRoom({}); setUpdationRoomState(false) }} className={styles.cancelButton}><GiCancel size={20} /></span></div> : ""}
+                    </Col>
+                  );
+                })}
+              </Row>
+            </Col>
+          </Row>
           {roomDetails?.map((val, i) => {
             return (
               <>
@@ -613,9 +613,9 @@ export default function PropertyId() {
                             return (
                               <>
                                 {val.name == avail.roomName && (
-                                  <Col className={styles.col} key={avail.id} onClick={()=>{setUpdationRoom(avail);setUpdationRoomState(true)}}>
+                                  <Col className={styles.col} key={avail.id} onClick={() => { setUpdationRoom(avail); setUpdationRoomState(true) }}>
                                     {/* {avail.noOfAvailable} */}
-                                    {updationRoomState === true && updationRoom.id === avail.id ?<input type="text" name="noOfAvailable" placeholder={updationRoom.noOfAvailable} className={styles.availabilityInput} value={updationRoom.noOfAvailable} onChange={handleUpdationOfRoomRatesAndAvailablity} />: avail.noOfAvailable}
+                                    {updationRoomState === true && updationRoom.id === avail.id ? <input type="text" name="noOfAvailable" placeholder={updationRoom.noOfAvailable} className={styles.availabilityInput} value={updationRoom.noOfAvailable} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : avail.noOfAvailable}
                                   </Col>
                                 )}
                               </>
@@ -628,11 +628,11 @@ export default function PropertyId() {
                       <Col className={styles.Icon}></Col>
                       <Col
                         className={styles.leftSection}
-                        style={{flexDirection: "column"}}
+                        style={{ flexDirection: "column" }}
                       >
-                        <span className={styles.roomsAndPlansPricesSpan} style={{border: 'none'}}>Room Rates and Plans</span>
-                        <span className={styles.roomsAndPlansPrices} style={{border: 'none'}}>
-                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map((plans,ji)=>{
+                        <span className={styles.roomsAndPlansPricesSpan} style={{ border: 'none' }}>Room Rates and Plans</span>
+                        <span className={styles.roomsAndPlansPrices} style={{ border: 'none' }}>
+                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map((plans, ji) => {
                             return (
                               <>{filteredPlan === "" ? <span className={styles.roomsAndPlansPricesSpan} key={ji}>{plans.name}</span> : filteredPlan.name === plans.name && <span className={styles.roomsAndPlansPricesSpan} key={ji}>{plans.name}</span>}</>
                             )
@@ -640,15 +640,15 @@ export default function PropertyId() {
                         </span>
                       </Col>
                       <Col className={styles.midSection}><div className={styles.roomsAndPlansPrices}>
-                        <span className={styles.roomsAndPlansPricesSpan} style={{border: "none"}}>Rates :</span>
-                        <span className={styles.roomsAndPlansPrices} style={{border: 'none'}}>
-                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map((plans,ji)=>{
+                        <span className={styles.roomsAndPlansPricesSpan} style={{ border: "none" }}>Rates :</span>
+                        <span className={styles.roomsAndPlansPrices} style={{ border: 'none' }}>
+                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map((plans, ji) => {
                             return (
                               <>{filteredPlan === "" ? <span className={styles.roomsAndPlansPricesSpan} key={ji}>Rates:</span> : filteredPlan.name === plans.name && <span className={styles.roomsAndPlansPricesSpan} key={ji}>Rates:</span>}</>
                             )
                           })}
                         </span>
-                        </div></Col>
+                      </div></Col>
                       <Col className={styles.rightSection}>
                         <Row className={styles.data}>
                           {sevenDaysDataOfRoom.map((roomPrice, keyj) => {
@@ -656,14 +656,14 @@ export default function PropertyId() {
                             return (
                               <Col className={styles.col} key={keyj}>
                                 <div className={styles.roomsAndPlansPrices}>
-                                {updationRoomState === true && updationRoom.id === roomPrice.id ?<input type="text" name="price" placeholder={updationRoom.price} className={styles.ratesInput} value={updationRoom.price} onChange={handleUpdationOfRoomRatesAndAvailablity} />: <span className={styles.roomsAndPlansPricesSpan} style={{border: "none", justifyContent: "center"}}>₹{roomPrice.price}</span>}
+                                  {updationRoomState === true && updationRoom.id === roomPrice.id ? <input type="text" name="price" placeholder={updationRoom.price} className={styles.ratesInput} value={updationRoom.price} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : <span className={styles.roomsAndPlansPricesSpan} style={{ border: "none", justifyContent: "center" }}>₹{roomPrice.price}</span>}
                                   {/* <span className={styles.roomsAndPlansPricesSpan} style={{border: "none", justifyContent: "center"}}>₹{roomPrice.price}</span> */}
-                                  {roomPrice.roomRatePlans.map((plan,keyji)=>{
+                                  {roomPrice.roomRatePlans.map((plan, keyji) => {
                                     return (
                                       <>
-                                      {
-                                        filteredPlan === "" ? <>{updationRoomState === true && updationRoom.id === roomPrice.id ? <input type="text" name="price" placeholder={plan.amount} className={styles.ratesInput} value={plan.amount} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : <span key={keyji} className={styles.roomsAndPlansPricesSpan}>₹{plan.amount}</span>} </>: filteredPlan.name === plan.name && <span key={keyji} className={styles.roomsAndPlansPricesSpan}> ₹{plan.amount}</span>
-                                      }
+                                        {
+                                          filteredPlan === "" ? <>{updationRoomState === true && updationRoom.id === roomPrice.id ? <input type="text" name="price" placeholder={plan.amount} className={styles.ratesInput} value={plan.amount} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : <span key={keyji} className={styles.roomsAndPlansPricesSpan}>₹{plan.amount}</span>} </> : filteredPlan.name === plan.name && <span key={keyji} className={styles.roomsAndPlansPricesSpan}> ₹{plan.amount}</span>
+                                        }
                                       </>
                                     )
                                   })}
@@ -840,11 +840,14 @@ export default function PropertyId() {
                       ratePlans ? { display: "block" } : { display: "none" }
                     }
                   >
+
+                    <li onClick={() => {
+                      setFilteredPlanName("");
+                    }} >All</li>
                     {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
                       (dropdownPlan, dropKey) => {
                         return (
-                          <li
-                            key={dropKey}
+                          <li key={dropKey}
                             onClick={() => {
                               setFilteredPlanName(dropdownPlan);
                             }}
@@ -856,12 +859,12 @@ export default function PropertyId() {
                     )}
                   </div>
                 </button>
-                <span style={{cursor: "pointer"}} onClick={() => {
-                      getRefreshedSevenDaysDataOfRooms(
-                        sevenDaysDataOfRoom[0].roomId
-                      );
-                      setFilteredPlanName('')
-                    }}>Clear all filters</span>
+                <span style={{ cursor: "pointer" }} onClick={() => {
+                  getRefreshedSevenDaysDataOfRooms(
+                    sevenDaysDataOfRoom[0].roomId
+                  );
+                  setFilteredPlanName('')
+                }}>Clear all filters</span>
               </Col>
               <Col className={styles.rightlinkText}>
                 <div className={styles.linkText}>
