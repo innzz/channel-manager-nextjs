@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import "./index.css"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,6 +11,7 @@ function MyApp({ Component, pageProps }) {
   return(
     <>
       <SSRProvider>
+       
       {/* <NavBar /> */}
       <Component {...pageProps} showTravelAgencyName={showTravelAgencyName} setShowTravelAgencyName={setShowTravelAgencyName}/>
       </SSRProvider>

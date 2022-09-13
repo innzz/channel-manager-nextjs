@@ -842,7 +842,7 @@ export default function PropertyId() {
                   >
 
                     <li onClick={() => {
-                      setFilteredPlanName("");
+                      setFilteredPlanName("")
                     }} >All</li>
                     {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
                       (dropdownPlan, dropKey) => {
