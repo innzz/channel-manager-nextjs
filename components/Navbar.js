@@ -30,14 +30,14 @@ function NavBar(props) {
         </Link>
       </Col>
       <Col className={styles.navItem}>
-        <div className={styles.links}>
+        {/* <div className={styles.links}>
           <Link href="/login" className={styles.link}>
             CRS
           </Link>
           <Link href="/login" className={styles.link}>
             CM
           </Link>
-        </div>
+        </div> */}
       </Col>
       <Col className={styles.profileButtonColumn}>
         <div className={`${styles.profileButton} flex`} onClick={bookOneTextHotel}>
