@@ -790,10 +790,10 @@ export default function PropertyId() {
           })}
           <div className={styles.buttonGroup}>
             <Row>
-              <Col className={styles.buttons}>
-                <button onClick={handleRoomTypesDrop} className={styles.button}>
+              <Col className={styles.buttons} >
+                <button onClick={handleRoomTypesDrop} className={`${styles.button} flex h-8 p-1`} >
                   <FaBed
-                    style={{ marginRight: "8px", marginBottom: "2px" }}
+                    style={{ marginRight: "8px", marginBottom: "2px", marginTop:"2px" }}
                     size={15}
                   />
                   All Room Types
@@ -824,9 +824,9 @@ export default function PropertyId() {
                     })}
                   </div>
                 </button>
-                <button className={styles.button} onClick={handleRateDrop}>
+                <button className={`${styles.button} flex h-8 p-1 px-2`} onClick={handleRateDrop}>
                   <BsFillTagFill
-                    style={{ marginRight: "8px", marginBottom: "2px" }}
+                    style={{ marginRight: "8px", marginBottom: "2px", marginTop:"3px" }}
                   />
                   All Rates Plans
                   <MdOutlineArrowDropDown
@@ -867,7 +867,7 @@ export default function PropertyId() {
                 }}>Clear all filters</span>
               </Col>
               <Col className={styles.rightlinkText}>
-                <div className={styles.linkText}>
+                <div className={`${styles.linkText} flex`}>
                   <GoTriangleRight size={20} style={{ marginBottom: "3px" }} />
                   <span>Quick Tour - Inventory Grid</span>
                 </div>
