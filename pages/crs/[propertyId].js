@@ -8,7 +8,11 @@ import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { GoTriangleRight } from "react-icons/go";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdModeEditOutline } from "react-icons/md";
+import {
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdModeEditOutline,
+} from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
 import { IoIosSave } from "react-icons/io";
@@ -20,6 +24,7 @@ import Head from "next/head";
 import { DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
+import BulkUpdateModal from "../../components/BulkUpdateModal";
 
 export default function PropertyId() {
   let router = useRouter();
@@ -241,14 +246,17 @@ export default function PropertyId() {
     setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
     setCurrentdate(currentDateFuncResponse);
     setNoOfDays(14);
-    setNextPrevArrows(true)
+    setNextPrevArrows(true);
   };
-
 
   //This function will update room rates and availablity of a specific room
   const updateRatesandAvailablity = async (room) => {
-    const data = { ...room, updateType: "Availability", channelManagerUpdateType: "AVAILABILITY_UPDATE" };
-    console.log(data)
+    const data = {
+      ...room,
+      updateType: "Availability",
+      channelManagerUpdateType: "AVAILABILITY_UPDATE",
+    };
+    console.log(data);
     let updateRatesAndAvailablityRes = await fetch(
       `https://api.bookonelocal.in/api-bookone/api/availability/updateAvailability`,
       {
@@ -261,7 +269,7 @@ export default function PropertyId() {
         },
         body: JSON.stringify(data),
       }
-    )
+    );
     let currentDateFuncResponse = getCurrentDateFunction();
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
     const dataRefreshed = {
@@ -289,17 +297,16 @@ export default function PropertyId() {
 
     setUpdationRoom({});
     setUpdationRoomState(false);
-  }
+  };
 
   //it will handle the object of room to post the data to update room details
   const handleUpdationOfRoomRatesAndAvailablity = (e) => {
     if (e.target.name === "price") {
       // console.log("func ")
-      setUpdationRoom({ ...updationRoom, price: +e.target.value })
-    }
-    else if (e.target.name === "noOfAvailable") {
+      setUpdationRoom({ ...updationRoom, price: +e.target.value });
+    } else if (e.target.name === "noOfAvailable") {
       // console.log("func ")
-      setUpdationRoom({ ...updationRoom, noOfAvailable: +e.target.value })
+      setUpdationRoom({ ...updationRoom, noOfAvailable: +e.target.value });
     }
   };
 
@@ -389,7 +396,14 @@ export default function PropertyId() {
                       }}
                     />
                   </div>
-                  <button className={styles.findRatesButton} onClick={() => { getDatePickerDataOfRooms(currentDate, seventhDayDate) }}>SEARCH</button>
+                  <button
+                    className={styles.findRatesButton}
+                    onClick={() => {
+                      getDatePickerDataOfRooms(currentDate, seventhDayDate);
+                    }}
+                  >
+                    SEARCH
+                  </button>
                 </Col>
                 <span>
                   <GrRotateLeft
@@ -401,27 +415,31 @@ export default function PropertyId() {
                     size={15}
                     style={{ marginRight: "10px" }}
                   />
-                  {nextPrevArrows && <AiOutlineDoubleLeft
-                    size={15}
-                    style={{ marginRight: "10px" }}
-                    onClick={() => {
-                      getPreviousSevenDaysDataOfRooms(
-                        propertyId,
-                        sevenDaysDataOfRoom[0].roomId
-                      );
-                    }}
-                  />}
+                  {nextPrevArrows && (
+                    <AiOutlineDoubleLeft
+                      size={15}
+                      style={{ marginRight: "10px" }}
+                      onClick={() => {
+                        getPreviousSevenDaysDataOfRooms(
+                          propertyId,
+                          sevenDaysDataOfRoom[0].roomId
+                        );
+                      }}
+                    />
+                  )}
                   {currentDate}
-                  {nextPrevArrows && <AiOutlineDoubleRight
-                    size={15}
-                    style={{ marginLeft: "10px" }}
-                    onClick={() => {
-                      getNextSevenDaysDataOfRooms(
-                        propertyId,
-                        sevenDaysDataOfRoom[0].roomId
-                      );
-                    }}
-                  />}
+                  {nextPrevArrows && (
+                    <AiOutlineDoubleRight
+                      size={15}
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => {
+                        getNextSevenDaysDataOfRooms(
+                          propertyId,
+                          sevenDaysDataOfRoom[0].roomId
+                        );
+                      }}
+                    />
+                  )}
                 </span>
               </Col>
               <Col className={styles.dates}>
@@ -435,18 +453,18 @@ export default function PropertyId() {
                           {date.getDay() == 1
                             ? "MON"
                             : date.getDay() == 2
-                              ? "TUE"
-                              : date.getDay() == 3
-                                ? "WED"
-                                : date.getDay() == 4
-                                  ? "THU"
-                                  : date.getDay() == 5
-                                    ? "FRI"
-                                    : date.getDay() == 6
-                                      ? "SAT"
-                                      : date.getDay() == 0
-                                        ? "SUN"
-                                        : "NO DAY"}
+                            ? "TUE"
+                            : date.getDay() == 3
+                            ? "WED"
+                            : date.getDay() == 4
+                            ? "THU"
+                            : date.getDay() == 5
+                            ? "FRI"
+                            : date.getDay() == 6
+                            ? "SAT"
+                            : date.getDay() == 0
+                            ? "SUN"
+                            : "NO DAY"}
                         </span>
                         <span className={styles.boldDateText}>
                           {date.getDate() < 10
@@ -457,28 +475,28 @@ export default function PropertyId() {
                           {date.getMonth() == 0
                             ? "JAN"
                             : date.getMonth() == 1
-                              ? "FEB"
-                              : date.getMonth() == 2
-                                ? "MAR"
-                                : date.getMonth() == 3
-                                  ? "APR"
-                                  : date.getMonth() == 4
-                                    ? "MAY"
-                                    : date.getMonth() == 5
-                                      ? "JUN"
-                                      : date.getMonth() == 6
-                                        ? "JUL"
-                                        : date.getMonth() == 7
-                                          ? "AUG"
-                                          : date.getMonth() == 8
-                                            ? "SEP"
-                                            : date.getMonth() == 9
-                                              ? "OCT"
-                                              : date.getMonth() == 10
-                                                ? "NOV"
-                                                : date.getMonth() == 11
-                                                  ? "DEC"
-                                                  : "NO MONTH"}
+                            ? "FEB"
+                            : date.getMonth() == 2
+                            ? "MAR"
+                            : date.getMonth() == 3
+                            ? "APR"
+                            : date.getMonth() == 4
+                            ? "MAY"
+                            : date.getMonth() == 5
+                            ? "JUN"
+                            : date.getMonth() == 6
+                            ? "JUL"
+                            : date.getMonth() == 7
+                            ? "AUG"
+                            : date.getMonth() == 8
+                            ? "SEP"
+                            : date.getMonth() == 9
+                            ? "OCT"
+                            : date.getMonth() == 10
+                            ? "NOV"
+                            : date.getMonth() == 11
+                            ? "DEC"
+                            : "NO MONTH"}
                         </span>
                       </Col>
                     );
@@ -575,15 +593,47 @@ export default function PropertyId() {
             <Col
               className={styles.leftSection}
               style={{ border: "none" }}
-            >
-            </Col>
+            ></Col>
             <Col className={styles.midSection} style={{ border: "none" }}></Col>
             <Col className={styles.rightSection}>
               <Row className={styles.data}>
                 {sevenDaysDataOfRoom.map((room, keyj) => {
                   return (
-                    <Col className={styles.col} style={{ border: "none" }} key={keyj} >
-                      {updationRoomState === true && updationRoom.id === room.id ? <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center" }}><span onClick={() => updateRatesandAvailablity(updationRoom)} className={styles.saveButton}><IoIosSave size={20} /></span><span onClick={() => { setUpdationRoom({}); setUpdationRoomState(false) }} className={styles.cancelButton}><GiCancel size={20} /></span></div> : ""}
+                    <Col
+                      className={styles.col}
+                      style={{ border: "none" }}
+                      key={keyj}
+                    >
+                      {updationRoomState === true &&
+                      updationRoom.id === room.id ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-evenly",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span
+                            onClick={() =>
+                              updateRatesandAvailablity(updationRoom)
+                            }
+                            className={styles.saveButton}
+                          >
+                            <IoIosSave size={20} />
+                          </span>
+                          <span
+                            onClick={() => {
+                              setUpdationRoom({});
+                              setUpdationRoomState(false);
+                            }}
+                            className={styles.cancelButton}
+                          >
+                            <GiCancel size={20} />
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </Col>
                   );
                 })}
@@ -595,16 +645,15 @@ export default function PropertyId() {
               <>
                 {val.name == roomDetailsToShow?.name && (
                   <div key={i} className={styles.item}>
-                    <Row className={styles.heading}>
+                    <Row className={`${styles.heading} flex items-center`}>
                       <Col className={styles.Icon}>
                         <FaBed size={18} style={{ marginTop: "5px" }} />
                       </Col>
-                      <Col className={styles.leftSection}>
+                      <Col
+                        className={`${styles.leftSection} flex items-center`}
+                      >
                         <span>{val.name}</span>
-                        <AiFillThunderbolt
-                          size={15}
-                          style={{ marginTop: "5px", color: "#2494d1" }}
-                        />
+                        <BulkUpdateModal />
                       </Col>
                       <Col className={styles.midSection}>Stock</Col>
                       <Col className={styles.rightSection}>
@@ -613,9 +662,30 @@ export default function PropertyId() {
                             return (
                               <>
                                 {val.name == avail.roomName && (
-                                  <Col className={styles.col} key={avail.id} onClick={() => { setUpdationRoom(avail); setUpdationRoomState(true) }}>
+                                  <Col
+                                    className={styles.col}
+                                    key={avail.id}
+                                    onClick={() => {
+                                      setUpdationRoom(avail);
+                                      setUpdationRoomState(true);
+                                    }}
+                                  >
                                     {/* {avail.noOfAvailable} */}
-                                    {updationRoomState === true && updationRoom.id === avail.id ? <input type="text" name="noOfAvailable" placeholder={updationRoom.noOfAvailable} className={styles.availabilityInput} value={updationRoom.noOfAvailable} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : avail.noOfAvailable}
+                                    {updationRoomState === true &&
+                                    updationRoom.id === avail.id ? (
+                                      <input
+                                        type="text"
+                                        name="noOfAvailable"
+                                        placeholder={updationRoom.noOfAvailable}
+                                        className={styles.availabilityInput}
+                                        value={updationRoom.noOfAvailable}
+                                        onChange={
+                                          handleUpdationOfRoomRatesAndAvailablity
+                                        }
+                                      />
+                                    ) : (
+                                      avail.noOfAvailable
+                                    )}
                                   </Col>
                                 )}
                               </>
@@ -630,25 +700,89 @@ export default function PropertyId() {
                         className={styles.leftSection}
                         style={{ flexDirection: "column" }}
                       >
-                        <span className={styles.roomsAndPlansPricesSpan} style={{ border: 'none' }}>Room Rates and Plans</span>
-                        <span className={styles.roomsAndPlansPrices} style={{ border: 'none' }}>
-                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map((plans, ji) => {
-                            return (
-                              <>{filteredPlan === "" ? <span className={styles.roomsAndPlansPricesSpan} key={ji}>{plans.name}</span> : filteredPlan.name === plans.name && <span className={styles.roomsAndPlansPricesSpan} key={ji}>{plans.name}</span>}</>
-                            )
-                          })}
+                        <span
+                          className={styles.roomsAndPlansPricesSpan}
+                          style={{ border: "none" }}
+                        >
+                          Room Rates and Plans
+                        </span>
+                        <span
+                          className={styles.roomsAndPlansPrices}
+                          style={{ border: "none" }}
+                        >
+                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map(
+                            (plans, ji) => {
+                              return (
+                                <>
+                                  {filteredPlan === "" ? (
+                                    <span
+                                      className={styles.roomsAndPlansPricesSpan}
+                                      key={ji}
+                                    >
+                                      {plans.name}
+                                    </span>
+                                  ) : (
+                                    filteredPlan.name === plans.name && (
+                                      <span
+                                        className={
+                                          styles.roomsAndPlansPricesSpan
+                                        }
+                                        key={ji}
+                                      >
+                                        {plans.name}
+                                      </span>
+                                    )
+                                  )}
+                                </>
+                              );
+                            }
+                          )}
                         </span>
                       </Col>
-                      <Col className={styles.midSection}><div className={styles.roomsAndPlansPrices}>
-                        <span className={styles.roomsAndPlansPricesSpan} style={{ border: "none" }}>Rates :</span>
-                        <span className={styles.roomsAndPlansPrices} style={{ border: 'none' }}>
-                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map((plans, ji) => {
-                            return (
-                              <>{filteredPlan === "" ? <span className={styles.roomsAndPlansPricesSpan} key={ji}>Rates:</span> : filteredPlan.name === plans.name && <span className={styles.roomsAndPlansPricesSpan} key={ji}>Rates:</span>}</>
-                            )
-                          })}
-                        </span>
-                      </div></Col>
+                      <Col className={styles.midSection}>
+                        <div className={styles.roomsAndPlansPrices}>
+                          <span
+                            className={styles.roomsAndPlansPricesSpan}
+                            style={{ border: "none" }}
+                          >
+                            Rates :
+                          </span>
+                          <span
+                            className={styles.roomsAndPlansPrices}
+                            style={{ border: "none" }}
+                          >
+                            {sevenDaysDataOfRoom[0]?.roomRatePlans?.map(
+                              (plans, ji) => {
+                                return (
+                                  <>
+                                    {filteredPlan === "" ? (
+                                      <span
+                                        className={
+                                          styles.roomsAndPlansPricesSpan
+                                        }
+                                        key={ji}
+                                      >
+                                        Rates:
+                                      </span>
+                                    ) : (
+                                      filteredPlan.name === plans.name && (
+                                        <span
+                                          className={
+                                            styles.roomsAndPlansPricesSpan
+                                          }
+                                          key={ji}
+                                        >
+                                          Rates:
+                                        </span>
+                                      )
+                                    )}
+                                  </>
+                                );
+                              }
+                            )}
+                          </span>
+                        </div>
+                      </Col>
                       <Col className={styles.rightSection}>
                         <Row className={styles.data}>
                           {sevenDaysDataOfRoom.map((roomPrice, keyj) => {
@@ -656,17 +790,77 @@ export default function PropertyId() {
                             return (
                               <Col className={styles.col} key={keyj}>
                                 <div className={styles.roomsAndPlansPrices}>
-                                  {updationRoomState === true && updationRoom.id === roomPrice.id ? <input type="text" name="price" placeholder={updationRoom.price} className={styles.ratesInput} value={updationRoom.price} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : <span className={styles.roomsAndPlansPricesSpan} style={{ border: "none", justifyContent: "center" }}>₹{roomPrice.price}</span>}
+                                  {updationRoomState === true &&
+                                  updationRoom.id === roomPrice.id ? (
+                                    <input
+                                      type="text"
+                                      name="price"
+                                      placeholder={updationRoom.price}
+                                      className={styles.ratesInput}
+                                      value={updationRoom.price}
+                                      onChange={
+                                        handleUpdationOfRoomRatesAndAvailablity
+                                      }
+                                    />
+                                  ) : (
+                                    <span
+                                      className={styles.roomsAndPlansPricesSpan}
+                                      style={{
+                                        border: "none",
+                                        justifyContent: "center",
+                                      }}
+                                    >
+                                      ₹{roomPrice.price}
+                                    </span>
+                                  )}
                                   {/* <span className={styles.roomsAndPlansPricesSpan} style={{border: "none", justifyContent: "center"}}>₹{roomPrice.price}</span> */}
-                                  {roomPrice.roomRatePlans.map((plan, keyji) => {
-                                    return (
-                                      <>
-                                        {
-                                          filteredPlan === "" ? <>{updationRoomState === true && updationRoom.id === roomPrice.id ? <input type="text" name="price" placeholder={plan.amount} className={styles.ratesInput} value={plan.amount} onChange={handleUpdationOfRoomRatesAndAvailablity} /> : <span key={keyji} className={styles.roomsAndPlansPricesSpan}>₹{plan.amount}</span>} </> : filteredPlan.name === plan.name && <span key={keyji} className={styles.roomsAndPlansPricesSpan}> ₹{plan.amount}</span>
-                                        }
-                                      </>
-                                    )
-                                  })}
+                                  {roomPrice.roomRatePlans.map(
+                                    (plan, keyji) => {
+                                      return (
+                                        <>
+                                          {filteredPlan === "" ? (
+                                            <>
+                                              {updationRoomState === true &&
+                                              updationRoom.id ===
+                                                roomPrice.id ? (
+                                                <input
+                                                  type="text"
+                                                  name="price"
+                                                  placeholder={plan.amount}
+                                                  className={styles.ratesInput}
+                                                  value={plan.amount}
+                                                  onChange={
+                                                    handleUpdationOfRoomRatesAndAvailablity
+                                                  }
+                                                />
+                                              ) : (
+                                                <span
+                                                  key={keyji}
+                                                  className={
+                                                    styles.roomsAndPlansPricesSpan
+                                                  }
+                                                >
+                                                  ₹{plan.amount}
+                                                </span>
+                                              )}{" "}
+                                            </>
+                                          ) : (
+                                            filteredPlan.name === plan.name && (
+                                              <span
+                                                key={keyji}
+                                                className={
+                                                  styles.roomsAndPlansPricesSpan
+                                                }
+                                              >
+                                                {" "}
+                                                ₹{plan.amount}
+                                              </span>
+                                            )
+                                          )}
+                                        </>
+                                      );
+                                    }
+                                  )}
                                 </div>
                               </Col>
                               // <Col className={styles.col} key={keyj}>
@@ -790,10 +984,17 @@ export default function PropertyId() {
           })}
           <div className={styles.buttonGroup}>
             <Row>
-              <Col className={styles.buttons} >
-                <button onClick={handleRoomTypesDrop} className={`${styles.button} flex h-8 p-1`} >
+              <Col className={styles.buttons}>
+                <button
+                  onClick={handleRoomTypesDrop}
+                  className={`${styles.button} flex h-8 p-1`}
+                >
                   <FaBed
-                    style={{ marginRight: "8px", marginBottom: "2px", marginTop:"2px" }}
+                    style={{
+                      marginRight: "8px",
+                      marginBottom: "2px",
+                      marginTop: "2px",
+                    }}
                     size={15}
                   />
                   All Room Types
@@ -824,9 +1025,16 @@ export default function PropertyId() {
                     })}
                   </div>
                 </button>
-                <button className={`${styles.button} flex h-8 p-1 px-2`} onClick={handleRateDrop}>
+                <button
+                  className={`${styles.button} flex h-8 p-1 px-2`}
+                  onClick={handleRateDrop}
+                >
                   <BsFillTagFill
-                    style={{ marginRight: "8px", marginBottom: "2px", marginTop:"3px" }}
+                    style={{
+                      marginRight: "8px",
+                      marginBottom: "2px",
+                      marginTop: "3px",
+                    }}
                   />
                   All Rates Plans
                   <MdOutlineArrowDropDown
@@ -840,14 +1048,18 @@ export default function PropertyId() {
                       ratePlans ? { display: "block" } : { display: "none" }
                     }
                   >
-
-                    <li onClick={() => {
-                      setFilteredPlanName("")
-                    }} >All</li>
+                    <li
+                      onClick={() => {
+                        setFilteredPlanName("");
+                      }}
+                    >
+                      All
+                    </li>
                     {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
                       (dropdownPlan, dropKey) => {
                         return (
-                          <li key={dropKey}
+                          <li
+                            key={dropKey}
                             onClick={() => {
                               setFilteredPlanName(dropdownPlan);
                             }}
@@ -859,12 +1071,17 @@ export default function PropertyId() {
                     )}
                   </div>
                 </button>
-                <span style={{ cursor: "pointer" }} onClick={() => {
-                  getRefreshedSevenDaysDataOfRooms(
-                    sevenDaysDataOfRoom[0].roomId
-                  );
-                  setFilteredPlanName('')
-                }}>Clear all filters</span>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    getRefreshedSevenDaysDataOfRooms(
+                      sevenDaysDataOfRoom[0].roomId
+                    );
+                    setFilteredPlanName("");
+                  }}
+                >
+                  Clear all filters
+                </span>
               </Col>
               <Col className={styles.rightlinkText}>
                 <div className={`${styles.linkText} flex`}>
