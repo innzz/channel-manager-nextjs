@@ -52,6 +52,7 @@ export default function PropertyId() {
   const [updationRoom, setUpdationRoom] = useState({});
   const [updationRoomState, setUpdationRoomState] = useState(false);
   const [nextPrevArrows, setNextPrevArrows] = useState(true);
+
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
@@ -336,6 +337,8 @@ export default function PropertyId() {
           setRoomDetails(resJson.roomDtos);
           getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
           setRoomDetailsToShow(resJson?.roomDtos[0]);
+          // console.log(resJson?.roomDtos[0].bookoneRoomId);
+          // console.log(resJson);
           //   console.log(sevenDayData);
           //   console.log(resJson);
         });
@@ -343,8 +346,10 @@ export default function PropertyId() {
   }, [router]);
   //   console.log(sevenDaysDataOfRoom);
   //   console.log(roomDetailsToShow);
-  //   console.log(roomDetails);
+  console.log(roomDetails);
   // console.log(filteredPlan);
+  // console.log(roomId);
+  console.log(sevenDaysDataOfRoom);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
