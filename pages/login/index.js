@@ -9,11 +9,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState(false);
+  const [radio, setRadio] = useState("");
   //   const token = localStorage.get("token");
   //   console.log(token);
   const router = useRouter();
   //   console.log(router);
   const signIn = (e) => {
+    console.log(radio)
     e.preventDefault();
     fetch("https://api.bookonelocal.in/api-bookone/api/user/login", {
       method: "POST",
@@ -48,7 +50,11 @@ const Login = () => {
           )
             .then((res) => res.json())
             .then((resJson) => {
-              router.push(`/crs/${resJson.bookonePropertyId}`);
+              if(radio === "crs"){
+                router.push(`/crs/${resJson.bookonePropertyId}`);
+              } else if (radio === "cm"){
+                router.push(`/onlinetravelagencies/Agoda/${resJson.bookonePropertyId}`);
+              }
               //   console.log(resJson.propertiesOnlineTravelAgencies);
               //   for (
               //     let i = 0;
@@ -127,6 +133,20 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </Form.Group>
+                <div className="flex gap-3 ml-1">
+                  <div className="flex gap-1"> 
+                    <input type="radio" onClick={()=>setRadio("crs")} />
+                      <label>CRS</label>
+                  </div>
+                  <div className="flex gap-1"> 
+                    <input type="radio" onClick={()=>setRadio("cm")} />
+                      <label>CM</label>
+                  </div>
+                  <div className="flex gap-1"> 
+                    <input type="radio" onClick={()=>setRadio("eglobe")} />
+                      <label>EGlobe</label>
+                  </div>
+                </div>
                 <div className={styles.buttonContainer}>
                   <button className={styles.submitbutton} onClick={signIn}>
                     Sign in
