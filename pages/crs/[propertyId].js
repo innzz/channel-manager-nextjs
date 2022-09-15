@@ -25,6 +25,7 @@ import { DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import BulkUpdateModal from "../../components/BulkUpdateModal";
+import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 
 export default function PropertyId() {
   let router = useRouter();
@@ -458,18 +459,18 @@ export default function PropertyId() {
                           {date.getDay() == 1
                             ? "MON"
                             : date.getDay() == 2
-                            ? "TUE"
-                            : date.getDay() == 3
-                            ? "WED"
-                            : date.getDay() == 4
-                            ? "THU"
-                            : date.getDay() == 5
-                            ? "FRI"
-                            : date.getDay() == 6
-                            ? "SAT"
-                            : date.getDay() == 0
-                            ? "SUN"
-                            : "NO DAY"}
+                              ? "TUE"
+                              : date.getDay() == 3
+                                ? "WED"
+                                : date.getDay() == 4
+                                  ? "THU"
+                                  : date.getDay() == 5
+                                    ? "FRI"
+                                    : date.getDay() == 6
+                                      ? "SAT"
+                                      : date.getDay() == 0
+                                        ? "SUN"
+                                        : "NO DAY"}
                         </span>
                         <span className={styles.boldDateText}>
                           {date.getDate() < 10
@@ -480,28 +481,28 @@ export default function PropertyId() {
                           {date.getMonth() == 0
                             ? "JAN"
                             : date.getMonth() == 1
-                            ? "FEB"
-                            : date.getMonth() == 2
-                            ? "MAR"
-                            : date.getMonth() == 3
-                            ? "APR"
-                            : date.getMonth() == 4
-                            ? "MAY"
-                            : date.getMonth() == 5
-                            ? "JUN"
-                            : date.getMonth() == 6
-                            ? "JUL"
-                            : date.getMonth() == 7
-                            ? "AUG"
-                            : date.getMonth() == 8
-                            ? "SEP"
-                            : date.getMonth() == 9
-                            ? "OCT"
-                            : date.getMonth() == 10
-                            ? "NOV"
-                            : date.getMonth() == 11
-                            ? "DEC"
-                            : "NO MONTH"}
+                              ? "FEB"
+                              : date.getMonth() == 2
+                                ? "MAR"
+                                : date.getMonth() == 3
+                                  ? "APR"
+                                  : date.getMonth() == 4
+                                    ? "MAY"
+                                    : date.getMonth() == 5
+                                      ? "JUN"
+                                      : date.getMonth() == 6
+                                        ? "JUL"
+                                        : date.getMonth() == 7
+                                          ? "AUG"
+                                          : date.getMonth() == 8
+                                            ? "SEP"
+                                            : date.getMonth() == 9
+                                              ? "OCT"
+                                              : date.getMonth() == 10
+                                                ? "NOV"
+                                                : date.getMonth() == 11
+                                                  ? "DEC"
+                                                  : "NO MONTH"}
                         </span>
                       </Col>
                     );
@@ -610,7 +611,7 @@ export default function PropertyId() {
                       key={keyj}
                     >
                       {updationRoomState === true &&
-                      updationRoom.id === room.id ? (
+                        updationRoom.id === room.id ? (
                         <div
                           style={{
                             display: "flex",
@@ -658,7 +659,6 @@ export default function PropertyId() {
                         className={`${styles.leftSection} flex items-center`}
                       >
                         <span>{val.name}</span>
-                        <BulkUpdateModal />
                       </Col>
                       <Col className={styles.midSection}>Stock</Col>
                       <Col className={styles.rightSection}>
@@ -677,7 +677,7 @@ export default function PropertyId() {
                                   >
                                     {/* {avail.noOfAvailable} */}
                                     {updationRoomState === true &&
-                                    updationRoom.id === avail.id ? (
+                                      updationRoom.id === avail.id ? (
                                       <input
                                         type="text"
                                         name="noOfAvailable"
@@ -796,7 +796,7 @@ export default function PropertyId() {
                               <Col className={styles.col} key={keyj}>
                                 <div className={styles.roomsAndPlansPrices}>
                                   {updationRoomState === true &&
-                                  updationRoom.id === roomPrice.id ? (
+                                    updationRoom.id === roomPrice.id ? (
                                     <input
                                       type="text"
                                       name="price"
@@ -826,7 +826,7 @@ export default function PropertyId() {
                                           {filteredPlan === "" ? (
                                             <>
                                               {updationRoomState === true &&
-                                              updationRoom.id ===
+                                                updationRoom.id ===
                                                 roomPrice.id ? (
                                                 <input
                                                   type="text"
@@ -1087,7 +1087,13 @@ export default function PropertyId() {
                 >
                   Clear all filters
                 </span>
+                <div className="ml-3">
+                  <BulkUpdateModal />
+                        <AddOrUpdatePlan roomDetails={roomDetails} roomDetailsToShow={roomDetailsToShow} sevenDaysDataOfRoom={sevenDaysDataOfRoom} />
+                </div>
               </Col>
+              {/* <Col>
+              </Col> */}
               <Col className={styles.rightlinkText}>
                 <div className={`${styles.linkText} flex`}>
                   <GoTriangleRight size={20} style={{ marginBottom: "3px" }} />
