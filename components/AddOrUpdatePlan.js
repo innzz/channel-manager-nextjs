@@ -32,7 +32,6 @@ export default function AddOrUpdatePlan(props) {
         type="button"
         onClick={() => setShowModal(true)}
       >
-
         Add or Update Plan
       </button>
       {showModal ? (
@@ -46,7 +45,9 @@ export default function AddOrUpdatePlan(props) {
                       {/*content*/}
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                         <div className="flex justify-between bg-blue-500 items-center p-2 px-3">
-                          <h3 className="text-white text-xl">Add Or Update Plans For {val.name}</h3>
+                          <h3 className="text-white text-xl">
+                            Add Or Update Plans For {val.name}
+                          </h3>
                           <RiCloseFill
                             className="text-white h-6 w-6 text-bold"
                             onClick={() => setShowModal(false)}
@@ -334,7 +335,6 @@ export default function AddOrUpdatePlan(props) {
                               </div>
                             </div>}
                         </div>
-
                         {/*footer*/}
                         <div className="flex items-center justify-end px-6 py-2 border-t border-solid border-slate-200 rounded-b">
                           <button

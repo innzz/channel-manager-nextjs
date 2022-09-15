@@ -5,11 +5,62 @@ import moment from "moment";
 import { DatePicker } from "antd";
 import { RiCloseFill } from "react-icons/ri";
 
-export default function Modal() {
+export default function Modal(props) {
   const [showModal, setShowModal] = React.useState(false);
-  const [currentDate, setCurrentdate] = useState("");
-  const [seventhDayDate, setSeventhDayDate] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [totalNoRooms, setTotalNoRooms] = useState("");
+  const [price, setPrice] = useState("");
+  const [noOfBooked, setNoOfBooked] = useState("");
+  const [noOfHold, setNoOfHold] = useState("");
+  const [noOfAvailable, setNoOfAvailable] = useState("");
   //   console.log(currentDate, seventhDayDate);
+  // console.log(props.roomDetails);
+  // console.log(props.roomDetailsToShow);
+  const propertyId = props.propertyId;
+  const roomId = props.defaultRoomId;
+  const token = props.token;
+
+  // console.log(fromDate);
+  // console.log(toDate);
+  // console.log(totalNoRooms);
+  // console.log(price);
+  // console.log(noOfBooked);
+  // console.log(noOfHold);
+  // console.log(noOfAvailable);
+  // console.log(propertyId);
+  // console.log(roomId);
+  // console.log(token);
+
+  const bulkUpdateInventory = async () => {
+    let data = {
+      fromDate: fromDate,
+      noOfAvailable: noOfAvailable,
+      noOfBooked: noOfBooked,
+      noOfOnHold: noOfHold,
+      price: price,
+      propertyId: propertyId,
+      roomId: roomId,
+      toDate: toDate,
+      totalNoRooms: totalNoRooms,
+    };
+    const res = await fetch(
+      "https://api.bookonelocal.in/api-bookone/api/availability/bulkAvailabilityUpdateByRoomAndDateRange",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    let updatedResponse = await res.json();
+    console.log(updatedResponse);
+  };
+
   return (
     <>
       <button
@@ -17,117 +68,171 @@ export default function Modal() {
         type="button"
         onClick={() => setShowModal(true)}
       >
-        Bulk Update
+        Bulk Update Inventory
       </button>
       {showModal ? (
         <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-full backdrop-blur-sm">
-            <div className="relative my-6 mx-auto max-w-3xl w-full">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <div className="flex justify-between bg-blue-500 items-center p-2">
-                  <h3 className="text-white text-xl">Bulk Update</h3>
-                  <RiCloseFill
-                    className="text-white h-6 w-6 text-bold"
-                    onClick={() => setShowModal(false)}
-                  />
-                </div>
-                <div className="flex justify-between py-2 items-center">
-                  <div className="p-2">
-                    <DatePicker
-                      className="p-2"
-                      size="small"
-                      onChange={(value) => {
-                        const fromDate = moment(value).format("YYYY-MM-DD");
-                        setCurrentdate(fromDate);
-                      }}
-                    />
-                    <DatePicker
-                      className="p-2 mx-2"
-                      placeholder="End Date"
-                      size="small"
-                      onChange={(value) => {
-                        const endDate = moment(value).format("YYYY-MM-DD");
-                        setSeventhDayDate(endDate);
-                      }}
-                    />
-                  </div>
-                  <button className="border bg-blue-400 h-10 p-2 m-2 text-white border-none rounded-md font-bold shadow hover:shadow-lg  focus:outline-none ease-linear transition-all duration-150 active:bg-blue-600">
-                    Add Range
-                  </button>
-                </div>
-                <div className="mx-2 mt-4">
-                  {/* <div className="">
-                    <label className="text-black-900 w-24">
-                      Availability :{" "}
-                    </label>{" "}
-                    <input
-                      className="border-2 border-blue-100 rounded-md"
-                      type="text"
-                      id=""
-                      name=""
-                    />
-                  </div> */}
-                  <div>
-                    <div className="mb-3 xl:w-96 flex">
-                      <div>
-                        <label
-                          htmlFor="noOfRooms"
-                          className="form-label inline-block mb-2 text-gray-700"
-                        ></label>
-                        <input
-                          name="noOfRooms"
-                          type="number"
-                          className="form-control block w-full px-3 py-1.5 text-sm font-normal text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                          id="noOfRooms"
-                          placeholder="No Of Rooms"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="price"
-                          className="form-label inline-block mb-2 text-gray-700"
-                        ></label>
-                        <input
-                          name="price"
-                          type="number"
-                          className="form-control block w-full px-3 py-1.5 text-sm font-normal text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none appearance-none"
-                          id="price"
-                          placeholder="Price"
-                          required
-                        />
+          {props.roomDetails.map((val, i) => {
+            return (
+              <div key={i}>
+                {val.name == props.roomDetailsToShow?.name && (
+                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-full backdrop-blur-sm">
+                    <div className="relative my-6 mx-auto max-w-3xl w-full">
+                      {/*content*/}
+                      <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        <div className="flex justify-between bg-blue-500 items-center p-2">
+                          <h3 className="text-white text-xl">
+                            Update Inventory for {val.name}
+                          </h3>
+                          <RiCloseFill
+                            className="text-white h-6 w-6 text-bold"
+                            onClick={() => setShowModal(false)}
+                          />
+                        </div>
+                        <div className="flex justify-between py-2 px-2 items-center">
+                          <DatePicker
+                            className="p-2 w-full"
+                            size="small"
+                            onChange={(value) => {
+                              const fromDate =
+                                moment(value).format("YYYY-MM-DD");
+                              setFromDate(fromDate);
+                            }}
+                          />
+                          <DatePicker
+                            className="p-2 mx-2 w-full"
+                            placeholder="End Date"
+                            size="small"
+                            onChange={(value) => {
+                              const toDate = moment(value).format("YYYY-MM-DD");
+                              setToDate(toDate);
+                            }}
+                          />
+                        </div>
+                        <form className="mx-2 mt-4">
+                          <div className="flex justify-between items-center">
+                            <div className="m-1 flex w-full">
+                              <label
+                                htmlFor="totalNoRooms"
+                                className="form-label text-gray-700 w-72 text-sm mt-2"
+                              >
+                                No Of Rooms :
+                              </label>
+                              <input
+                                className="form-control block text-sm text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                name="totalNoRooms"
+                                type="number"
+                                id="totalNoRooms"
+                                placeholder="No Of Rooms"
+                                onChange={(e) =>
+                                  setTotalNoRooms(+e.target.value)
+                                }
+                                required
+                              />
+                            </div>
+                            <div className="m-1 flex w-full">
+                              <label
+                                htmlFor="price"
+                                className="form-label text-gray-700 w-52 text-sm mt-2"
+                              >
+                                Price :
+                              </label>
+                              <input
+                                className="form-control block text-sm text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                name="price"
+                                type="number"
+                                id="price"
+                                placeholder="Price"
+                                onChange={(e) => setPrice(+e.target.value)}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center mt-3">
+                            <div className="m-1 flex w-full">
+                              <label
+                                htmlFor="noOfBooked"
+                                className="form-label text-gray-700 w-72 text-sm mt-2"
+                              >
+                                No Of Booked Rooms :
+                              </label>
+                              <input
+                                className="form-control block text-sm text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                name="noOfBooked"
+                                type="number"
+                                id="noOfBooked"
+                                placeholder="Booked"
+                                onChange={(e) => setNoOfBooked(+e.target.value)}
+                                required
+                              />
+                            </div>
+                            <div className="m-1 flex w-full">
+                              <label
+                                htmlFor="noOfHold"
+                                className="form-label text-gray-700 w-52 text-sm mt-2"
+                              >
+                                No Of Hold Rooms :
+                              </label>
+                              <input
+                                className="form-control block text-sm text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                name="noOfHold"
+                                type="number"
+                                id="noOfHold"
+                                placeholder="Hold"
+                                onChange={(e) => setNoOfHold(+e.target.value)}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center mt-3 w-[23.5rem] mb-4">
+                            <div className="m-1 flex w-full">
+                              <label
+                                htmlFor="noOfAvailable"
+                                className="form-label text-gray-700 w-[18rem] text-sm mt-2"
+                              >
+                                No Of Available Rooms :
+                              </label>
+                              <input
+                                className="w-full form-control block text-sm text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                name="noOfAvailable"
+                                type="number"
+                                id="noOfAvailable"
+                                placeholder="Available"
+                                onChange={(e) =>
+                                  setNoOfAvailable(+e.target.value)
+                                }
+                                required
+                              />
+                            </div>
+                          </div>
+                        </form>
+                        {/*footer*/}
+                        <div className="flex items-center justify-end px-2 py-2 border-t border-solid border-slate-200 rounded-b">
+                          <button
+                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Close
+                          </button>
+                          <button
+                            className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={() => {
+                              bulkUpdateInventory();
+                              setShowModal(false);
+                            }}
+                          >
+                            Save Changes
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex justify-end">
-                  <button className="border bg-blue-400 h-10 p-2 m-2 text-white border-none rounded-md font-bold shadow hover:shadow-lg  focus:outline-none ease-linear transition-all duration-150 active:bg-blue-600">
-                    Clear Selection
-                  </button>
-                </div>
-
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Save Changes
-                  </button>
-                </div>
+                )}
               </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+            );
+          })}
         </>
       ) : null}
     </>
