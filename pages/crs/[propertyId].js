@@ -970,10 +970,9 @@ export default function PropertyId() {
                 </span>
                 <div className="ml-3">
                   <BulkUpdateModal
-                    roomDetails={roomDetails}
-                    roomDetailsToShow={roomDetailsToShow}
-                    defaultRoomId={defaultRoomId}
-                    propertyId={propertyId}
+                    roomDetails={sevenDaysDataOfRoom[0]}
+                    setSevenDaysDataofRooms={setSevenDaysDataofRooms}
+                    setCurrentdate={setCurrentdate}
                     token={token}
                   />
                   <AddOrUpdatePlan
