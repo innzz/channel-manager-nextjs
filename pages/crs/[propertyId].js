@@ -52,12 +52,12 @@ export default function PropertyId() {
   const [filteredPlan, setFilteredPlanName] = useState("");
   const [token, setToken] = useState("");
   const [noOfDays, setNoOfDays] = useState(7);
-  const [updationRoom, setUpdationRoom] = useState({});
-  const [updationRoomPlan, setUpdationRoomPlan] = useState({});
+  const [updationRoom, setUpdationRoom] = useState('');
+  const [updationRoomPlan, setUpdationRoomPlan] = useState('');
+  const [updationRoomPrice, setUpdationRoomPrice] = useState('');
   const [updationRoomState, setUpdationRoomState] = useState(false);
+  const [updationRoomPlanState, setUpdationRoomPlanState] = useState(false);
   const [nextPrevArrows, setNextPrevArrows] = useState(true);
-  // const [plansNames, setPlansNames] = useState([]);
-  let planNames = [];
 
 
   const handleShopModal = () => {
@@ -188,12 +188,13 @@ export default function PropertyId() {
 
   //This function will update room rates and availablity of a specific room
   const updateRatesandAvailablity = async (room) => {
+    // console.log("updation room after in function update rates and avail", room)
+   if (room !== '') {
     const data = {
       ...room,
       updateType: "Availability",
       channelManagerUpdateType: "AVAILABILITY_UPDATE",
     };
-    console.log(data);
     let updateRateAndAvailablity = await UpdateRatesAndAvailablity(data,token)
     let currentDateFuncResponse = getCurrentDateFunction();
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
@@ -204,55 +205,51 @@ export default function PropertyId() {
       toDate: seventhDayDateFuncResponse,
     };
     let refreshedDataOfRooms = await DataByDates(dataRefreshed,token);
-    setSevenDaysDataofRooms(refreshedDataOfRooms);
-    setUpdationRoom({});
+    let refreshedDataOfRoomsResponse = refreshedDataOfRooms
+    // console.log("update rates and availablity",refreshedDataOfRoomsResponse)
+    setSevenDaysDataofRooms(refreshedDataOfRoomsResponse);
+    setCurrentdate(currentDateFuncResponse);
+    setUpdationRoom('');
     setUpdationRoomState(false);
-  };
+    setNoOfDays(7);
+  }
+};
 
-  //This function will update room plans rates and availablity of a specific room
-  const updatePlansRates = async (plan,updationRoom) => {
-    console.log("room",updationRoom)
-    const a = new Date(updationRoom.date).toLocaleDateString().split("/");
-    let date = a[1];
-    if (date < 10) {
-      date = "0"+date
-    }
-    let month = a[0];
-    if (month < 10) {
-      month = "0"+month
-    }
-    let year = a[2];
+//This function will update room plans rates and availablity of a specific room
+const updatePlansRates = async (plan,updationRoom) => {
+    // console.log("updation room in plans function",updationRoom)
+    // console.log("updation plan in plans function",plan)
+    if (plan !== '') {
+      const a = new Date(updationRoom.date).toLocaleDateString().split("/");
+      let date = a[1];
+      if (date < 10) {
+        date = "0"+date
+      }
+      let month = a[0];
+      if (month < 10) {
+        month = "0"+month
+      }
+      let year = a[2];
       const data = {
-          ...plan,
-          channelManagerUpdateType: "ROOM_RATE_PLAN",
-          propertyId: propertyId,
-          roomTypeId: plan.roomId,
-          effectiveDate: `${year}-${month}-${date}`,
-          expiryDate: `${year}-${month}-${date}`
-        };
+        ...plan,
+        channelManagerUpdateType: "ROOM_RATE_PLAN",
+        propertyId: propertyId,
+        roomTypeId: updationRoom.roomId,
+        effectiveDate: `${year}-${month}-${date}`,
+        expiryDate: `${year}-${month}-${date}`
+      };
       let updatePlansReq = await fetch('https://api.bookonelocal.in/api-bookone/api/availability/addOrUpdatePlan',
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-          body: JSON.stringify(data),
-        }
-        );
-      //   let updatePlansRes = await updatePlansReq.json();
-      //   let updatePlansResponse = updatePlansRes;
-      //   console.log(updatePlansResponse)
-      // let currentDateFuncResponse = getCurrentDateFunction();
-      // let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
-      // const dataRefreshed = {
-      //   fromDate: currentDateFuncResponse,
-      //   propertyId: propertyId,
-      //   roomId: sevenDaysDataOfRoom[0].roomId,
-      //   toDate: seventhDayDateFuncResponse,
-      // };
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+      );
       let currentDateFuncResponse = getCurrentDateFunction();
       let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
       const dataRefreshed = {
@@ -262,27 +259,12 @@ export default function PropertyId() {
         toDate: seventhDayDateFuncResponse,
       };
       let refreshedDataOfRooms = await DataByDates(dataRefreshed,token);
+      setCurrentdate(currentDateFuncResponse);
       setSevenDaysDataofRooms(refreshedDataOfRooms);
-      setUpdationRoomPlan({});
-      // setCurrentdate(currentDateFuncResponse);
-      // setNoOfDays(14);
-      // setNextPrevArrows(true);
-      
-    // }
-    // console.log(data);
-    // // let updateRateAndAvailablity = await UpdateRatesAndAvailablity(data,token)
-    // let currentDateFuncResponse = getCurrentDateFunction();
-    // let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
-    // const dataRefreshed = {
-    //   fromDate: currentDateFuncResponse,
-    //   propertyId: propertyId,
-    //   roomId: room.roomId,
-    //   toDate: seventhDayDateFuncResponse,
-    // };
-    // let refreshedDataOfRooms = await DataByDates(dataRefreshed,token);
-    // setSevenDaysDataofRooms(refreshedDataOfRooms);
-    // setUpdationRoom({});
-    // setUpdationRoomState(false);
+      setUpdationRoomPlan('');
+      setUpdationRoomState(false);
+      setNoOfDays(7)
+    }
   };
 
   //it will handle the object of room to post the data to update room details
@@ -298,14 +280,17 @@ export default function PropertyId() {
 
   //it will handle the object of plans to post the data to update room plans details
   const handleUpdationOfRoomsPlans = (e,updationRoomPlanObject) => {
-    if (e.target.name === "plan") {
+    if (e.target.name === updationRoomPlanObject.name) {
       // setUpdationRoomPlan({...updationRoomPlan,[e.target.name]:{...updationRoomPlanObject,amount: +e.target.value}})
-      setUpdationRoomPlan({...updationRoomPlan,amount: +e.target.value});
+      setUpdationRoomPlan({...updationRoomPlanObject,amount: +e.target.value});
     }
   };
 
-  console.log("updation room plan useSatate",updationRoomPlan);
+  // console.log("updation room plan useSatate",updationRoomPlan);
+  // console.log("updation room useSatate",updationRoom);
   // console.log(sevenDaysDataOfRoom);
+  console.log("updation plan", updationRoomPlan)
+  console.log("updation room", updationRoom)
 
   useEffect(() => {
     if (propertyId !== undefined) {
@@ -339,10 +324,10 @@ export default function PropertyId() {
   }, [router]);
   //   console.log(sevenDaysDataOfRoom);
   //   console.log(roomDetailsToShow);
-  console.log(roomDetails);
+  // console.log(roomDetails);
   // console.log(filteredPlan);
   // console.log(roomId);
-  console.log(sevenDaysDataOfRoom);
+  console.log("seven days data of rooms",sevenDaysDataOfRoom);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -356,9 +341,6 @@ export default function PropertyId() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
-  useEffect(() => {
-    
-  }, [sevenDaysDataOfRoom])
   
   // console.log(fromDatePicker, endDatePicker);
   // console.log("date",a)
@@ -447,7 +429,7 @@ export default function PropertyId() {
               </Col>
               <Col className={styles.dates}>
                 <Row className={styles.dateCards}>
-                  {sevenDaysDataOfRoom.map((val, i) => {
+                  {sevenDaysDataOfRoom?.map((val, i) => {
                     let date = new Date(val.date);
 
                     return (
@@ -608,7 +590,9 @@ export default function PropertyId() {
                       key={keyj}
                     >
                       {updationRoomState === true &&
-                      updationRoom.id === room.id ? (
+                      updationRoom.id === room.id || 
+                      updationRoomPlanState === true &&
+                      updationRoom.id === room.id? (
                         <div
                           style={{
                             display: "flex",
@@ -618,7 +602,7 @@ export default function PropertyId() {
                         >
                           <span
                             onClick={() =>
-                              {updatePlansRates(updationRoomPlan,updationRoom);updateRatesandAvailablity(updationRoom)}
+                              {updateRatesandAvailablity(updationRoom);updatePlansRates(updationRoomPlan,updationRoom);}
                             }
                             className={styles.saveButton}
                           >
@@ -626,8 +610,9 @@ export default function PropertyId() {
                           </span>
                           <span
                             onClick={() => {
-                              setUpdationRoom({});
+                              setUpdationRoom('');
                               setUpdationRoomState(false);
+                              setUpdationRoomPlanState(false);
                             }}
                             className={styles.cancelButton}
                           >
@@ -671,9 +656,9 @@ export default function PropertyId() {
                                     onClick={() => {
                                       setUpdationRoom(avail);
                                       setUpdationRoomState(true);
+                                      setUpdationRoomPlanState(false)
                                     }}
                                   >
-                                    {/* {avail.noOfAvailable} */}
                                     {updationRoomState === true &&
                                     updationRoom.id === avail.id ? (
                                       <input
@@ -687,7 +672,7 @@ export default function PropertyId() {
                                         }
                                       />
                                     ) : (
-                                      avail.noOfAvailable
+                                      <span>{avail.noOfAvailable}</span>
                                     )}
                                   </Col>
                                 )}
@@ -709,7 +694,7 @@ export default function PropertyId() {
                         >
                           Room Rates and Plans
                         </span>
-                        <span
+                        {/* <span
                           className={styles.roomsAndPlansPrices}
                           style={{ border: "none" }}
                         >
@@ -740,7 +725,7 @@ export default function PropertyId() {
                               );
                             }
                           )}
-                        </span>
+                        </span> */}
                       </Col>
                       <Col className={styles.midSection}>
                         <div className={styles.roomsAndPlansPrices}>
@@ -750,7 +735,7 @@ export default function PropertyId() {
                           >
                             Rates :
                           </span>
-                          <span
+                          {/* <span
                             className={styles.roomsAndPlansPrices}
                             style={{ border: "none" }}
                           >
@@ -783,13 +768,12 @@ export default function PropertyId() {
                                 );
                               }
                             )}
-                          </span>
+                          </span> */}
                         </div>
                       </Col>
                       <Col className={styles.rightSection}>
                         <Row className={styles.data}>
                           {sevenDaysDataOfRoom.map((roomPrice, keyj) => {
-                            // console.log(roomPrice)
                             return (
                               <Col className={styles.col} key={keyj}>
                                 <div className={styles.roomsAndPlansPrices}>
@@ -812,12 +796,14 @@ export default function PropertyId() {
                                         border: "none",
                                         justifyContent: "center",
                                       }}
+                                      onClick={()=>{setUpdationRoomState(true);setUpdationRoom(roomPrice);
+                                        setUpdationRoomState(true);
+                                        setUpdationRoomPlanState(false);}}
                                     >
                                       ₹{roomPrice.price}
                                     </span>
                                   )}
-                                  {/* <span className={styles.roomsAndPlansPricesSpan} style={{border: "none", justifyContent: "center"}}>₹{roomPrice.price}</span> */}
-                                  {roomPrice.roomRatePlans.map(
+                                  {/* {roomPrice.roomRatePlans.map(
                                     (plan, keyji) => {
                                       return (
                                         <>
@@ -831,7 +817,6 @@ export default function PropertyId() {
                                                   name="plan"
                                                   placeholder={plan.amount}
                                                   className={styles.ratesInput}
-                                                  // value={plan.amount}
                                                   value={updationRoomPlan.amount}
                                                   onChange={(e)=>{
                                                     handleUpdationOfRoomsPlans(e,plan)
@@ -865,19 +850,16 @@ export default function PropertyId() {
                                         </>
                                       );
                                     }
-                                  )}
+                                  )} */}
                                 </div>
                               </Col>
-                              // <Col className={styles.col} key={keyj}>
-                              //   {updationRoomState === true && updationRoom.id === roomPrice.id ?<input type="text" name="price" placeholder={updationRoom.price} className={styles.ratesInput} value={updationRoom.price} onChange={handleUpdationOfRoomRatesAndAvailablity} />: `₹ ${roomPrice.price}`}
-                              // </Col>
                             );
                           })}
                         </Row>
                       </Col>
                     </Row>
 
-                    {/* {val.name === sevenDaysDataOfRoom[0]?.roomName && (
+                    {val.name === sevenDaysDataOfRoom[0]?.roomName && (
                       <>
                         {sevenDaysDataOfRoom[0].roomRatePlans.map(
                           (planName, key) => {
@@ -911,7 +893,12 @@ export default function PropertyId() {
                                                       <>
                                                         {planName.name == plansRatesToShow.name && (
                                                           <Col key={keyi} className={styles.col}>
-                                                            {updationRoomState === true && updationRoom.id === planRatesOfSevenDays.id ?<input type="text" name={plansRatesToShow.name} placeholder={plansRatesToShow.amount} className={styles.plansInput} />: plansRatesToShow.amount}
+                                                            {updationRoomPlanState === true && updationRoom.id === planRatesOfSevenDays.id && plansRatesToShow.code === updationRoomPlan.code ?<input type="text" value={updationRoomPlan.amount} name={plansRatesToShow.name} onChange={(e)=>handleUpdationOfRoomsPlans(e,plansRatesToShow)} placeholder={plansRatesToShow.amount} className={styles.plansInput} />: <span onClick={()=>{
+                                                              setUpdationRoomPlan(plansRatesToShow);
+                                                              setUpdationRoomPlanState(true);
+                                                              setUpdationRoom(planRatesOfSevenDays);
+                                                              setUpdationRoomState(false);
+                                                              }}>{plansRatesToShow.amount}</span>}
                                                           </Col>
                                                         )}
                                                       </>
@@ -981,7 +968,7 @@ export default function PropertyId() {
                           }
                         )}
                       </>
-                    )} */}
+                    )}
                   </div>
                 )}
               </>
