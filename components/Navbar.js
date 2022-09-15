@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import styles from "../styles/Navbar.module.css";
 import { MdSystemUpdateAlt } from "react-icons/md";
 function NavBar(props) {
-  console.log(props.bookingId);
+  // console.log(props.bookingId);
   const [bthList, setBthList] = useState(false);
   const bookOneTextHotel = () => {
     setBthList(!bthList);
@@ -40,7 +40,10 @@ function NavBar(props) {
         </div> */}
       </Col>
       <Col className={styles.profileButtonColumn}>
-        <div className={`${styles.profileButton} flex`} onClick={bookOneTextHotel}>
+        <div
+          className={`${styles.profileButton} flex`}
+          onClick={bookOneTextHotel}
+        >
           BookOne test Hotel
           <span>
             <IoMdArrowDropdown size={25} />
@@ -58,22 +61,22 @@ function NavBar(props) {
             <li className="flex gap-2">
               <CgProfile className="h-6" /> <span>My Account</span>
             </li>
-            <li  className="flex gap-2">
+            <li className="flex gap-2">
               <TbNotes className="h-6" />
               <span>Terms & Condition </span>
             </li>
-            <li  className="flex gap-2">
+            <li className="flex gap-2">
               <MdSupportAgent className="h-6" />
               <span>Support</span>
             </li>
             <Link href={`/bookings/${props.bookingId}`}>
-              <li  className="flex gap-2">
+              <li className="flex gap-2">
                 <MdSupportAgent className="h-6" />
                 <span>Bookings</span>
               </li>
             </Link>
             <Link href="/">
-              <li  className="flex gap-2">
+              <li className="flex gap-2">
                 <AiOutlineLogout className="h-6" />
                 <span>Logout</span>
               </li>

@@ -21,6 +21,7 @@
     "@mui/styled-engine-sc": "^5.8.0",
     "@syncfusion/ej2-react-calendars": "^20.2.46",
     "antd": "^4.23.1",
+    "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "hero": "^0.0.0",
     "heroicons": "^2.0.11",

@@ -25,6 +25,7 @@ import { DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import BulkUpdateModal from "../../components/BulkUpdateModal";
+import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 import { DataByDates } from "../../assets/api/dataByDates";
 import { DataOfSevenDays } from "../../assets/api/dataOfSevenDays";
 import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvailablity";
@@ -439,18 +440,18 @@ const updatePlansRates = async (plan,updationRoom) => {
                           {date.getDay() == 1
                             ? "MON"
                             : date.getDay() == 2
-                            ? "TUE"
-                            : date.getDay() == 3
-                            ? "WED"
-                            : date.getDay() == 4
-                            ? "THU"
-                            : date.getDay() == 5
-                            ? "FRI"
-                            : date.getDay() == 6
-                            ? "SAT"
-                            : date.getDay() == 0
-                            ? "SUN"
-                            : "NO DAY"}
+                              ? "TUE"
+                              : date.getDay() == 3
+                                ? "WED"
+                                : date.getDay() == 4
+                                  ? "THU"
+                                  : date.getDay() == 5
+                                    ? "FRI"
+                                    : date.getDay() == 6
+                                      ? "SAT"
+                                      : date.getDay() == 0
+                                        ? "SUN"
+                                        : "NO DAY"}
                         </span>
                         <span className={styles.boldDateText}>
                           {date.getDate() < 10
@@ -461,28 +462,28 @@ const updatePlansRates = async (plan,updationRoom) => {
                           {date.getMonth() == 0
                             ? "JAN"
                             : date.getMonth() == 1
-                            ? "FEB"
-                            : date.getMonth() == 2
-                            ? "MAR"
-                            : date.getMonth() == 3
-                            ? "APR"
-                            : date.getMonth() == 4
-                            ? "MAY"
-                            : date.getMonth() == 5
-                            ? "JUN"
-                            : date.getMonth() == 6
-                            ? "JUL"
-                            : date.getMonth() == 7
-                            ? "AUG"
-                            : date.getMonth() == 8
-                            ? "SEP"
-                            : date.getMonth() == 9
-                            ? "OCT"
-                            : date.getMonth() == 10
-                            ? "NOV"
-                            : date.getMonth() == 11
-                            ? "DEC"
-                            : "NO MONTH"}
+                              ? "FEB"
+                              : date.getMonth() == 2
+                                ? "MAR"
+                                : date.getMonth() == 3
+                                  ? "APR"
+                                  : date.getMonth() == 4
+                                    ? "MAY"
+                                    : date.getMonth() == 5
+                                      ? "JUN"
+                                      : date.getMonth() == 6
+                                        ? "JUL"
+                                        : date.getMonth() == 7
+                                          ? "AUG"
+                                          : date.getMonth() == 8
+                                            ? "SEP"
+                                            : date.getMonth() == 9
+                                              ? "OCT"
+                                              : date.getMonth() == 10
+                                                ? "NOV"
+                                                : date.getMonth() == 11
+                                                  ? "DEC"
+                                                  : "NO MONTH"}
                         </span>
                       </Col>
                     );
@@ -491,89 +492,6 @@ const updatePlansRates = async (plan,updationRoom) => {
               </Col>
             </Row>
           </div>
-          {/* <div className={styles.buttonGroup}>
-            <Row>
-              <Col className={styles.buttons}>
-                <button onClick={handleRoomTypesDrop} className={styles.button}>
-                  <FaBed
-                    style={{ marginRight: "8px", marginBottom: "2px" }}
-                    size={15}
-                  />
-                  All Room Types
-                  <MdOutlineArrowDropDown
-                    size={22}
-                    style={{ marginLeft: "2px", marginBottom: "2px" }}
-                  />
-                  <div
-                    className={styles.roomTypeDrop}
-                    onMouseLeave={handleRoomTypesDrop}
-                    style={
-                      roomType ? { display: "block" } : { display: "none" }
-                    }
-                  >
-                    {roomDetails?.map((val, i) => {
-                      return (
-                        <li
-                          key={i}
-                          onClick={() => {
-                            setRoomDetailsToShow(val);
-                            getSevenDaysDataOfRoom(token, val.bookoneRoomId);
-                            setFilteredPlanName("");
-                          }}
-                        >
-                          {val.name}
-                        </li>
-                      );
-                    })}
-                  </div>
-                </button>
-                <button className={styles.button} onClick={handleRateDrop}>
-                  <BsFillTagFill
-                    style={{ marginRight: "8px", marginBottom: "2px" }}
-                  />
-                  All Rates Plans
-                  <MdOutlineArrowDropDown
-                    size={22}
-                    style={{ marginLeft: "2px", marginBottom: "4px" }}
-                  />
-                  <div
-                    className={styles.ratePlanDrop}
-                    onMouseLeave={handleRateDrop}
-                    style={
-                      ratePlans ? { display: "block" } : { display: "none" }
-                    }
-                  >
-                    {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
-                      (dropdownPlan, dropKey) => {
-                        return (
-                          <li
-                            key={dropKey}
-                            onClick={() => {
-                              setFilteredPlanName(dropdownPlan);
-                            }}
-                          >
-                            {dropdownPlan.name}
-                          </li>
-                        );
-                      }
-                    )}
-                  </div>
-                </button>
-                <span style={{cursor: "pointer"}} onClick={() => {
-                      getRefreshedSevenDaysDataOfRooms(
-                        sevenDaysDataOfRoom[0].roomId
-                      );
-                      setFilteredPlanName('')
-                    }}>Clear all filters</span>
-              </Col>
-              <Col className={styles.rightlinkText}>
-                <div className={styles.linkText}>
-                  <GoTriangleRight size={20} style={{ marginBottom: "3px" }} />
-                  <span>Quick Tour - Inventory Grid</span>
-                </div>
-              </Col>
-            </Row>
-          </div> */}
           <Row className={styles.content}>
             <Col className={styles.Icon}></Col>
             <Col
@@ -645,7 +563,6 @@ const updatePlansRates = async (plan,updationRoom) => {
                         className={`${styles.leftSection} flex items-center`}
                       >
                         <span>{val.name}</span>
-                        <BulkUpdateModal />
                       </Col>
                       <Col className={styles.midSection}>Stock</Col>
                       <Col className={styles.rightSection}>
@@ -659,7 +576,7 @@ const updatePlansRates = async (plan,updationRoom) => {
                                     key={avail.id}
                                   >
                                     {updationRoomState === true &&
-                                    updationRoom.id === avail.id ? (
+                                      updationRoom.id === avail.id ? (
                                       <input
                                         type="text"
                                         name="noOfAvailable"
@@ -699,38 +616,6 @@ const updatePlansRates = async (plan,updationRoom) => {
                         >
                           Room Rates and Plans
                         </span>
-                        {/* <span
-                          className={styles.roomsAndPlansPrices}
-                          style={{ border: "none" }}
-                        >
-                          {sevenDaysDataOfRoom[0]?.roomRatePlans?.map(
-                            (plans, ji) => {
-                              return (
-                                <>
-                                  {filteredPlan === "" ? (
-                                    <span
-                                      className={styles.roomsAndPlansPricesSpan}
-                                      key={ji}
-                                    >
-                                      {plans.name}
-                                    </span>
-                                  ) : (
-                                    filteredPlan.name === plans.name && (
-                                      <span
-                                        className={
-                                          styles.roomsAndPlansPricesSpan
-                                        }
-                                        key={ji}
-                                      >
-                                        {plans.name}
-                                      </span>
-                                    )
-                                  )}
-                                </>
-                              );
-                            }
-                          )}
-                        </span> */}
                       </Col>
                       <Col className={styles.midSection}>
                         <div className={styles.roomsAndPlansPrices}>
@@ -740,40 +625,6 @@ const updatePlansRates = async (plan,updationRoom) => {
                           >
                             Rates :
                           </span>
-                          {/* <span
-                            className={styles.roomsAndPlansPrices}
-                            style={{ border: "none" }}
-                          >
-                            {sevenDaysDataOfRoom[0]?.roomRatePlans?.map(
-                              (plans, ji) => {
-                                return (
-                                  <>
-                                    {filteredPlan === "" ? (
-                                      <span
-                                        className={
-                                          styles.roomsAndPlansPricesSpan
-                                        }
-                                        key={ji}
-                                      >
-                                        Rates:
-                                      </span>
-                                    ) : (
-                                      filteredPlan.name === plans.name && (
-                                        <span
-                                          className={
-                                            styles.roomsAndPlansPricesSpan
-                                          }
-                                          key={ji}
-                                        >
-                                          Rates:
-                                        </span>
-                                      )
-                                    )}
-                                  </>
-                                );
-                              }
-                            )}
-                          </span> */}
                         </div>
                       </Col>
                       <Col className={styles.rightSection}>
@@ -808,54 +659,6 @@ const updatePlansRates = async (plan,updationRoom) => {
                                       ₹{roomPrice.price}
                                     </span>
                                   )}
-                                  {/* {roomPrice.roomRatePlans.map(
-                                    (plan, keyji) => {
-                                      return (
-                                        <>
-                                          {filteredPlan === "" ? (
-                                            <>
-                                              {updationRoomState === true &&
-                                              updationRoom.id ===
-                                                roomPrice.id && updationRoomPlan.name === plan.name ? (
-                                                <input
-                                                  type="text"
-                                                  name="plan"
-                                                  placeholder={plan.amount}
-                                                  className={styles.ratesInput}
-                                                  value={updationRoomPlan.amount}
-                                                  onChange={(e)=>{
-                                                    handleUpdationOfRoomsPlans(e,plan)
-                                                  }
-                                                  }
-                                                />
-                                              ) : (
-                                                <span
-                                                  key={keyji}
-                                                  className={
-                                                    styles.roomsAndPlansPricesSpan
-                                                  }
-                                                  onClick={()=>setUpdationRoomPlan(plan)}
-                                                >
-                                                  ₹{plan.amount}
-                                                </span>
-                                              )}
-                                            </>
-                                          ) : (
-                                            filteredPlan.name === plan.name && (
-                                              <span
-                                                key={keyji}
-                                                className={
-                                                  styles.roomsAndPlansPricesSpan
-                                                }
-                                              >
-                                                ₹{plan.amount}
-                                              </span>
-                                            )
-                                          )}
-                                        </>
-                                      );
-                                    }
-                                  )} */}
                                 </div>
                               </Col>
                             );
@@ -903,6 +706,7 @@ const updatePlansRates = async (plan,updationRoom) => {
                                                               setUpdationRoomPlanState(true);
                                                               setUpdationRoom(planRatesOfSevenDays);
                                                               setUpdationRoomState(false);
+                                                              setUpdationRoomPriceState(false);
                                                               }}>{plansRatesToShow.amount}</span>}
                                                           </Col>
                                                         )}
@@ -952,6 +756,7 @@ const updatePlansRates = async (plan,updationRoom) => {
                                                               setUpdationRoomPlanState(true);
                                                               setUpdationRoom(planRatesOfSevenDays);
                                                               setUpdationRoomState(false);
+                                                              setUpdationRoomPriceState(false);
                                                               }}>{plansRatesToShow.amount}</span>}
                                                           </Col>
                                                         )}
@@ -1080,6 +885,10 @@ const updatePlansRates = async (plan,updationRoom) => {
                 >
                   Clear all filters
                 </span>
+                <div className="ml-3">
+                  <BulkUpdateModal />
+                        <AddOrUpdatePlan roomDetails={roomDetails} roomDetailsToShow={roomDetailsToShow} sevenDaysDataOfRoom={sevenDaysDataOfRoom} />
+                </div>
               </Col>
               <Col className={styles.rightlinkText}>
                 <div className={`${styles.linkText} flex`}>

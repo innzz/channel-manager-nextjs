@@ -15,7 +15,7 @@ const Login = () => {
   const router = useRouter();
   //   console.log(router);
   const signIn = (e) => {
-    console.log(radio)
+    console.log(radio);
     e.preventDefault();
     fetch("https://api.bookonelocal.in/api-bookone/api/user/login", {
       method: "POST",
@@ -50,10 +50,12 @@ const Login = () => {
           )
             .then((res) => res.json())
             .then((resJson) => {
-              if(radio === "crs"){
+              if (radio === "crs") {
                 router.push(`/crs/${resJson.bookonePropertyId}`);
-              } else if (radio === "cm"){
-                router.push(`/onlinetravelagencies/Agoda/${resJson.bookonePropertyId}`);
+              } else if (radio === "cm") {
+                router.push(
+                  `/onlinetravelagencies/Agoda/${resJson.bookonePropertyId}`
+                );
               }
               //   console.log(resJson.propertiesOnlineTravelAgencies);
               //   for (
@@ -134,17 +136,17 @@ const Login = () => {
                   />
                 </Form.Group>
                 <div className="flex gap-3 ml-1">
-                  <div className="flex gap-1"> 
-                    <input type="radio" onClick={()=>setRadio("crs")} />
-                      <label>CRS</label>
+                  <div className="flex gap-1">
+                    <input type="radio" onClick={() => setRadio("crs")} />
+                    <label>CRS</label>
                   </div>
-                  <div className="flex gap-1"> 
-                    <input type="radio" onClick={()=>setRadio("cm")} />
-                      <label>CM</label>
+                  <div className="flex gap-1">
+                    <input type="radio" onClick={() => setRadio("cm")} />
+                    <label>CM</label>
                   </div>
-                  <div className="flex gap-1"> 
-                    <input type="radio" onClick={()=>setRadio("eglobe")} />
-                      <label>EGlobe</label>
+                  <div className="flex gap-1">
+                    <input type="radio" onClick={() => setRadio("eglobe")} />
+                    <label>EGlobe</label>
                   </div>
                 </div>
                 <div className={styles.buttonContainer}>

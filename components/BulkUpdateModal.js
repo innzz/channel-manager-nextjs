@@ -57,7 +57,7 @@ export default function Modal() {
                   </button>
                 </div>
                 <div className="mx-2 mt-4">
-                  <div className="">
+                  {/* <div className="">
                     <label className="text-black-900 w-24">
                       Availability :{" "}
                     </label>{" "}
@@ -67,17 +67,38 @@ export default function Modal() {
                       id=""
                       name=""
                     />
-                  </div>
-                  <div className="mt-2">
-                    <label className="text-black-900 text-md w-24">
-                      Rates :{" "}
-                    </label>{" "}
-                    <input
-                      className="border-2 border-blue-100 rounded-md"
-                      type="text"
-                      id=""
-                      name=""
-                    />
+                  </div> */}
+                  <div>
+                    <div className="mb-3 xl:w-96 flex">
+                      <div>
+                        <label
+                          htmlFor="noOfRooms"
+                          className="form-label inline-block mb-2 text-gray-700"
+                        ></label>
+                        <input
+                          name="noOfRooms"
+                          type="number"
+                          className="form-control block w-full px-3 py-1.5 text-sm font-normal text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                          id="noOfRooms"
+                          placeholder="No Of Rooms"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="price"
+                          className="form-label inline-block mb-2 text-gray-700"
+                        ></label>
+                        <input
+                          name="price"
+                          type="number"
+                          className="form-control block w-full px-3 py-1.5 text-sm font-normal text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none appearance-none"
+                          id="price"
+                          placeholder="Price"
+                          required
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex justify-end">
@@ -85,16 +106,7 @@ export default function Modal() {
                     Clear Selection
                   </button>
                 </div>
-                <div className="flex items-center bg-blue-400 border-blue-100 h-8 mx-2 mt-1 p-2 rounded-md">
-                  <input className="border-blue-200" type="checkbox" />
-                  <label className="font-bold ml-2 text-white">
-                    Double Room
-                  </label>
-                </div>
-                <div className="flex items-center bg-blue-400 border-blue-100 h-8 mx-2 mt-1 p-2 rounded-md">
-                  <input className="border-blue-200" type="checkbox" />
-                  <label className="font-bold ml-2 text-white">Twin Room</label>
-                </div>
+
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                   <button
