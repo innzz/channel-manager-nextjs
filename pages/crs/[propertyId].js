@@ -25,6 +25,9 @@ import { DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import BulkUpdateModal from "../../components/BulkUpdateModal";
+import { DataByDates } from "../../assets/api/dataByDates";
+import { DataOfSevenDays } from "../../assets/api/dataOfSevenDays";
+import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvailablity";
 
 export default function PropertyId() {
   let router = useRouter();
@@ -50,8 +53,12 @@ export default function PropertyId() {
   const [token, setToken] = useState("");
   const [noOfDays, setNoOfDays] = useState(7);
   const [updationRoom, setUpdationRoom] = useState({});
+  const [updationRoomPlan, setUpdationRoomPlan] = useState({});
   const [updationRoomState, setUpdationRoomState] = useState(false);
   const [nextPrevArrows, setNextPrevArrows] = useState(true);
+  // const [plansNames, setPlansNames] = useState([]);
+  let planNames = [];
+
 
   const handleShopModal = () => {
     setshopModal(!shopModal);
@@ -106,21 +113,8 @@ export default function PropertyId() {
   const getSevenDaysDataOfRoom = async (token, roomId) => {
     let currentDateFuncResponse = getCurrentDateFunction();
     setCurrentdate(currentDateFuncResponse);
-    // console.log(token, roomId);
-    let res = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getNext7daysRatesAndAvailabilityForRoom?PropertyId=${propertyId}&RoomId=${roomId}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-      }
-    );
-    let resJson = await res.json();
-    setSevenDaysDataofRooms(resJson);
+    let sevenDaysDataOfRooms = await DataOfSevenDays(propertyId,roomId,token)
+    setSevenDaysDataofRooms(sevenDaysDataOfRooms);
     setNoOfDays(14);
   };
 
@@ -137,23 +131,9 @@ export default function PropertyId() {
       roomId: roomId,
       toDate: seventhDayDateFuncResponse,
     };
-    let previousSevenDaysRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-    let previousSevenDaysResponse = await previousSevenDaysRes.json();
-    let previousSevenDaysResponseJson = previousSevenDaysResponse;
+    let previousDataOfRooms = await DataByDates(data,token);
+    setSevenDaysDataofRooms(previousDataOfRooms);
     setCurrentdate(currentDateFuncResponse);
-    setSevenDaysDataofRooms(previousSevenDaysResponseJson);
 
     // }
   };
@@ -167,24 +147,9 @@ export default function PropertyId() {
       roomId: sevenDaysDataOfRoom[0].roomId,
       toDate: endDate,
     };
-    let datePickerDataRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-    let datePickerDataResponse = await datePickerDataRes.json();
-    let datePickerDataResponseJson = datePickerDataResponse;
-    // console.log(datePickerDataResponseJson);
+    let datePickerDataOfRooms = await DataByDates(data,token);
+    setSevenDaysDataofRooms(datePickerDataOfRooms);
     setCurrentdate(startDate);
-    setSevenDaysDataofRooms(datePickerDataResponseJson);
     setNextPrevArrows(false);
   };
 
@@ -199,24 +164,9 @@ export default function PropertyId() {
       roomId: roomId,
       toDate: seventhDayDateFuncResponse,
     };
-    let nextSevenDaysRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-    let nextSevenDaysResponse = await nextSevenDaysRes.json();
-    let nextSevenDaysResponseJson = nextSevenDaysResponse;
-    console.log(nextSevenDaysResponseJson);
+    let nextSevenDaysDataOfRooms = await DataByDates(data,token);
+    setSevenDaysDataofRooms(nextSevenDaysDataOfRooms);
     setCurrentdate(currentDateFuncResponse);
-    setSevenDaysDataofRooms(nextSevenDaysResponseJson);
   };
 
   //This function will set Refreshed Seven Days Data of Specific Room
@@ -229,22 +179,8 @@ export default function PropertyId() {
       roomId: roomId,
       toDate: seventhDayDateFuncResponse,
     };
-    let refreshedSevenDaysRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-    let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
-    let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
-    setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
+    let refreshedDataOfRooms = await DataByDates(data,token);
+    setSevenDaysDataofRooms(refreshedDataOfRooms);
     setCurrentdate(currentDateFuncResponse);
     setNoOfDays(14);
     setNextPrevArrows(true);
@@ -258,19 +194,7 @@ export default function PropertyId() {
       channelManagerUpdateType: "AVAILABILITY_UPDATE",
     };
     console.log(data);
-    let updateRatesAndAvailablityRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/updateAvailability`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    let updateRateAndAvailablity = await UpdateRatesAndAvailablity(data,token)
     let currentDateFuncResponse = getCurrentDateFunction();
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
     const dataRefreshed = {
@@ -279,25 +203,86 @@ export default function PropertyId() {
       roomId: room.roomId,
       toDate: seventhDayDateFuncResponse,
     };
-    let refreshedSevenDaysRes = await fetch(
-      `https://api.bookonelocal.in/api-bookone/api/availability/getRatesAndAvailabilityForRoomByDate`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          APP_ID: "BOOKONE_WEB_APP",
-        },
-        body: JSON.stringify(dataRefreshed),
-      }
-    );
-    let refreshedSevenDaysResponse = await refreshedSevenDaysRes.json();
-    let refreshedSevenDaysResponseJson = refreshedSevenDaysResponse;
-    setSevenDaysDataofRooms(refreshedSevenDaysResponseJson);
-
+    let refreshedDataOfRooms = await DataByDates(dataRefreshed,token);
+    setSevenDaysDataofRooms(refreshedDataOfRooms);
     setUpdationRoom({});
     setUpdationRoomState(false);
+  };
+
+  //This function will update room plans rates and availablity of a specific room
+  const updatePlansRates = async (plan,updationRoom) => {
+    console.log("room",updationRoom)
+    const a = new Date(updationRoom.date).toLocaleDateString().split("/");
+    let date = a[1];
+    if (date < 10) {
+      date = "0"+date
+    }
+    let month = a[0];
+    if (month < 10) {
+      month = "0"+month
+    }
+    let year = a[2];
+      const data = {
+          ...plan,
+          channelManagerUpdateType: "ROOM_RATE_PLAN",
+          propertyId: propertyId,
+          roomTypeId: plan.roomId,
+          effectiveDate: `${year}-${month}-${date}`,
+          expiryDate: `${year}-${month}-${date}`
+        };
+      let updatePlansReq = await fetch('https://api.bookonelocal.in/api-bookone/api/availability/addOrUpdatePlan',
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            APP_ID: "BOOKONE_WEB_APP",
+          },
+          body: JSON.stringify(data),
+        }
+        );
+      //   let updatePlansRes = await updatePlansReq.json();
+      //   let updatePlansResponse = updatePlansRes;
+      //   console.log(updatePlansResponse)
+      // let currentDateFuncResponse = getCurrentDateFunction();
+      // let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+      // const dataRefreshed = {
+      //   fromDate: currentDateFuncResponse,
+      //   propertyId: propertyId,
+      //   roomId: sevenDaysDataOfRoom[0].roomId,
+      //   toDate: seventhDayDateFuncResponse,
+      // };
+      let currentDateFuncResponse = getCurrentDateFunction();
+      let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+      const dataRefreshed = {
+        fromDate: currentDateFuncResponse,
+        propertyId: propertyId,
+        roomId: plan.roomId,
+        toDate: seventhDayDateFuncResponse,
+      };
+      let refreshedDataOfRooms = await DataByDates(dataRefreshed,token);
+      setSevenDaysDataofRooms(refreshedDataOfRooms);
+      setUpdationRoomPlan({});
+      // setCurrentdate(currentDateFuncResponse);
+      // setNoOfDays(14);
+      // setNextPrevArrows(true);
+      
+    // }
+    // console.log(data);
+    // // let updateRateAndAvailablity = await UpdateRatesAndAvailablity(data,token)
+    // let currentDateFuncResponse = getCurrentDateFunction();
+    // let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+    // const dataRefreshed = {
+    //   fromDate: currentDateFuncResponse,
+    //   propertyId: propertyId,
+    //   roomId: room.roomId,
+    //   toDate: seventhDayDateFuncResponse,
+    // };
+    // let refreshedDataOfRooms = await DataByDates(dataRefreshed,token);
+    // setSevenDaysDataofRooms(refreshedDataOfRooms);
+    // setUpdationRoom({});
+    // setUpdationRoomState(false);
   };
 
   //it will handle the object of room to post the data to update room details
@@ -311,7 +296,15 @@ export default function PropertyId() {
     }
   };
 
-  // console.log(updationRoom);
+  //it will handle the object of plans to post the data to update room plans details
+  const handleUpdationOfRoomsPlans = (e,updationRoomPlanObject) => {
+    if (e.target.name === "plan") {
+      // setUpdationRoomPlan({...updationRoomPlan,[e.target.name]:{...updationRoomPlanObject,amount: +e.target.value}})
+      setUpdationRoomPlan({...updationRoomPlan,amount: +e.target.value});
+    }
+  };
+
+  console.log("updation room plan useSatate",updationRoomPlan);
   // console.log(sevenDaysDataOfRoom);
   const fetchAPI =
     "https://api.bookonelocal.in/channel-integration/api/channelManager/property/";
@@ -366,7 +359,12 @@ export default function PropertyId() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
+  useEffect(() => {
+    
+  }, [sevenDaysDataOfRoom])
+  
   // console.log(fromDatePicker, endDatePicker);
+  // console.log("date",a)
 
   return (
     <div className={styles.outerContainer}>
@@ -623,7 +621,7 @@ export default function PropertyId() {
                         >
                           <span
                             onClick={() =>
-                              updateRatesandAvailablity(updationRoom)
+                              {updatePlansRates(updationRoomPlan,updationRoom);updateRatesandAvailablity(updationRoom)}
                             }
                             className={styles.saveButton}
                           >
@@ -829,15 +827,17 @@ export default function PropertyId() {
                                             <>
                                               {updationRoomState === true &&
                                               updationRoom.id ===
-                                                roomPrice.id ? (
+                                                roomPrice.id && updationRoomPlan.name === plan.name ? (
                                                 <input
                                                   type="text"
-                                                  name="price"
+                                                  name="plan"
                                                   placeholder={plan.amount}
                                                   className={styles.ratesInput}
-                                                  value={plan.amount}
-                                                  onChange={
-                                                    handleUpdationOfRoomRatesAndAvailablity
+                                                  // value={plan.amount}
+                                                  value={updationRoomPlan.amount}
+                                                  onChange={(e)=>{
+                                                    handleUpdationOfRoomsPlans(e,plan)
+                                                  }
                                                   }
                                                 />
                                               ) : (
@@ -846,10 +846,11 @@ export default function PropertyId() {
                                                   className={
                                                     styles.roomsAndPlansPricesSpan
                                                   }
+                                                  onClick={()=>setUpdationRoomPlan(plan)}
                                                 >
                                                   ₹{plan.amount}
                                                 </span>
-                                              )}{" "}
+                                              )}
                                             </>
                                           ) : (
                                             filteredPlan.name === plan.name && (
@@ -859,7 +860,6 @@ export default function PropertyId() {
                                                   styles.roomsAndPlansPricesSpan
                                                 }
                                               >
-                                                {" "}
                                                 ₹{plan.amount}
                                               </span>
                                             )
