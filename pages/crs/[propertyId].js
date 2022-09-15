@@ -5,14 +5,7 @@ import { FaBed } from "react-icons/fa";
 import { AiFillThunderbolt } from "react-icons/ai";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { BsFillTagFill, BsFillStarFill } from "react-icons/bs";
-import { BiSearch } from "react-icons/bi";
-import { TiTick } from "react-icons/ti";
 import { GoTriangleRight } from "react-icons/go";
-import {
-  MdKeyboardArrowLeft,
-  MdKeyboardArrowRight,
-  MdModeEditOutline,
-} from "react-icons/md";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import { GrRotateLeft } from "react-icons/gr";
 import { IoIosSave } from "react-icons/io";
@@ -33,12 +26,7 @@ import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvaila
 export default function PropertyId() {
   let router = useRouter();
 
-  //   let token = localStorage.getItem("token");
-  //   console.log(token);
-  //   console.log(router);
-
   const { propertyId } = router.query;
-  // console.log(siteminder)
   const [allRatesAvailiblityDropDown, setAllRatesAvailiblityDropDown] =
     useState(false);
   const [shopModal, setshopModal] = useState(false);
@@ -55,7 +43,6 @@ export default function PropertyId() {
   const [noOfDays, setNoOfDays] = useState(7);
   const [updationRoom, setUpdationRoom] = useState("");
   const [updationRoomPlan, setUpdationRoomPlan] = useState("");
-  const [updationRoomPrice, setUpdationRoomPrice] = useState("");
   const [updationRoomState, setUpdationRoomState] = useState(false);
   const [updationRoomPlanState, setUpdationRoomPlanState] = useState(false);
   const [updationRoomPriceState, setUpdationRoomPriceState] = useState(false);
@@ -190,7 +177,6 @@ export default function PropertyId() {
 
   //This function will update room rates and availablity of a specific room
   const updateRatesandAvailablity = async (room) => {
-    // console.log("updation room after in function update rates and avail", room)
     if (room !== "") {
       const data = {
         ...room,
@@ -222,8 +208,6 @@ export default function PropertyId() {
 
   //This function will update room plans rates and availablity of a specific room
   const updatePlansRates = async (plan, updationRoom) => {
-    // console.log("updation room in plans function",updationRoom)
-    // console.log("updation plan in plans function",plan)
     if (plan !== "") {
       const a = new Date(updationRoom.date).toLocaleDateString().split("/");
       let date = a[1];
@@ -276,10 +260,8 @@ export default function PropertyId() {
   //it will handle the object of room to post the data to update room details
   const handleUpdationOfRoomRatesAndAvailablity = (e) => {
     if (e.target.name === "price") {
-      // console.log("func ")
       setUpdationRoom({ ...updationRoom, price: +e.target.value });
     } else if (e.target.name === "noOfAvailable") {
-      // console.log("func ")
       setUpdationRoom({ ...updationRoom, noOfAvailable: +e.target.value });
     }
   };
@@ -287,7 +269,6 @@ export default function PropertyId() {
   //it will handle the object of plans to post the data to update room plans details
   const handleUpdationOfRoomsPlans = (e, updationRoomPlanObject) => {
     if (e.target.name === updationRoomPlanObject.name) {
-      // setUpdationRoomPlan({...updationRoomPlan,[e.target.name]:{...updationRoomPlanObject,amount: +e.target.value}})
       setUpdationRoomPlan({
         ...updationRoomPlanObject,
         amount: +e.target.value,
@@ -295,11 +276,6 @@ export default function PropertyId() {
     }
   };
 
-  // console.log("updation room plan useSatate",updationRoomPlan);
-  // console.log("updation room useSatate",updationRoom);
-  // console.log(sevenDaysDataOfRoom);
-  console.log("updation plan", updationRoomPlan);
-  console.log("updation room", updationRoom);
 
   useEffect(() => {
     if (propertyId !== undefined) {
@@ -325,19 +301,9 @@ export default function PropertyId() {
           getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
           setRoomDetailsToShow(resJson?.roomDtos[0]);
           setDefaultRoomId(resJson?.roomDtos[0].bookoneRoomId);
-          // console.log(resJson?.roomDtos[0].bookoneRoomId);
-          // console.log(resJson);
-          //   console.log(sevenDayData);
-          //   console.log(resJson);
         });
     }
   }, [router]);
-  //   console.log(sevenDaysDataOfRoom);
-  //   console.log(roomDetailsToShow);
-  // console.log(roomDetails);
-  // console.log(filteredPlan);
-  // console.log(roomId);
-  console.log("seven days data of rooms", sevenDaysDataOfRoom);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -351,8 +317,6 @@ export default function PropertyId() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
-  // console.log(fromDatePicker, endDatePicker);
-  // console.log("date",a)
 
   return (
     <div className={styles.outerContainer}>
