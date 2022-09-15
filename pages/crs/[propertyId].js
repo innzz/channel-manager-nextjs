@@ -57,6 +57,7 @@ export default function PropertyId() {
   const [updationRoomPrice, setUpdationRoomPrice] = useState('');
   const [updationRoomState, setUpdationRoomState] = useState(false);
   const [updationRoomPlanState, setUpdationRoomPlanState] = useState(false);
+  const [updationRoomPriceState, setUpdationRoomPriceState] = useState(false);
   const [nextPrevArrows, setNextPrevArrows] = useState(true);
 
 
@@ -592,7 +593,10 @@ const updatePlansRates = async (plan,updationRoom) => {
                       {updationRoomState === true &&
                       updationRoom.id === room.id || 
                       updationRoomPlanState === true &&
-                      updationRoom.id === room.id? (
+                      updationRoom.id === room.id ||
+                      updationRoomPriceState === true &&
+                      updationRoom.id === room.id 
+                      ? (
                         <div
                           style={{
                             display: "flex",
@@ -653,11 +657,6 @@ const updatePlansRates = async (plan,updationRoom) => {
                                   <Col
                                     className={styles.col}
                                     key={avail.id}
-                                    onClick={() => {
-                                      setUpdationRoom(avail);
-                                      setUpdationRoomState(true);
-                                      setUpdationRoomPlanState(false)
-                                    }}
                                   >
                                     {updationRoomState === true &&
                                     updationRoom.id === avail.id ? (
@@ -672,7 +671,13 @@ const updatePlansRates = async (plan,updationRoom) => {
                                         }
                                       />
                                     ) : (
-                                      <span>{avail.noOfAvailable}</span>
+                                      <span
+                                      onClick={() => {
+                                        setUpdationRoom(avail);
+                                        setUpdationRoomState(true);
+                                        setUpdationRoomPlanState(false);
+                                        setUpdationRoomPriceState(false)
+                                      }}>{avail.noOfAvailable}</span>
                                     )}
                                   </Col>
                                 )}
@@ -777,7 +782,7 @@ const updatePlansRates = async (plan,updationRoom) => {
                             return (
                               <Col className={styles.col} key={keyj}>
                                 <div className={styles.roomsAndPlansPrices}>
-                                  {updationRoomState === true &&
+                                  {updationRoomPriceState === true &&
                                   updationRoom.id === roomPrice.id ? (
                                     <input
                                       type="text"
@@ -796,8 +801,8 @@ const updatePlansRates = async (plan,updationRoom) => {
                                         border: "none",
                                         justifyContent: "center",
                                       }}
-                                      onClick={()=>{setUpdationRoomState(true);setUpdationRoom(roomPrice);
-                                        setUpdationRoomState(true);
+                                      onClick={()=>{setUpdationRoomState(false);setUpdationRoom(roomPrice);
+                                        setUpdationRoomPriceState(true);
                                         setUpdationRoomPlanState(false);}}
                                     >
                                       ₹{roomPrice.price}
@@ -916,50 +921,51 @@ const updatePlansRates = async (plan,updationRoom) => {
                                   <>
                                     {filteredPlan.name === planName.name && (
                                       <Row className={styles.content} key={key}>
-                                        <Col className={styles.Icon}></Col>
-                                        <Col className={styles.leftSection}>
-                                          {planName.name}
-                                          <AiFillThunderbolt
-                                            size={15}
-                                            style={{
-                                              marginTop: "5px",
-                                              color: "#2494d1",
-                                            }}
-                                          />
-                                        </Col>
-                                        <Col className={styles.midSection}>
-                                          Plan Rates
-                                        </Col>
-                                        <Col className={styles.rightSection}>
-                                          <Row className={styles.data}>
-                                            {sevenDaysDataOfRoom.map(
-                                              (planRatesOfSevenDays) => {
-                                                return (
-                                                  <>
-                                                    {planRatesOfSevenDays.roomRatePlans.map(
-                                                      (
-                                                        plansRatesToShow,
-                                                        keyi
-                                                      ) => {
-                                                        return (
-                                                          <>
-                                                            {planName.name ==
-                                                              plansRatesToShow.name && (
-                                                                <Col key={keyi} className={styles.col}>
-                                                                {updationRoomState === true && updationRoom.id === planRatesOfSevenDays.id ?<input type="text" name={plansRatesToShow.name} placeholder={plansRatesToShow.amount} className={styles.plansInput} />: plansRatesToShow.amount}
-                                                              </Col>
-                                                            )}
-                                                          </>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </>
-                                                );
-                                              }
-                                            )}
-                                          </Row>
-                                        </Col>
+                                    <Col className={styles.Icon}></Col>
+                                    <Col className={styles.leftSection}>
+                                      {planName.name}
+                                      <AiFillThunderbolt
+                                        size={15}
+                                        style={{
+                                          marginTop: "5px",
+                                          color: "#2494d1",
+                                        }}
+                                      />
+                                    </Col>
+                                    <Col className={styles.midSection}>
+                                      Plan Rates
+                                    </Col>
+                                    <Col className={styles.rightSection}>
+                                      <Row className={styles.data}>
+                                        {sevenDaysDataOfRoom?.map(
+                                          (planRatesOfSevenDays) => {
+                                            return (
+                                              <>
+                                                {planRatesOfSevenDays?.roomRatePlans?.map(
+                                                  (plansRatesToShow, keyi) => {
+                                                    return (
+                                                      <>
+                                                        {planName.name == plansRatesToShow.name && (
+                                                          <Col key={keyi} className={styles.col}>
+                                                            {updationRoomPlanState === true && updationRoom.id === planRatesOfSevenDays.id && plansRatesToShow.code === updationRoomPlan.code ?<input type="text" value={updationRoomPlan.amount} name={plansRatesToShow.name} onChange={(e)=>handleUpdationOfRoomsPlans(e,plansRatesToShow)} placeholder={plansRatesToShow.amount} className={styles.plansInput} />: <span onClick={()=>{
+                                                              setUpdationRoomPlan(plansRatesToShow);
+                                                              setUpdationRoomPlanState(true);
+                                                              setUpdationRoom(planRatesOfSevenDays);
+                                                              setUpdationRoomState(false);
+                                                              }}>{plansRatesToShow.amount}</span>}
+                                                          </Col>
+                                                        )}
+                                                      </>
+                                                    );
+                                                  }
+                                                )}
+                                              </>
+                                            );
+                                          }
+                                        )}
                                       </Row>
+                                    </Col>
+                                  </Row>
                                     )}
                                   </>
                                 )}
