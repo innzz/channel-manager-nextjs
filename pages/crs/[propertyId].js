@@ -313,6 +313,22 @@ export default function PropertyId() {
 
   // console.log(updationRoom);
   // console.log(sevenDaysDataOfRoom);
+  const fetchAPI =
+    "https://api.bookonelocal.in/channel-integration/api/channelManager/property/";
+
+  const fetchPropertyData = async (propertyId, tokenRes) => {
+    const res = await fetch(`${fetchAPI}${propertyId}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${tokenRes}`,
+        "Content-Type": "application/json",
+        APP_ID: "BOOKONE_WEB_APP",
+      },
+    });
+    const json = await res.json();
+    return json;
+  };
 
   useEffect(() => {
     if (propertyId !== undefined) {
@@ -320,36 +336,23 @@ export default function PropertyId() {
       setCurrentdate(currentDateFuncResponse);
       let tokenRes = localStorage.getItem("token");
       setToken(tokenRes);
-      fetch(
-        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${propertyId}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${tokenRes}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((resJson) => {
-          setRoomDetails(resJson.roomDtos);
-          getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
-          setRoomDetailsToShow(resJson?.roomDtos[0]);
-          // console.log(resJson?.roomDtos[0].bookoneRoomId);
-          // console.log(resJson);
-          //   console.log(sevenDayData);
-          //   console.log(resJson);
-        });
+      fetchPropertyData(propertyId, tokenRes).then((resJson) => {
+        setRoomDetails(resJson.roomDtos);
+        getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
+        setRoomDetailsToShow(resJson?.roomDtos[0]);
+        // console.log(resJson?.roomDtos[0].bookoneRoomId);
+        // console.log(resJson);
+        //   console.log(sevenDayData);
+        //   console.log(resJson);
+      });
     }
   }, [router]);
-  //   console.log(sevenDaysDataOfRoom);
-  //   console.log(roomDetailsToShow);
-  console.log(roomDetails);
+  // console.log(sevenDaysDataOfRoom);
+  // console.log(roomDetailsToShow);
+  // console.log(roomDetails);
   // console.log(filteredPlan);
   // console.log(roomId);
-  console.log(sevenDaysDataOfRoom);
+  // console.log(sevenDaysDataOfRoom);
 
   const handleRoomTypesDrop = () => {
     setRoomType(!roomType);
@@ -658,7 +661,6 @@ export default function PropertyId() {
                         className={`${styles.leftSection} flex items-center`}
                       >
                         <span>{val.name}</span>
-                        <BulkUpdateModal />
                       </Col>
                       <Col className={styles.midSection}>Stock</Col>
                       <Col className={styles.rightSection}>
@@ -1087,6 +1089,9 @@ export default function PropertyId() {
                 >
                   Clear all filters
                 </span>
+                <Col>
+                  <BulkUpdateModal />
+                </Col>
               </Col>
               <Col className={styles.rightlinkText}>
                 <div className={`${styles.linkText} flex`}>
