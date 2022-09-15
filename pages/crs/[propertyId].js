@@ -463,7 +463,7 @@ export default function PropertyId() {
               </Col>
             </Row>
           </div>
-          <Row className={styles.content}>
+          <Row className={styles.content} style={{height: "35px"}}>
             <Col className={styles.Icon}></Col>
             <Col
               className={styles.leftSection}
@@ -490,6 +490,7 @@ export default function PropertyId() {
                             display: "flex",
                             justifyContent: "space-evenly",
                             alignItems: "center",
+                            width: "100%"
                           }}
                         >
                           <span
