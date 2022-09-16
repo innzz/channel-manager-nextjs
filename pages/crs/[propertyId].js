@@ -345,7 +345,7 @@ export default function PropertyId() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
-  // console.log("plans",selectedRoomPlans)
+  console.log(roomDetailsToShow)
 
 
   return (
@@ -494,7 +494,7 @@ export default function PropertyId() {
               </Col>
             </Row>
           </div>
-          <Row className={styles.content} style={{height: "35px"}}>
+          <Row className={styles.content}>
             {/* <Col className={styles.Icon}></Col> */}
             <Col
               className={styles.leftSection}
