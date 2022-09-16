@@ -7,16 +7,23 @@ import { TbNotes } from "react-icons/tb";
 import { MdSupportAgent } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
 import { Col } from "react-bootstrap";
-
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import styles from "../styles/Navbar.module.css";
 import { MdSystemUpdateAlt } from "react-icons/md";
 function NavBar(props) {
+  const router = useRouter();
   // console.log(props.bookingId);
   const [bthList, setBthList] = useState(false);
   const bookOneTextHotel = () => {
     setBthList(!bthList);
   };
+
+  const logOutFunction = ()=>{
+    localStorage.removeItem("token");
+    router.push('/')
+  }
+
   return (
     <div className={styles.navbarContainer}>
       <Col className={styles.logo}>
@@ -75,12 +82,12 @@ function NavBar(props) {
                 <span>Bookings</span>
               </li>
             </Link>
-            <Link href="/">
-              <li className="flex gap-2">
+            {/* <Link href="/" onClick={()=>{localStorage.removeItem("token")}}> */}
+              <li className="flex gap-2" onClick={logOutFunction}>
                 <AiOutlineLogout className="h-6" />
                 <span>Logout</span>
               </li>
-            </Link>
+            {/* </Link> */}
           </div>
           {/* </div> */}
         </div>

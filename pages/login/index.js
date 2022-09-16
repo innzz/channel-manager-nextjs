@@ -15,7 +15,7 @@ const Login = () => {
   const router = useRouter();
   //   console.log(router);
   const signIn = (e) => {
-    console.log(radio);
+    // console.log(radio);
     e.preventDefault();
     fetch("https://api.bookonelocal.in/api-bookone/api/user/login", {
       method: "POST",

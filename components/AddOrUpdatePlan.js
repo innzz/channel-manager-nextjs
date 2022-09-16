@@ -24,7 +24,7 @@ export default function AddOrUpdatePlan(props) {
   const [extraChargePerPerson, setExtraChargePerPerson] = useState("")
   const [extraChargePerChild, setExtraChargePerChild] = useState("")
   const [weeks, setWeeks] = useState([])
-  console.log(props.sevenDaysDataOfRoom[0]?.roomRatePlans);
+  // console.log(props.sevenDaysDataOfRoom[0]?.roomRatePlans);
   return (
     <>
       <button

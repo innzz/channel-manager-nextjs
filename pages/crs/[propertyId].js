@@ -282,26 +282,31 @@ export default function PropertyId() {
       let currentDateFuncResponse = getCurrentDateFunction();
       setCurrentdate(currentDateFuncResponse);
       let tokenRes = localStorage.getItem("token");
-      setToken(tokenRes);
-      fetch(
-        `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${propertyId}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${tokenRes}`,
-            "Content-Type": "application/json",
-            APP_ID: "BOOKONE_WEB_APP",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((resJson) => {
-          setRoomDetails(resJson.roomDtos);
-          getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
-          setRoomDetailsToShow(resJson?.roomDtos[0]);
-          setDefaultRoomId(resJson?.roomDtos[0].bookoneRoomId);
-        });
+      if (!localStorage.getItem("token")) {
+        router.push('/')
+      }
+      else{
+        setToken(tokenRes);
+        fetch(
+          `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${propertyId}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${tokenRes}`,
+              "Content-Type": "application/json",
+              APP_ID: "BOOKONE_WEB_APP",
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((resJson) => {
+            setRoomDetails(resJson.roomDtos);
+            getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
+            setRoomDetailsToShow(resJson?.roomDtos[0]);
+            setDefaultRoomId(resJson?.roomDtos[0].bookoneRoomId);
+          });
+      }
     }
   }, [router]);
 
