@@ -19,6 +19,7 @@ import "antd/dist/antd.css";
 import moment from "moment";
 import BulkUpdateModal from "../../components/BulkUpdateModal";
 import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
+import Duplicate from "../../components/Duplicate";
 import { DataByDates } from "../../assets/api/dataByDates";
 import { DataOfSevenDays } from "../../assets/api/dataOfSevenDays";
 import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvailablity";
@@ -276,7 +277,6 @@ export default function PropertyId() {
     }
   };
 
-
   useEffect(() => {
     if (propertyId !== undefined) {
       let currentDateFuncResponse = getCurrentDateFunction();
@@ -316,7 +316,6 @@ export default function PropertyId() {
   const handleRatesAvailiblityDropDown = () => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
-
 
   return (
     <div className={styles.outerContainer}>
@@ -981,6 +980,11 @@ export default function PropertyId() {
                     roomDetailsToShow={roomDetailsToShow}
                     sevenDaysDataOfRoom={sevenDaysDataOfRoom}
                   />
+                  <Duplicate
+                    propertyId={propertyId}
+                    defaultRoomId={defaultRoomId}
+                    token={token}
+                  />
                 </div>
               </Col>
               <Col className={styles.rightlinkText}>
@@ -996,4 +1000,3 @@ export default function PropertyId() {
     </div>
   );
 }
-
