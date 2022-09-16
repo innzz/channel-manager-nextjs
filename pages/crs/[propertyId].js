@@ -38,6 +38,7 @@ export default function PropertyId() {
   const [seventhDayDate, setSeventhDayDate] = useState("");
   const [roomDetailsToShow, setRoomDetailsToShow] = useState("");
   const [sevenDaysDataOfRoom, setSevenDaysDataofRooms] = useState([]);
+  const [selectedRoomPlans, setSelectedRoomPlans] = useState([]);
   const [filteredPlan, setFilteredPlanName] = useState("");
   const [token, setToken] = useState("");
   const [noOfDays, setNoOfDays] = useState(7);
@@ -56,6 +57,27 @@ export default function PropertyId() {
   const handleBulkUpdateModal = () => {
     setBulkUpdateModal(!bulkUpdateModal);
   };
+
+  //Get Plans of Selected room
+  const getPlansOfSelectedRoom = async (propertyId,roomId,token)=>{
+    console.log("plans func",roomId)
+    fetch(
+      `https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyId}/room/${roomId}/roomPlan`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((resJson) => {
+        setSelectedRoomPlans(resJson);
+      });
+  }
 
   //It will give Current Date
   const getCurrentDateFunction = () => {
@@ -304,7 +326,8 @@ export default function PropertyId() {
             setRoomDetails(resJson.roomDtos);
             getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
             setRoomDetailsToShow(resJson?.roomDtos[0]);
-            setDefaultRoomId(resJson?.roomDtos[0].bookoneRoomId);
+            // setDefaultRoomId(resJson?.roomDtos[0].bookoneRoomId);
+            // getPlansOfSelectedRoom(propertyId,resJson?.roomDtos[0].bookoneRoomId,tokenRes);
           });
       }
     }
@@ -321,6 +344,8 @@ export default function PropertyId() {
   const handleRatesAvailiblityDropDown = () => {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
+
+  // console.log("plans",selectedRoomPlans)
 
 
   return (
@@ -649,6 +674,7 @@ export default function PropertyId() {
 
                     {val.name === sevenDaysDataOfRoom[0]?.roomName && (
                       <>
+                        {/* {selectedRoomPlans.map( */}
                         {sevenDaysDataOfRoom[0].roomRatePlans.map(
                           (planName, key) => {
                             return (
@@ -734,9 +760,7 @@ export default function PropertyId() {
                                                                   );
                                                                 }}
                                                               >
-                                                                {
-                                                                  plansRatesToShow.amount
-                                                                }
+                                                                {parseInt(plansRatesToShow.amount) > 0 ? `₹${parseInt(plansRatesToShow.amount)}` : 'No Plan'}
                                                               </span>
                                                             )}
                                                           </Col>
@@ -907,8 +931,8 @@ export default function PropertyId() {
                             setRoomDetailsToShow(val);
                             getSevenDaysDataOfRoom(token, val.bookoneRoomId);
                             setFilteredPlanName("");
-                            let roomId = val?.bookoneRoomId;
-                            setDefaultRoomId(roomId);
+                            // let roomId = val?.bookoneRoomId;
+                            // setDefaultRoomId(roomId);
                           }}
                         >
                           {val.name}
