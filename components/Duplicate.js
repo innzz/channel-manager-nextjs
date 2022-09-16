@@ -6,9 +6,9 @@ import axios from "axios";
 import "antd/dist/antd.css";
 import moment from "moment";
 
-export default function Duplicate({ propertyId, defaultRoomId, token }) {
+export default function Duplicate({ propertyId, roomDetails, token }) {
   const [showModal, setShowModal] = React.useState(false);
-  const [dropdownPlan, setDropdownPlan] = useState(!true);
+  const [dropdownPlan, setDropdownPlan] = useState(false);
   const [currencyDropDown, setCurrencyDropDown] = useState(false);
   const [rateShow, setRateShow] = useState(true);
   const [restrictionShow, setRestrictionShow] = useState(false);
@@ -18,11 +18,11 @@ export default function Duplicate({ propertyId, defaultRoomId, token }) {
   const [planDataDetail, setPlanDataDetail] = useState([]);
   const [daysOfWeek, setDaysOfWeek] = useState([]);
   // console.log(defaultRoomId, propertyId);
-  console.log(planDataDetail);
+  // console.log(planDataDetail);
 
   const roomPlanResponse = async () => {
     const res = await axios.get(
-      `https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyId}/room/${defaultRoomId}/roomPlan`,
+      `https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyId}/room/${roomDetails.bookoneRoomId}/roomPlan`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,7 +40,9 @@ export default function Duplicate({ propertyId, defaultRoomId, token }) {
     roomPlanResponse();
   }, []);
 
-  console.log(dropdownPlan);
+  // console.log(dropdownPlan);
+  console.log(propertyId, roomDetails.bookoneRoomId, token);
+  // console.log(planData);
 
   return (
     <>
@@ -75,7 +77,7 @@ export default function Duplicate({ propertyId, defaultRoomId, token }) {
                         aria-expanded="true"
                         aria-haspopup="true"
                         onClick={() => {
-                          console.log(dropdownPlan);
+                          // console.log(dropdownPlan);
                           if (dropdownPlan === false) {
                             setDropdownPlan(true);
                           } else {

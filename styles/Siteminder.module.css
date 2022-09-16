@@ -220,13 +220,18 @@
   margin-bottom: 15px;
   border: 1px solid #ddd;
 }
+
 .heading {
   margin: 0 0;
   background-color: #afd8fe;
 }
 .content {
   margin: 0 0;
+  border-bottom: 1px solid #ddd;
+  font-weight: 450;
 }
+
+
 .col {
   text-align: center;
   padding: 0;
