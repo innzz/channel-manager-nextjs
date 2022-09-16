@@ -364,9 +364,10 @@ export default function PropertyId() {
               <Col className={styles.dateSelector}>
                 <Col>
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <span>From: </span>
+                    {/* <span>From: </span> */}
                     <DatePicker
                       size="small"
+                      placeholder="From Date"
                       onChange={(value) => {
                         const fromDate = moment(value).format("YYYY-MM-DD");
                         setCurrentdate(fromDate);
@@ -374,9 +375,9 @@ export default function PropertyId() {
                     />
                   </div>
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <span>To: </span>
+                    {/* <span>To: </span> */}
                     <DatePicker
-                      placeholder="End Date"
+                      placeholder="To Date"
                       size="small"
                       onChange={(value) => {
                         const endDate = moment(value).format("YYYY-MM-DD");
@@ -494,12 +495,101 @@ export default function PropertyId() {
             </Row>
           </div>
           <Row className={styles.content} style={{height: "35px"}}>
-            <Col className={styles.Icon}></Col>
+            {/* <Col className={styles.Icon}></Col> */}
             <Col
               className={styles.leftSection}
               style={{ border: "none" }}
-            ></Col>
-            <Col className={styles.midSection} style={{ border: "none" }}></Col>
+            ><Col className={styles.buttons}>
+            <button
+              onClick={handleRoomTypesDrop}
+              className={`${styles.button} flex h-8 p-1`}
+            >
+              <FaBed
+                style={{
+                  marginRight: "8px",
+                  marginBottom: "2px",
+                  marginTop: "2px",
+                }}
+                size={15}
+              />
+              All Room Types
+              <MdOutlineArrowDropDown
+                size={22}
+                style={{ marginLeft: "2px", marginBottom: "2px" }}
+              />
+              <div
+                className={styles.roomTypeDrop}
+                onMouseLeave={handleRoomTypesDrop}
+                style={
+                  roomType ? { display: "block" } : { display: "none" }
+                }
+              >
+                {roomDetails?.map((val, i) => {
+                  return (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        setRoomDetailsToShow(val);
+                        getSevenDaysDataOfRoom(token, val.bookoneRoomId);
+                        setFilteredPlanName("");
+                        // let roomId = val?.bookoneRoomId;
+                        // setDefaultRoomId(roomId);
+                      }}
+                    >
+                      {val.name}
+                    </li>
+                  );
+                })}
+              </div>
+            </button>
+            <button
+              className={`${styles.button} flex h-8 p-1 px-2`}
+              onClick={handleRateDrop}
+            >
+              <BsFillTagFill
+                style={{
+                  marginRight: "8px",
+                  marginBottom: "2px",
+                  marginTop: "3px",
+                }}
+              />
+              All Rates Plans
+              <MdOutlineArrowDropDown
+                size={22}
+                style={{ marginLeft: "2px", marginBottom: "4px" }}
+              />
+              <div
+                className={styles.ratePlanDrop}
+                onMouseLeave={handleRateDrop}
+                style={
+                  ratePlans ? { display: "block" } : { display: "none" }
+                }
+              >
+                <li
+                  onClick={() => {
+                    setFilteredPlanName("");
+                  }}
+                >
+                  All
+                </li>
+                {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
+                  (dropdownPlan, dropKey) => {
+                    return (
+                      <li
+                        key={dropKey}
+                        onClick={() => {
+                          setFilteredPlanName(dropdownPlan);
+                        }}
+                      >
+                        {dropdownPlan.name}
+                      </li>
+                    );
+                  }
+                )}
+              </div>
+            </button>
+          </Col></Col>
+            {/* <Col className={styles.midSection} style={{ border: "none" }}></Col> */}
             <Col className={styles.rightSection}>
               <Row className={styles.data}>
                 {sevenDaysDataOfRoom.map((room, keyj) => {
@@ -566,7 +656,7 @@ export default function PropertyId() {
                       >
                         <span>{val.name}</span>
                       </Col>
-                      <Col className={styles.midSection}>Stock</Col>
+                      <Col className={styles.midSection}>Available:</Col>
                       <Col className={styles.rightSection}>
                         <Row className={styles.data}>
                           {sevenDaysDataOfRoom.map((avail) => {
@@ -693,7 +783,7 @@ export default function PropertyId() {
                                       />
                                     </Col>
                                     <Col className={styles.midSection}>
-                                      Plan Rates
+                                      Plan Rates:
                                     </Col>
                                     <Col className={styles.rightSection}>
                                       <Row className={styles.data}>
@@ -899,7 +989,7 @@ export default function PropertyId() {
           <div className={styles.buttonGroup}>
             <Row>
               <Col className={styles.buttons}>
-                <button
+                {/* <button
                   onClick={handleRoomTypesDrop}
                   className={`${styles.button} flex h-8 p-1`}
                 >
@@ -997,8 +1087,8 @@ export default function PropertyId() {
                   }}
                 >
                   Clear all filters
-                </span>
-                <div className="ml-3">
+                </span> */}
+                <div style={{width: "40%", display: "flex",justifyContent: "space-between"}}>
                   <BulkUpdateModal
                     roomDetails={sevenDaysDataOfRoom[0]}
                     setSevenDaysDataofRooms={setSevenDaysDataofRooms}
@@ -1006,6 +1096,7 @@ export default function PropertyId() {
                     token={token}
                   />
                   <AddOrUpdatePlan
+                  className="ml-3"
                     roomDetails={roomDetails}
                     roomDetailsToShow={roomDetailsToShow}
                     sevenDaysDataOfRoom={sevenDaysDataOfRoom}
