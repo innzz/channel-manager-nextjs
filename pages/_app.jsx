@@ -1,22 +1,25 @@
-import '../styles/globals.css'
-import "./index.css"
+import "../styles/globals.css";
+import "./index.css";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import {SSRProvider} from '@react-aria/ssr'; 
+import { SSRProvider } from "@react-aria/ssr";
 import { useState } from "react";
 
 function MyApp({ Component, pageProps }) {
   const [showTravelAgencyName, setShowTravelAgencyName] = useState({});
-  return(
+  return (
     <>
       <SSRProvider>
-       
-      {/* <NavBar /> */}
-      <Component {...pageProps} showTravelAgencyName={showTravelAgencyName} setShowTravelAgencyName={setShowTravelAgencyName}/>
+        {/* <NavBar /> */}
+        <Component
+          {...pageProps}
+          showTravelAgencyName={showTravelAgencyName}
+          setShowTravelAgencyName={setShowTravelAgencyName}
+        />
       </SSRProvider>
     </>
-    )
+  );
 }
 
-export default MyApp
+export default MyApp;

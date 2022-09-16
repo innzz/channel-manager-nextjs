@@ -18,10 +18,11 @@ import { DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import BulkUpdateModal from "../../components/BulkUpdateModal";
-import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 import { DataByDates } from "../../assets/api/dataByDates";
 import { DataOfSevenDays } from "../../assets/api/dataOfSevenDays";
 import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvailablity";
+import Duplicate from "../../components/duplicate";
+import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 
 export default function PropertyId() {
   let router = useRouter();
@@ -59,8 +60,8 @@ export default function PropertyId() {
   };
 
   //Get Plans of Selected room
-  const getPlansOfSelectedRoom = async (propertyId,roomId,token)=>{
-    console.log("plans func",roomId)
+  const getPlansOfSelectedRoom = async (propertyId, roomId, token) => {
+    console.log("plans func", roomId);
     fetch(
       `https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyId}/room/${roomId}/roomPlan`,
       {
@@ -77,7 +78,7 @@ export default function PropertyId() {
       .then((resJson) => {
         setSelectedRoomPlans(resJson);
       });
-  }
+  };
 
   //It will give Current Date
   const getCurrentDateFunction = () => {
@@ -298,16 +299,14 @@ export default function PropertyId() {
     }
   };
 
-
   useEffect(() => {
     if (propertyId !== undefined) {
       let currentDateFuncResponse = getCurrentDateFunction();
       setCurrentdate(currentDateFuncResponse);
       let tokenRes = localStorage.getItem("token");
       if (!localStorage.getItem("token")) {
-        router.push('/')
-      }
-      else{
+        router.push("/");
+      } else {
         setToken(tokenRes);
         fetch(
           `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${propertyId}`,
@@ -324,7 +323,10 @@ export default function PropertyId() {
           .then((res) => res.json())
           .then((resJson) => {
             setRoomDetails(resJson.roomDtos);
-            getSevenDaysDataOfRoom(tokenRes, resJson?.roomDtos[0].bookoneRoomId);
+            getSevenDaysDataOfRoom(
+              tokenRes,
+              resJson?.roomDtos[0].bookoneRoomId
+            );
             setRoomDetailsToShow(resJson?.roomDtos[0]);
             // setDefaultRoomId(resJson?.roomDtos[0].bookoneRoomId);
             // getPlansOfSelectedRoom(propertyId,resJson?.roomDtos[0].bookoneRoomId,tokenRes);
@@ -345,8 +347,7 @@ export default function PropertyId() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
-  console.log(roomDetailsToShow)
-
+  // console.log(sevenDaysDataOfRoom[0])
 
   return (
     <div className={styles.outerContainer}>
@@ -496,99 +497,98 @@ export default function PropertyId() {
           </div>
           <Row className={styles.content}>
             {/* <Col className={styles.Icon}></Col> */}
-            <Col
-              className={styles.leftSection}
-              style={{ border: "none" }}
-            ><Col className={styles.buttons}>
-            <button
-              onClick={handleRoomTypesDrop}
-              className={`${styles.button} flex h-8 p-1`}
-            >
-              <FaBed
-                style={{
-                  marginRight: "8px",
-                  marginBottom: "2px",
-                  marginTop: "2px",
-                }}
-                size={15}
-              />
-              All Room Types
-              <MdOutlineArrowDropDown
-                size={22}
-                style={{ marginLeft: "2px", marginBottom: "2px" }}
-              />
-              <div
-                className={styles.roomTypeDrop}
-                onMouseLeave={handleRoomTypesDrop}
-                style={
-                  roomType ? { display: "block" } : { display: "none" }
-                }
-              >
-                {roomDetails?.map((val, i) => {
-                  return (
+            <Col className={styles.leftSection} style={{ border: "none" }}>
+              <Col className={styles.buttons}>
+                <button
+                  onClick={handleRoomTypesDrop}
+                  className={`${styles.button} flex h-8 p-1`}
+                >
+                  <FaBed
+                    style={{
+                      marginRight: "8px",
+                      marginBottom: "2px",
+                      marginTop: "2px",
+                    }}
+                    size={15}
+                  />
+                  All Room Types
+                  <MdOutlineArrowDropDown
+                    size={22}
+                    style={{ marginLeft: "2px", marginBottom: "2px" }}
+                  />
+                  <div
+                    className={styles.roomTypeDrop}
+                    onMouseLeave={handleRoomTypesDrop}
+                    style={
+                      roomType ? { display: "block" } : { display: "none" }
+                    }
+                  >
+                    {roomDetails?.map((val, i) => {
+                      return (
+                        <li
+                          key={i}
+                          onClick={() => {
+                            setRoomDetailsToShow(val);
+                            getSevenDaysDataOfRoom(token, val.bookoneRoomId);
+                            setFilteredPlanName("");
+                            // let roomId = val?.bookoneRoomId;
+                            // setDefaultRoomId(roomId);
+                          }}
+                        >
+                          {val.name}
+                        </li>
+                      );
+                    })}
+                  </div>
+                </button>
+                <button
+                  className={`${styles.button} flex h-8 p-1 px-2`}
+                  onClick={handleRateDrop}
+                >
+                  <BsFillTagFill
+                    style={{
+                      marginRight: "8px",
+                      marginBottom: "2px",
+                      marginTop: "3px",
+                    }}
+                  />
+                  All Rates Plans
+                  <MdOutlineArrowDropDown
+                    size={22}
+                    style={{ marginLeft: "2px", marginBottom: "4px" }}
+                  />
+                  <div
+                    className={styles.ratePlanDrop}
+                    onMouseLeave={handleRateDrop}
+                    style={
+                      ratePlans ? { display: "block" } : { display: "none" }
+                    }
+                  >
                     <li
-                      key={i}
                       onClick={() => {
-                        setRoomDetailsToShow(val);
-                        getSevenDaysDataOfRoom(token, val.bookoneRoomId);
                         setFilteredPlanName("");
-                        // let roomId = val?.bookoneRoomId;
-                        // setDefaultRoomId(roomId);
                       }}
                     >
-                      {val.name}
+                      All
                     </li>
-                  );
-                })}
-              </div>
-            </button>
-            <button
-              className={`${styles.button} flex h-8 p-1 px-2`}
-              onClick={handleRateDrop}
-            >
-              <BsFillTagFill
-                style={{
-                  marginRight: "8px",
-                  marginBottom: "2px",
-                  marginTop: "3px",
-                }}
-              />
-              All Rates Plans
-              <MdOutlineArrowDropDown
-                size={22}
-                style={{ marginLeft: "2px", marginBottom: "4px" }}
-              />
-              <div
-                className={styles.ratePlanDrop}
-                onMouseLeave={handleRateDrop}
-                style={
-                  ratePlans ? { display: "block" } : { display: "none" }
-                }
-              >
-                <li
-                  onClick={() => {
-                    setFilteredPlanName("");
-                  }}
-                >
-                  All
-                </li>
-                {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
-                  (dropdownPlan, dropKey) => {
-                    return (
-                      <li
-                        key={dropKey}
-                        onClick={() => {
-                          setFilteredPlanName(dropdownPlan);
-                        }}
-                      >
-                        {dropdownPlan.name}
-                      </li>
-                    );
-                  }
-                )}
-              </div>
-            </button>
-          </Col></Col>
+                    {sevenDaysDataOfRoom[0]?.roomRatePlans.map(
+                      (dropdownPlan, dropKey) => {
+                        return (
+                          <li
+                            key={dropKey}
+                            onClick={() => {
+                              setFilteredPlanName(dropdownPlan);
+                            }}
+                          >
+                            {dropdownPlan.name}
+                          </li>
+                        );
+                      }
+                    )}
+                  </div>
+                </button>
+              </Col>
+            </Col>
             {/* <Col className={styles.midSection} style={{ border: "none" }}></Col> */}
             <Col className={styles.rightSection}>
               <Row className={styles.data}>
@@ -610,7 +610,7 @@ export default function PropertyId() {
                             display: "flex",
                             justifyContent: "space-evenly",
                             alignItems: "center",
-                            width: "100%"
+                            width: "100%",
                           }}
                         >
                           <span
@@ -850,7 +850,13 @@ export default function PropertyId() {
                                                                   );
                                                                 }}
                                                               >
-                                                                {parseInt(plansRatesToShow.amount) > 0 ? `₹${parseInt(plansRatesToShow.amount)}` : 'No Plan'}
+                                                                {parseInt(
+                                                                  plansRatesToShow.amount
+                                                                ) > 0
+                                                                  ? `₹${parseInt(
+                                                                      plansRatesToShow.amount
+                                                                    )}`
+                                                                  : "No Plan"}
                                                               </span>
                                                             )}
                                                           </Col>
@@ -1088,19 +1094,26 @@ export default function PropertyId() {
                 >
                   Clear all filters
                 </span> */}
-                <div style={{width: "40%", display: "flex",justifyContent: "space-between"}}>
-                  <BulkUpdateModal
+                <div
+                  style={{
+                    width: "40%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                   <BulkUpdateModal
                     roomDetails={sevenDaysDataOfRoom[0]}
                     setSevenDaysDataofRooms={setSevenDaysDataofRooms}
                     setCurrentdate={setCurrentdate}
                     token={token}
-                  />
-                  <AddOrUpdatePlan
-                  className="ml-3"
-                    roomDetails={roomDetails}
-                    roomDetailsToShow={roomDetailsToShow}
-                    sevenDaysDataOfRoom={sevenDaysDataOfRoom}
-                  />
+                    />
+                  {/* <AddOrUpdatePlan
+                    roomId={roomDetailsToShow.bookoneRoomId}
+                    propertyId={propertyId}
+                    setSevenDaysDataofRooms={setSevenDaysDataofRooms}
+                    setCurrentdate={setCurrentdate}
+                    token={token}
+                   /> */}
                 </div>
               </Col>
               <Col className={styles.rightlinkText}>
@@ -1116,4 +1129,3 @@ export default function PropertyId() {
     </div>
   );
 }
-
