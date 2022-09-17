@@ -21,7 +21,6 @@ import BulkUpdateModal from "../../components/BulkUpdateModal";
 import { DataByDates } from "../../assets/api/dataByDates";
 import { DataOfSevenDays } from "../../assets/api/dataOfSevenDays";
 import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvailablity";
-import Duplicate from "../../components/duplicate";
 import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 
 export default function PropertyId() {
