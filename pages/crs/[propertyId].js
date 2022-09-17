@@ -500,7 +500,7 @@ export default function PropertyId() {
               </Col>
             </Row>
           </div>
-          <Row className={`${styles.content} py-2`} style={{ height: "35px" }}>
+          <Row className={` py-2`} style={{ height: "35px" }}>
             {/* <Col className={styles.Icon}></Col> */}
             <Col className={styles.leftSection} style={{ border: "none" }}>
               <Col className={styles.buttons}>
@@ -655,15 +655,15 @@ export default function PropertyId() {
             return (
               <>
                 {val.name == roomDetailsToShow?.name && (
-                  <div key={i} className={styles.item}>
+                  <div key={i} className={`${styles.item}`}>
                     <Row className={`${styles.heading} flex items-center`}>
                       <Col className={styles.Icon}>
-                        <FaBed size={23} style={{ marginTop: "5px" }} />
+                        <FaBed size={23} className=" text-gray-900" style={{ marginTop: "5px" }} />
                       </Col>
                       <Col
                         className={`${styles.leftSection} flex items-center ml-1`}
                       >
-                        <span className="font-bold text-xl">{val.name}</span>
+                        <span className="font-bold text-xl text-gray-900">{val.name}</span>
                       </Col>
                       <Col className={`${styles.midSection} font-semibold`}>Avail:</Col>
                       <Col className={styles.rightSection}>
