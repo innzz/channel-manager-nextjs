@@ -689,7 +689,7 @@ export default function PropertyId() {
                       </Col>
                       <Col className={`${styles.midSection}  text-gray-200 font-semibold`}>Avail:</Col>
                       <Col className={styles.rightSection}>
-                        <Row className={`${styles.data} text-gray-200 font-semibold`}>
+                        <Row className={`${styles.data}`}>
                           {sevenDaysDataOfRoom.map((avail) => {
                             return (
                               <>
@@ -701,7 +701,7 @@ export default function PropertyId() {
                                         type="text"
                                         name="noOfAvailable"
                                         placeholder={updationRoom.noOfAvailable}
-                                        className={styles.availabilityInput}
+                                        className={`${styles.availabilityInput} text-black font-semibold`}
                                         value={updationRoom.noOfAvailable}
                                         onChange={
                                           handleUpdationOfRoomRatesAndAvailablity
@@ -709,6 +709,7 @@ export default function PropertyId() {
                                       />
                                     ) : (
                                       <span
+                                      className="text-gray-200 font-semibold"
                                         onClick={() => {
                                           setUpdationRoom(avail);
                                           setUpdationRoomState(true);
