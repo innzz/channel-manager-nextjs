@@ -114,7 +114,8 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
   return (
     <>
       <button
-        className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-3 py-2 rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+      style={{backgroundColor:"#1D174D"}}
+        className=" text-white font-bold uppercase text-sm px-3 py-2 rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
       >

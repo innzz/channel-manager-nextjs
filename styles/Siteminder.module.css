@@ -57,16 +57,16 @@
   left: -100px;
   right: -100px;
   bottom: 0;
-  border-top: 1px solid #cee4f8;
-  border-bottom: 1px solid #cee4f8;
+  border-top: 1px solid hsl(248, 20%, 55%);
+  border-bottom: 1px solid hsl(248, 20%, 55%);
   z-index: -1;
   box-shadow: 0px 1px 5px rgb(171, 170, 170);
-  background-color: #cee4f8;
+  background-color: hsl(248, 20%, 55%);
 }
 
 .topBar {
   position: relative;
-  background-color: #cee4f8;
+  background-color: hsl(248, 20%, 55%);
   z-index: 1;
 }
 
@@ -109,7 +109,7 @@
   flex-direction: column;
   text-align: center;
   padding: 0;
-  line-height: 18px;
+  line-height: 24px;
   padding: 5px 0;
   border-right: 1px solid #eaf5ff;
 }
@@ -130,8 +130,8 @@
 .button {
   border: none;
   padding: 0px 10px;
-  background-color: #b4d6f4;
-  border: 1px solid #b4d6f4;
+  background-color: #1D174D;
+  border: 1px solid #1D174D;
   border-radius: 6px;
   position: relative;
 }
@@ -152,7 +152,7 @@
 
 .button:hover {
   position: relative;
-  background-color: rgb(149, 193, 235);
+  background-color: #1D174D;
 }
 .buttons {
   flex: 9;
@@ -223,7 +223,7 @@
 
 .heading {
   margin: 0 0;
-  background-color: #afd8fe;
+  background-color: hsl(248, 20%, 55%);
 }
 .content {
   margin: 0 0;
@@ -462,7 +462,7 @@
 }
 
 .roomTypeDrop > li:hover {
-  background-color: #136794;
+  background-color: hsl(247, 35%, 25%);
   color: white;
 }
 
@@ -490,7 +490,8 @@
 }
 
 .ratePlanDrop > li:hover {
-  background-color: #136794;
+  background-color: hsl(247, 35%, 25%);
+  color: white;;
   color: white;
 }
 
@@ -693,10 +694,10 @@
 }
 
 .findRatesButton {
-  border: 1px solid #2494d1;
+  border: 1px solid #1D174D;
   text-align: center;
   margin: 0;
-  background-color: #2494d1;
+  background-color: #1D174D;
   color: white;
   border-radius: 5px;
   font-size: 13px;
@@ -756,9 +757,9 @@
 
 .roomsAndPlansPricesSpan{
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 10px;
+  justify-content: left;
+  align-items: left;
+  padding: 5px 2px;
   font-weight: 600;
   border-top: 1px solid #ddd;
 
