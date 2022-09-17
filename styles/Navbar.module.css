@@ -1,6 +1,6 @@
 .navbarContainer{
     display: flex;
-    background-color: #001D37;
+    background-color: #1D174D;
 }
 
 .logo{
@@ -59,7 +59,7 @@
   }
   
   .roomTypeDrop > li:hover {
-    background-color: #136794;
+    background-color: hsl(247, 35%, 25%);
     color: white;
   }
   .bulkUpdateBtn > span {
