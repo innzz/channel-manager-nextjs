@@ -348,6 +348,7 @@ export default function PropertyId() {
   };
 
   // console.log(sevenDaysDataOfRoom[0])
+  console.log(roomDetailsToShow)
 
   return (
     <div className={styles.outerContainer}>
@@ -500,7 +501,7 @@ export default function PropertyId() {
               </Col>
             </Row>
           </div>
-          <Row className={`${styles.content} py-2`} style={{ height: "35px" }}>
+          <Row className={`${styles.content} py-2`}>
             {/* <Col className={styles.Icon}></Col> */}
             <Col className={styles.leftSection} style={{ border: "none" }}>
               <Col className={styles.buttons}>
@@ -1116,12 +1117,19 @@ export default function PropertyId() {
                     setCurrentdate={setCurrentdate}
                     token={token}
                     />
-                  <AddOrUpdatePlan
+                  {/* <AddOrUpdatePlan
                     roomDetails={sevenDaysDataOfRoom[0]}
                     setSevenDaysDataofRooms={setSevenDaysDataofRooms}
                     setCurrentdate={setCurrentdate}
                     token={token}
-                   />
+                   /> */}
+                  {roomDetailsToShow.bookoneRoomId !== undefined && <AddOrUpdatePlan
+                    roomDetails={roomDetailsToShow}
+                    propertyId={propertyId}
+                    setSevenDaysDataofRooms={setSevenDaysDataofRooms}
+                    setCurrentdate={setCurrentdate}
+                    token={token}
+                   />}
                 </div>
               </Col>
               <Col className={styles.rightlinkText}>
