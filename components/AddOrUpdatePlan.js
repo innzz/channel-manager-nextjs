@@ -21,7 +21,7 @@ export default function AddOrUpdatePlan({roomId,propertyId,token,setSevenDaysDat
               }
         });
         const roomPlansRes = await roomPlansReq.json();
-        console.log(roomPlansRes);
+        // console.log(roomPlansRes);
     }
 
   useEffect(() => {
