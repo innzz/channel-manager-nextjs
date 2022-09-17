@@ -18,11 +18,11 @@ import { DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import BulkUpdateModal from "../../components/BulkUpdateModal";
-import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 import { DataByDates } from "../../assets/api/dataByDates";
 import { DataOfSevenDays } from "../../assets/api/dataOfSevenDays";
 import { UpdateRatesAndAvailablity } from "../../assets/api/updateRatesAndAvailablity";
 import Duplicate from "../../components/duplicate";
+import AddOrUpdatePlan from "../../components/AddOrUpdatePlan";
 
 export default function PropertyId() {
   let router = useRouter();
@@ -347,7 +347,7 @@ export default function PropertyId() {
     setAllRatesAvailiblityDropDown(!allRatesAvailiblityDropDown);
   };
 
-  // console.log("plans",selectedRoomPlans)
+  // console.log(sevenDaysDataOfRoom[0])
 
   return (
     <div className={styles.outerContainer}>
@@ -1110,23 +1110,19 @@ export default function PropertyId() {
                     justifyContent: "space-between",
                   }}
                 >
-                  <BulkUpdateModal
+                   <BulkUpdateModal
                     roomDetails={sevenDaysDataOfRoom[0]}
                     setSevenDaysDataofRooms={setSevenDaysDataofRooms}
                     setCurrentdate={setCurrentdate}
                     token={token}
-                  />
+                    />
                   {/* <AddOrUpdatePlan
-                    className="ml-3"
-                    roomDetails={roomDetails}
-                    roomDetailsToShow={roomDetailsToShow}
-                    sevenDaysDataOfRoom={sevenDaysDataOfRoom}
-                  /> */}
-                  <Duplicate
-                    token={token}
+                    roomId={roomDetailsToShow.bookoneRoomId}
                     propertyId={propertyId}
-                    roomDetails={roomDetailsToShow}
-                  />
+                    setSevenDaysDataofRooms={setSevenDaysDataofRooms}
+                    setCurrentdate={setCurrentdate}
+                    token={token}
+                   /> */}
                 </div>
               </Col>
               <Col className={styles.rightlinkText}>
