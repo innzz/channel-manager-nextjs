@@ -1107,13 +1107,12 @@ export default function PropertyId() {
                     setCurrentdate={setCurrentdate}
                     token={token}
                     />
-                  {/* <AddOrUpdatePlan
-                    roomId={roomDetailsToShow.bookoneRoomId}
-                    propertyId={propertyId}
+                  <AddOrUpdatePlan
+                    roomDetails={sevenDaysDataOfRoom[0]}
                     setSevenDaysDataofRooms={setSevenDaysDataofRooms}
                     setCurrentdate={setCurrentdate}
                     token={token}
-                   /> */}
+                   />
                 </div>
               </Col>
               <Col className={styles.rightlinkText}>

@@ -7,7 +7,7 @@ import { RiCloseFill } from "react-icons/ri";
 import { bulkUpdateRatesAndAvailablity } from "../assets/api/bulkUpdateRatesAndAvailablity";
 import { DataByDates } from "../assets/api/dataByDates";
 
-export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurrentdate,}) {
+export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurrentdate}) {
   let ModalRoomDetails = roomDetails;
   const [showModal, setShowModal] = useState(false);
   const [fromDate, setFromDate] = useState("");

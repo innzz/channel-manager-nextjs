@@ -6,27 +6,82 @@ import { DatePicker } from "antd";
 import { RiCloseFill } from "react-icons/ri";
 import { useEffect } from "react";
 
-export default function AddOrUpdatePlan({roomId,propertyId,token,setSevenDaysDataofRooms,setCurrentdate}) {
-  const [showModal, setShowModal] = React.useState(false);
-//   const [bulkUpdationRoom, setBulkUpdationRoom] = useState(roomDetails);
+export default function AddOrUpdatePlan({roomDetails,token,setSevenDaysDataofRooms,setCurrentdate,}) {
+  let ModalRoomDetails = roomDetails;
+  const [showModal, setShowModal] = useState(false);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [bulkUpdationRoom, setBulkUpdationRoom] = useState(ModalRoomDetails);
+  
+  console.log("bulk update room",bulkUpdationRoom)
 
-    const getRoomPlans = async()=>{
-        const roomPlansReq = await fetch(`https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyId}/room/${roomId}/roomPlan`,{
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                APP_ID: "BOOKONE_WEB_APP",
-              }
-        });
-        const roomPlansRes = await roomPlansReq.json();
-        console.log(roomPlansRes);
-    }
+    //It will give Current Date
+    const getCurrentDateFunction = () => {
+      const currentDate = new Date().toLocaleDateString().split("/");
+      // const currentDateNew = [];
+      for (let i = 0; i < currentDate.length; i++) {
+        if (currentDate[i] < 10) {
+          currentDate[i] = 0 + currentDate[i];
+        }
+      }
+      const currDate = currentDate.reverse();
+      let tempArrival = "";
+      tempArrival = currentDate[2];
+      currentDate[2] = currentDate[1];
+      currentDate[1] = tempArrival;
+  
+      let currentDateNew = currDate.join("-");
+      return currentDateNew;
+    };
+  
+    // It will give seventh Day Date from Current Date
+    const getSevenDaysAfterDate = (noOfDays) => {
+      const sevenDaysDate = new Date();
+      sevenDaysDate.setDate(sevenDaysDate.getDate() + noOfDays);
+      const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
+      const newSevenDays = [];
+      for (let i = 0; i < sevenDays.length; i++) {
+        if (sevenDays[i] < 10) {
+          sevenDays[i] = 0 + sevenDays[i];
+        }
+        newSevenDays.push(sevenDays[i]);
+      }
+      const newSevenDaysDate = sevenDays.reverse();
+      let newTempArr = "";
+      newTempArr = sevenDays[2];
+      sevenDays[2] = sevenDays[1];
+      sevenDays[1] = newTempArr;
+  
+      let seventhDayDate = sevenDays.join("-");
+      return seventhDayDate;
+    };
 
-  useEffect(() => {
-      getRoomPlans()
-  }, [])
+    
+    useEffect(() => {
+      setBulkUpdationRoom(roomDetails)
+    }, [ModalRoomDetails])
+
+  //   useEffect(() => {
+  //     setBulkUpdationRoom(roomDetails)
+  //   }, [ModalRoomDetails])
+
+  //   const getRoomPlans = async()=>{
+  //       const roomPlansReq = await fetch(`https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyId}/room/${roomId}/roomPlan`,{
+  //           method: "GET",
+  //           headers: {
+  //               Accept: "application/json",
+  //               Authorization: `Bearer ${token}`,
+  //               "Content-Type": "application/json",
+  //               APP_ID: "BOOKONE_WEB_APP",
+  //             }
+  //       });
+  //       const roomPlansRes = await roomPlansReq.json();
+  //       console.log(roomPlansRes);
+  //   }
+
+  // useEffect(() => {
+  //     getRoomPlans()
+  // }, [])
   
 //   const [currentDate, setCurrentdate] = useState("");
 //   const [seventhDayDate, setSeventhDayDate] = useState("");
