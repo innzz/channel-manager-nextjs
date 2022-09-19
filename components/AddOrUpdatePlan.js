@@ -120,7 +120,8 @@ export default function AddOrUpdatePlan({roomDetails,propertyId,token,setSevenDa
     }, [roomDetailsInModal])
     
     const getRoomPlans = async()=>{
-      const roomPlansReq = await fetch(`https://testapi.bookonelocal.co.nz/api-bookone/api/room/property/${propertyIdInModal}/room/${roomDetailsInModal.bookoneRoomId}/roomPlan`,{
+      // https://api.bookonelocal.in/api-bookone/api/room/property/443/room/1407/roomPlan
+      const roomPlansReq = await fetch(`https://api.bookonelocal.in/api-bookone/api/room/property/${propertyIdInModal}/room/${roomDetailsInModal.bookoneRoomId}/roomPlan`,{
         method: "GET",
         headers: {
           Accept: "application/json",
