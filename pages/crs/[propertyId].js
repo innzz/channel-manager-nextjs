@@ -50,6 +50,7 @@ export default function PropertyId() {
   const [nextPrevArrows, setNextPrevArrows] = useState(true);
   const [defaultRoomId, setDefaultRoomId] = useState("");
 
+  console.log("no of days",noOfDays)
   const handleShopModal = () => {
     setshopModal(!shopModal);
   };
@@ -126,16 +127,16 @@ export default function PropertyId() {
     setCurrentdate(currentDateFuncResponse);
     let sevenDaysDataOfRooms = await DataOfSevenDays(propertyId, roomId, token);
     setSevenDaysDataofRooms(sevenDaysDataOfRooms);
-    setNoOfDays(14);
+    setNoOfDays(7);
   };
 
   //This function will set Previuos Seven Days Data of Specific Room
   const getPreviousSevenDaysDataOfRooms = async (propertyId, roomId) => {
-    if (noOfDays >= 21) {
+    let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays - 7);
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays);
+    if (noOfDays >= 14) {
       setNoOfDays(noOfDays - 7);
     }
-    let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays - 14);
-    let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays - 7);
     const data = {
       fromDate: currentDateFuncResponse,
       propertyId: propertyId,
@@ -168,7 +169,7 @@ export default function PropertyId() {
   const getNextSevenDaysDataOfRooms = async (propertyId, roomId) => {
     let currentDateFuncResponse = getSevenDaysAfterDate(noOfDays);
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(noOfDays + 7);
-    setNoOfDays(noOfDays + 7);
+    setNoOfDays(noOfDays +7);
     const data = {
       fromDate: currentDateFuncResponse,
       propertyId: propertyId,
@@ -193,7 +194,7 @@ export default function PropertyId() {
     let refreshedDataOfRooms = await DataByDates(data, token);
     setSevenDaysDataofRooms(refreshedDataOfRooms);
     setCurrentdate(currentDateFuncResponse);
-    setNoOfDays(14);
+    setNoOfDays(7);
     setNextPrevArrows(true);
   };
 
@@ -827,10 +828,12 @@ export default function PropertyId() {
                                       <Row className={styles.data}>
                                         {sevenDaysDataOfRoom?.map(
                                           (planRatesOfSevenDays) => {
+                                            console.log("planRatesOfSevenDays" , planRatesOfSevenDays)
                                             return (
                                               <>
                                                 {planRatesOfSevenDays?.roomRatePlans?.map(
                                                   (plansRatesToShow, keyi) => {
+                                                    console.log("plansRatesToShow" , plansRatesToShow)
                                                     return (
                                                       <>
                                                         {planName.name ==
@@ -890,7 +893,7 @@ export default function PropertyId() {
                                                                 >
                                                                   {parseInt(
                                                                     plansRatesToShow.amount
-                                                                  ) > 0
+                                                                  ) > -1
                                                                     ? `₹${parseInt(
                                                                       plansRatesToShow.amount
                                                                     )}`
@@ -998,7 +1001,7 @@ export default function PropertyId() {
                                                                         );
                                                                       }}
                                                                     >
-                                                                      {
+                                                                      ₹{
                                                                         plansRatesToShow.amount
                                                                       }
                                                                     </span>
