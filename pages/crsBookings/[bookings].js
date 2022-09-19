@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 const Bookings = () => {
   const router = useRouter();
   const { bookings } = router.query;
-  let bookingPageToken = localStorage.getItem("token");
   //   console.log(bookings);
   // const [token, setToken] = useState("");
   const [bookingDate, setBookingDate] = useState("");
@@ -25,12 +24,12 @@ const Bookings = () => {
   const [departureDate, setDepartureDate] = useState("");
   const [bookingData, setBookingData] = useState([]);
 
-  const getBookings = async () => {
+  const getBookings = async (token) => {
     const res = await axios.get(
       `https://api.bookonelocal.in/api-bookone/api/booking/getCurrentAndFutureBookings/${bookings}`,
       {
         headers: {
-          Authorization: `Bearer ${bookingPageToken}`,
+          Authorization: `Bearer ${token}`,
           APP_ID: "BOOKONE_WEB_APP",
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -41,11 +40,12 @@ const Bookings = () => {
     // console.log(data);
     setBookingData(data);
   };
-
+  
   useEffect(() => {
+    let bookingPageToken = localStorage.getItem("token");
     if (bookingPageToken && bookings !== undefined) {
       // if (bookings !== undefined) {
-        getBookings();
+        getBookings(bookingPageToken);
       // }
     }
   }, [router]);
