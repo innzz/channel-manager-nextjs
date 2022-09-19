@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "antd/dist/antd.css";
 import moment from "moment";
@@ -8,10 +8,13 @@ import { bulkUpdateRatesAndAvailablity } from "../assets/api/bulkUpdateRatesAndA
 import { DataByDates } from "../assets/api/dataByDates";
 
 export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurrentdate}) {
-  const [showModal, setShowModal] = React.useState(false);
+  let ModalRoomDetails = roomDetails;
+  const [showModal, setShowModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [bulkUpdationRoom, setBulkUpdationRoom] = useState(roomDetails);
+  const [bulkUpdationRoom, setBulkUpdationRoom] = useState(ModalRoomDetails);
+  
+  // console.log("bulk update room",bulkUpdationRoom)
 
     //It will give Current Date
     const getCurrentDateFunction = () => {
@@ -54,6 +57,11 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
       return seventhDayDate;
     };
 
+    useEffect(() => {
+      setBulkUpdationRoom(roomDetails)
+    }, [ModalRoomDetails])
+    
+
 
     //It will handle all the input values
   const handleBulkUpdationOfRoom = (e)=>{
@@ -87,6 +95,7 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
       toDate: toDate,
       totalNoRooms: totalNoRooms,
     };
+    // console.log(data)
     let updatedBulkRatesAndAvailablities = await bulkUpdateRatesAndAvailablity(data,token);
     let currentDateFuncResponse = getCurrentDateFunction();
     let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
@@ -105,7 +114,8 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
   return (
     <>
       <button
-        className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-3 py-2 rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+      style={{backgroundColor:"#1D174D"}}
+        className=" text-white font-bold uppercase text-sm px-3 py-2 rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
       >
