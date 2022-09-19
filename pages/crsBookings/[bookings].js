@@ -17,8 +17,9 @@ import { useEffect, useState } from "react";
 const Bookings = () => {
   const router = useRouter();
   const { bookings } = router.query;
+  let bookingPageToken = localStorage.getItem("token");
   //   console.log(bookings);
-  const [token, setToken] = useState("");
+  // const [token, setToken] = useState("");
   const [bookingDate, setBookingDate] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -29,7 +30,7 @@ const Bookings = () => {
       `https://api.bookonelocal.in/api-bookone/api/booking/getCurrentAndFutureBookings/${bookings}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${bookingPageToken}`,
           APP_ID: "BOOKONE_WEB_APP",
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -42,11 +43,10 @@ const Bookings = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      setToken(localStorage.getItem("token"));
-    }
-    if (bookings !== undefined) {
-      getBookings();
+    if (bookingPageToken && bookings !== undefined) {
+      // if (bookings !== undefined) {
+        getBookings();
+      // }
     }
   }, [router]);
   //   console.log(bookingData);
@@ -199,7 +199,7 @@ const Bookings = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bookingData.map((val, i) => {
+                    {bookingData?.map((val, i) => {
                       return (
                         <tr
                           key={i}
