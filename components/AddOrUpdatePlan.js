@@ -5,6 +5,7 @@ import moment from "moment";
 import { DatePicker } from "antd";
 import { RiCloseFill } from "react-icons/ri";
 import { useEffect } from "react";
+import { DataByDates } from "../assets/api/dataByDates";
 
 export default function AddOrUpdatePlan({
   roomDetails,
@@ -61,12 +62,17 @@ export default function AddOrUpdatePlan({
   const restrictions = ["None", "Arrival", "Departure"];
   const [showModal, setShowModal] = useState(false);
   const [showModalPlans, setShowModalPlans] = useState(false);
+  const [showModalStatus, setShowModalStatus] = useState(false);
+  const [showModalRestrictions, setShowModalRestrictions] = useState(false);
   const [showModalCurrency, setShowModalCurrency] = useState(false);
   const [modalState, setModalState] = useState("Rate");
   const [updationPlan, setUpdationPlan] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [allPlans, setAllPlans] = useState("");
+  const [selectedCurrency, setSelectedCurrency] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedRestriction, setSelectedRestriction] = useState("");
 
   // console.log("bulk update room",roomId,propertyId)
   // console.log("bulk update room",bulkUpdationRoom)
@@ -132,16 +138,81 @@ export default function AddOrUpdatePlan({
       }
     );
     const roomPlansRes = await roomPlansReq.json();
+    console.log(roomPlansRes);
     setAllPlans(roomPlansRes);
   };
 
+  const filterWeek = (weekday, week) => {
+    week = week.filter((item) => item !== weekday);
+    setUpdationPlan({ ...updationPlan, dayOfTheWeekList: week });
+  };
+
+  const handleChange = (e) => {
+    if (
+      e.target.name === "code" ||
+      e.target.name === "name" ||
+      e.target.name === "description"
+    ) {
+      setUpdationPlan({ ...updationPlan, [e.target.name]: e.target.value });
+    } else {
+      setUpdationPlan({ ...updationPlan, [e.target.name]: +e.target.value });
+    }
+  };
+
+  const handleDiscountAmount = (e) => {
+    setUpdationPlan({ ...updationPlan, [e.target.name]: +e.target.value });
+    // setUpdationPlan({...updationPlan, amount: updationPlan.deviationFromStandardPlan - (updationPlan.deviationFromStandardPlan * updationPlan.amount) })
+  };
+
+  const updatePlans = async () => {
+    const data = {
+      ...updationPlan,
+      channelManagerUpdateType: "ROOM_RATE_PLAN",
+      effectiveDate: fromDate,
+      expiryDate: toDate,
+      roomTypeId: updationPlan.roomId,
+    };
+    console.log(data);
+    const updatePlanReq = await fetch(
+      "https://api.bookonelocal.in/api-bookone/api/availability/addOrUpdatePlan",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    let currentDateFuncResponse = getCurrentDateFunction();
+    let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
+    const dataRefreshed = {
+      fromDate: currentDateFuncResponse,
+      propertyId: propertyIdInModal,
+      roomId: roomDetailsInModal.bookoneRoomId,
+      toDate: seventhDayDateFuncResponse,
+    };
+    let refreshedDataOfRooms = await DataByDates(dataRefreshed, token);
+    let refreshedDataOfRoomsResponse = refreshedDataOfRooms;
+    setSevenDaysDataofRooms(refreshedDataOfRoomsResponse);
+    setCurrentdate(currentDateFuncResponse);
+    setShowModal(false);
+    setUpdationPlan("");
+  };
+
+  // if (updationPlan.amount <= 0 || updationPlan.amount === NaN || updationPlan.amount === Infinity ) {
+  //   setUpdationPlan({...updationPlan, amount: 2000})
+  // }
   // useEffect(() => {
   // }, [])
 
   //   const [currentDate, setCurrentdate] = useState("");
   //   const [seventhDayDate, setSeventhDayDate] = useState("");
-  console.log("room plans", allPlans);
+  // console.log("room plans",allPlans);
   console.log("selected plan", updationPlan);
+  console.log(fromDate, toDate);
 
   // console.log(props.sevenDaysDataOfRoom[0]?.roomRatePlans);
   return (
@@ -172,6 +243,11 @@ export default function AddOrUpdatePlan({
                       setShowModalPlans(false);
                       setShowModalCurrency(false);
                       setModalState("Rate");
+                      setSelectedRestriction("");
+                      setSelectedCurrency("");
+                      setSelectedStatus("");
+                      setShowModalRestrictions(false);
+                      setShowModalStatus(false);
                     }}
                   />
                 </div>
@@ -220,6 +296,12 @@ export default function AddOrUpdatePlan({
                               onClick={() => {
                                 setShowModalPlans(false);
                                 setUpdationPlan(plan);
+                                setSelectedCurrency("");
+                                setSelectedRestriction("");
+                                setSelectedStatus("");
+                                setShowModalCurrency(false);
+                                setShowModalStatus(false);
+                                setShowModalRestrictions(false);
                               }}
                             >
                               <a
@@ -238,108 +320,242 @@ export default function AddOrUpdatePlan({
 
                     <div className="mx-3 flex flex-wrap w-96 gap-2 mt-3">
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          placeholder={
-                            updationPlan !== "" ? updationPlan.code : "Code"
-                          }
-                          name="code"
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="text"
+                            placeholder={
+                              updationPlan !== "" ? updationPlan.code : "Code"
+                            }
+                            name="code"
+                            onChange={handleChange}
+                            value={updationPlan.code}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="text"
+                            name="code"
+                            placeholder={
+                              updationPlan !== "" ? updationPlan.code : "Code"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          placeholder={
-                            updationPlan !== "" ? updationPlan.name : "Name"
-                          }
-                          name="name"
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="text"
+                            placeholder={
+                              updationPlan !== "" ? updationPlan.name : "Name"
+                            }
+                            name="name"
+                            onChange={handleChange}
+                            value={updationPlan.name}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="text"
+                            name="name"
+                            placeholder={
+                              updationPlan !== "" ? updationPlan.name : "Name"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.description
-                              : "Description"
-                          }
-                          name="description"
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="text"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.description
+                                : "Description"
+                            }
+                            name="description"
+                            onChange={handleChange}
+                            value={updationPlan.description}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="text"
+                            name="description"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.description
+                                : "Description"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          name="minOccupancy"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.minimumOccupancy
-                              : "Min Occupancy"
-                          }
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="number"
+                            name="minimumOccupancy"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.minimumOccupancy
+                                : "Min Occupancy"
+                            }
+                            onChange={handleChange}
+                            value={updationPlan.minimumOccupancy}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            name="minimumOccupancy"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.minimumOccupancy
+                                : "Min Occupancy"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          name="maxOccupancy"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.maximumOccupancy
-                              : "Max Occupancy"
-                          }
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="number"
+                            name="maximumOccupancy"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.maximumOccupancy
+                                : "Max Occupancy"
+                            }
+                            onChange={handleChange}
+                            value={updationPlan.maximumOccupancy}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            name="maximumOccupancy"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.maximumOccupancy
+                                : "Max Occupancy"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          name="extraChargePerPerson"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.extraChargePerPerson
-                              : "Extra Charge Per Person"
-                          }
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="number"
+                            name="extraChargePerPerson"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.extraChargePerPerson
+                                : "Extra Charge Per Person"
+                            }
+                            onChange={handleChange}
+                            value={updationPlan.extraChargePerPerson}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            name="extraChargePerPerson"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.extraChargePerPerson
+                                : "Extra Charge Per Person"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          name="noOfChild"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.noOfChildren
-                              : "No of Child"
-                          }
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="number"
+                            name="noOfChildren"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.noOfChildren
+                                : "No of Child"
+                            }
+                            onChange={handleChange}
+                            value={updationPlan.noOfChildren}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            name="noOfChildren"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.noOfChildren
+                                : "No of Child"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 w-44 px-2 rounded-md"
-                          type="text"
-                          name="extraChargePerChild3to5years"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.extraChargePerChild3To5yrs
-                              : "Extra Charge Per Person (3-5 yrs)"
-                          }
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            type="number"
+                            name="extraChargePerChild3To5yrs"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.extraChargePerChild3To5yrs
+                                : "Extra Charge Per Person (3-5 yrs)"
+                            }
+                            onChange={handleChange}
+                            value={updationPlan.extraChargePerChild3To5yrs}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 w-44 px-2 rounded-md"
+                            name="extraChargePerChild3To5yrs"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.extraChargePerChild3To5yrs
+                                : "Extra Charge Per Person (3-5 yrs)"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                       <div className="">
-                        <input
-                          className="border-2 border-blue-100 px-2 w-44 rounded-md"
-                          type="text"
-                          name="extraChargePerChild"
-                          placeholder={
-                            updationPlan !== ""
-                              ? updationPlan.extraChargePerChild
-                              : "Extra Charge Per Child"
-                          }
-                        />
+                        {updationPlan !== "" ? (
+                          <input
+                            className="border-2 border-blue-100 px-2 w-44 rounded-md"
+                            type="number"
+                            name="extraChargePerChild"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.extraChargePerChild
+                                : "Extra Charge Per Child"
+                            }
+                            onChange={handleChange}
+                            value={updationPlan.extraChargePerChild}
+                          />
+                        ) : (
+                          <input
+                            className="border-2 border-blue-100 px-2 w-44 rounded-md"
+                            name="extraChargePerChild"
+                            placeholder={
+                              updationPlan !== ""
+                                ? updationPlan.extraChargePerChild
+                                : "Extra Charge Per Child"
+                            }
+                            disabled
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -349,8 +565,9 @@ export default function AddOrUpdatePlan({
                         className="p-2 w-40"
                         size="small"
                         onChange={(value) => {
-                          const fromDate = moment(value).format("YYYY-MM-DD");
-                          setCurrentdate(fromDate);
+                          const fromDateValue =
+                            moment(value).format("YYYY-MM-DD");
+                          setFromDate(fromDateValue);
                         }}
                       />
                       <DatePicker
@@ -358,8 +575,9 @@ export default function AddOrUpdatePlan({
                         placeholder="End Date"
                         size="small"
                         onChange={(value) => {
-                          const endDate = moment(value).format("YYYY-MM-DD");
-                          setSeventhDayDate(endDate);
+                          const endDateValue =
+                            moment(value).format("YYYY-MM-DD");
+                          setToDate(endDateValue);
                         }}
                       />
                     </div>
@@ -374,77 +592,267 @@ export default function AddOrUpdatePlan({
                                     </div>
                                     ))})} */}
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("MONDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes("MONDAY") ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "MONDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "MONDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("MONDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           MONDAY
                         </span>
                       </div>
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("TUESDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes(
+                            "TUESDAY"
+                          ) ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "TUESDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "TUESDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("TUESDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           TUESDAY
                         </span>
                       </div>
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("WEDNESDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes(
+                            "WEDNESDAY"
+                          ) ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "WEDNESDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "WEDNESDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("WEDNESDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           WEDNESDAY
                         </span>
                       </div>
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("THURSDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes(
+                            "THURSDAY"
+                          ) ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "THURSDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "THURSDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("THURSDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           THURSDAY
                         </span>
                       </div>
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("FRIDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes("FRIDAY") ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "FRIDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "FRIDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("FRIDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           FRIDAY
                         </span>
                       </div>
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("SATURDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes(
+                            "SATURDAY"
+                          ) ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "SATURDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "SATURDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("SATURDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           SATURDAY
                         </span>
                       </div>
                       <div className="w-40">
-                        {updationPlan !== "" &&
-                        updationPlan.dayOfTheWeekList.includes("SUNDAY") ? (
-                          <input type="checkbox" checked />
+                        {updationPlan === "" ? (
+                          <input type="checkbox" disabled />
+                        ) : updationPlan.dayOfTheWeekList.includes("SUNDAY") ? (
+                          <input
+                            type="checkbox"
+                            onClick={() =>
+                              filterWeek(
+                                "SUNDAY",
+                                updationPlan.dayOfTheWeekList
+                              )
+                            }
+                            checked
+                          />
                         ) : (
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            onClick={() => {
+                              if (
+                                !updationPlan.dayOfTheWeekList.includes(
+                                  "SUNDAY"
+                                )
+                              ) {
+                                let arr = updationPlan.dayOfTheWeekList;
+                                arr.push("SUNDAY");
+                                setUpdationPlan({
+                                  ...updationPlan,
+                                  dayOfTheWeekList: arr,
+                                });
+                              }
+                            }}
+                          />
                         )}
                         <span className="text-base ml-2 font-normal">
                           SUNDAY
@@ -495,34 +903,63 @@ export default function AddOrUpdatePlan({
                       <div>
                         <span>Max Length Of Stay</span>
                         <div>
-                          <input
-                            type="text"
-                            placeholder={
-                              updationPlan !== ""
-                                ? updationPlan.maximumLengthOfStay
-                                : "Max Length Of Stay"
-                            }
-                            name="maxLengthOfStay"
-                            className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                          ></input>
+                          {updationPlan !== "" ? (
+                            <input
+                              type="number"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.maximumLengthOfStay
+                                  : "Max Length Of Stay"
+                              }
+                              name="maximumLengthOfStay"
+                              className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              onChange={handleChange}
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.maximumLengthOfStay
+                                  : "Max Length Of Stay"
+                              }
+                              name="maximumLengthOfStay"
+                              className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              disabled
+                            />
+                          )}
                         </div>
                       </div>
                       <div>
                         <span>Min Length Of Stay</span>
                         <div>
-                          <input
-                            type="text"
-                            placeholder={
-                              updationPlan !== ""
-                                ? updationPlan.minimumLengthOfStay
-                                : "Min Length Of Stay"
-                            }
-                            name="minLengthOfStay"
-                            className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                          ></input>
+                          {updationPlan !== "" ? (
+                            <input
+                              type="number"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.minimumLengthOfStay
+                                  : "Min Length Of Stay"
+                              }
+                              name="minimumLengthOfStay"
+                              className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              onChange={handleChange}
+                            />
+                          ) : (
+                            <input
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.minimumLengthOfStay
+                                  : "Min Length Of Stay"
+                              }
+                              name="minimumLengthOfStay"
+                              className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              disabled
+                            />
+                          )}
                         </div>
                       </div>
-                      <div>
+                      <div style={{ position: "relative" }}>
                         <span>Status</span>
                         <div>
                           <button
@@ -530,8 +967,11 @@ export default function AddOrUpdatePlan({
                             className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                             aria-expanded="true"
                             aria-haspopup="true"
+                            onClick={() => setShowModalStatus(!showModalStatus)}
                           >
-                            {updationPlan !== ""
+                            {selectedStatus !== ""
+                              ? selectedStatus
+                              : updationPlan !== ""
                               ? updationPlan.status
                               : "Status"}
                             <svg
@@ -549,8 +989,42 @@ export default function AddOrUpdatePlan({
                             </svg>
                           </button>
                         </div>
+                        {showModalStatus && (
+                          <div
+                            className="absolute left-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none h-20"
+                            style={{ overflowY: "auto" }}
+                            role="menu"
+                            aria-orientation="vertical"
+                            aria-labelledby="menu-button"
+                            tabIndex="-1"
+                          >
+                            {statusArray.map((status, i) => {
+                              return (
+                                <div
+                                  className="py-1"
+                                  role="none"
+                                  key={i}
+                                  onClick={() => {
+                                    setShowModalStatus(false);
+                                    setSelectedStatus(status);
+                                  }}
+                                >
+                                  <a
+                                    href="#"
+                                    className="text-gray-700 hover:bg-blue-400 hover:text-white hover:mx-3 block px-4 py-2 text-sm"
+                                    role="menuitem"
+                                    tabIndex="-1"
+                                    id="menu-item-0"
+                                  >
+                                    {status}
+                                  </a>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
-                      <div>
+                      <div style={{ position: "relative" }}>
                         <span>Restrictions</span>
                         <div>
                           <button
@@ -558,8 +1032,13 @@ export default function AddOrUpdatePlan({
                             className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-xs font-base text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                             aria-expanded="true"
                             aria-haspopup="true"
+                            onClick={() =>
+                              setShowModalRestrictions(!showModalRestrictions)
+                            }
                           >
-                            {updationPlan !== ""
+                            {selectedRestriction !== ""
+                              ? selectedRestriction
+                              : updationPlan !== ""
                               ? updationPlan.restriction
                               : "Restrictions"}
                             <svg
@@ -577,11 +1056,45 @@ export default function AddOrUpdatePlan({
                             </svg>
                           </button>
                         </div>
+                        {showModalRestrictions && (
+                          <div
+                            className="absolute left-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none h-20"
+                            style={{ overflowY: "auto" }}
+                            role="menu"
+                            aria-orientation="vertical"
+                            aria-labelledby="menu-button"
+                            tabIndex="-1"
+                          >
+                            {restrictions.map((restriction, i) => {
+                              return (
+                                <div
+                                  className="py-1"
+                                  role="none"
+                                  key={i}
+                                  onClick={() => {
+                                    setShowModalRestrictions(false);
+                                    setSelectedRestriction(restriction);
+                                  }}
+                                >
+                                  <a
+                                    href="#"
+                                    className="text-gray-700 hover:bg-blue-400 hover:text-white hover:mx-3 block px-4 py-2 text-sm"
+                                    role="menuitem"
+                                    tabIndex="-1"
+                                    id="menu-item-0"
+                                  >
+                                    {restriction}
+                                  </a>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ) : (
                     <div className="relative mx-6 flex flex-wrap gap-2 border-2 px-3 py-1 pb-2 rounded-lg mb-3">
-                      <div>
+                      <div style={{ position: "relative" }}>
                         <span>Currency</span>
                         <div>
                           <button
@@ -593,7 +1106,11 @@ export default function AddOrUpdatePlan({
                               setShowModalCurrency(!showModalCurrency)
                             }
                           >
-                            Currency
+                            {selectedCurrency !== ""
+                              ? selectedCurrency.currencyCode
+                              : updationPlan !== ""
+                              ? updationPlan.currencyCode
+                              : "Currency"}
                             <svg
                               className="-mr-1 ml-2 h-5 w-5"
                               xmlns="http://www.w3.org/2000/svg"
@@ -626,6 +1143,7 @@ export default function AddOrUpdatePlan({
                                   role="none"
                                   onClick={() => {
                                     setShowModalCurrency(false);
+                                    setSelectedCurrency(currency);
                                   }}
                                 >
                                   <a
@@ -652,33 +1170,69 @@ export default function AddOrUpdatePlan({
                             name="roomStandardPrice"
                             className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                             placeholder="2000"
-                          ></input>
+                            disabled
+                          />
                         </div>
                       </div>
                       <div>
                         <span>More Than Standard Rate (%)</span>
                         <div>
-                          <input
-                            type="number"
-                            className="inline-flex w-44 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                            name="quantity"
-                            min="1"
-                          ></input>
+                          {updationPlan !== "" ? (
+                            <input
+                              type="number"
+                              className="inline-flex w-44 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              name="deviationFromStandardPlan"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.deviationFromStandardPlan
+                                  : "Discount Amount"
+                              }
+                              onChange={handleDiscountAmount}
+                              value={updationPlan.deviationFromStandardPlan}
+                            />
+                          ) : (
+                            <input
+                              type="number"
+                              className="inline-flex w-44 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              name="deviationFromStandardPlan"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.deviationFromStandardPlan
+                                  : "Discount Amount"
+                              }
+                              disabled
+                            />
+                          )}
                         </div>
                       </div>
                       <div>
                         <span>Amount</span>
                         <div>
-                          <input
-                            type="number"
-                            className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                            name="amount"
-                            placeholder={
-                              updationPlan !== ""
-                                ? updationPlan.amount
-                                : "Amount"
-                            }
-                          ></input>
+                          {updationPlan !== "" ? (
+                            <input
+                              type="number"
+                              className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              name="amount"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.amount
+                                  : "Amount"
+                              }
+                              onChange={handleChange}
+                              value={updationPlan.amount}
+                            />
+                          ) : (
+                            <input
+                              className="inline-flex w-40 justify-between rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                              name="amount"
+                              placeholder={
+                                updationPlan !== ""
+                                  ? updationPlan.amount
+                                  : "Amount"
+                              }
+                              disabled
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -695,6 +1249,11 @@ export default function AddOrUpdatePlan({
                       setShowModalPlans(false);
                       setShowModalCurrency(false);
                       setModalState("Rate");
+                      setSelectedRestriction("");
+                      setSelectedCurrency("");
+                      setSelectedStatus("");
+                      setShowModalRestrictions(false);
+                      setShowModalStatus(false);
                     }}
                   >
                     Close
@@ -702,6 +1261,7 @@ export default function AddOrUpdatePlan({
                   <button
                     className="bg-emerald-700 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
+                    onClick={() => updatePlans()}
                   >
                     Save Changes
                   </button>
