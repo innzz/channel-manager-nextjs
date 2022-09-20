@@ -97,10 +97,13 @@ const Bookings = () => {
     // console.log(a);
   }
   // console.log(filteredRoomByStatus);
-  console.log(filteredStatusRoom);
-  console.log(filteredSourceRoom);
+  // console.log(filteredStatusRoom);
+  // console.log(filteredSourceRoom);
   // console.log(filteredRoomsByType);
-  console.log(filteredRoomType);
+  // console.log(filteredRoomType);
+  // let bookd = moment(bookingDate).format('llll')
+  // console.log(bookd)
+  // console.log(bookingDate)
 
   return (
     <>
@@ -161,6 +164,9 @@ const Bookings = () => {
                     setFilteredRoomType("");
                     setFilteredStatusRoom("");
                     setFilteredSourceRoom("");
+                    setDepartureDate("");
+                    setArrivalDate("");
+                    setBookingDate("");
                   }}
                   className="py-1 px-5 text-white rounded shadow-md"
                   style={{ backgroundColor: "#1D174D" }}
@@ -192,7 +198,7 @@ const Bookings = () => {
                           return (
                             <div
                               onClick={() =>
-                                {setFilteredRoomType(filteredRoomType);setFilteredStatusRoom("");setFilteredSourceRoom("")}
+                                {setFilteredRoomType(filteredRoomType);setFilteredStatusRoom("");setFilteredSourceRoom("");setArrivalDate("");setBookingDate("");setDepartureDate("")}
                               }
                               key={key}
                               className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold p-2"
@@ -231,7 +237,7 @@ const Bookings = () => {
                           return (
                             <div
                               onClick={() =>
-                                {setFilteredStatusRoom(filteredStatus); setFilteredRoomType("");setFilteredSourceRoom("")}
+                                {setFilteredStatusRoom(filteredStatus); setFilteredRoomType("");setFilteredSourceRoom("");setArrivalDate("");setBookingDate("");setDepartureDate("")}
                               }
                               key={key}
                               className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
@@ -271,7 +277,7 @@ const Bookings = () => {
                           return (
                             <div
                               onClick={() =>
-                                {setFilteredSourceRoom(filteredSource);setFilteredStatusRoom("");setFilteredRoomType("")}
+                                {setFilteredSourceRoom(filteredSource);setFilteredStatusRoom("");setFilteredRoomType("");setArrivalDate("");setBookingDate("");setDepartureDate("")}
                               }
                               key={key}
                               className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
@@ -287,29 +293,57 @@ const Bookings = () => {
                 <DatePicker
                   className="h-10 w-96 mx-2"
                   size="small"
-                  placeholder="Booking Date"
-                  onChange={(value) => {
-                    const bookDate = moment(value).format("DD-MM-YYYY");
-                    setBookingDate(bookingDate);
+                  placeholder={bookingDate !== "" ? bookingDate : "Booking Date"}
+                  value={0}
+                  onClick={()=>{
+                    setFilteredRoomType("");
+                    setFilteredSourceRoom("");
+                    setFilteredStatusRoom("");
+                    setDepartureDate("");
+                    setArrivalDate("");
                   }}
+                  onChange={(value) => {
+                    // console.log("booo d", value.toLocaleString().split(" ").splice(0,4).join(" "))
+                    // const bookDate = moment(value).format("DD-MM-YYYY");
+                    setBookingDate(value.toLocaleString().split(" ").splice(0,4).join(" "));
+                  }}
+                  // value={bookingDate}
                 />
                 <DatePicker
                   className="h-10 w-96 mx-2"
                   size="small"
-                  placeholder="Arrival Date"
+                  placeholder={arrivalDate !== "" ? arrivalDate : "Arrival Date"}
+                  value={0}
+                  onClick={()=>{
+                    setFilteredRoomType("");
+                    setFilteredSourceRoom("");
+                    setFilteredStatusRoom("");
+                    setBookingDate("");
+                    setDepartureDate("");
+                  }}
                   onChange={(value) => {
                     const arrDate = moment(value).format("DD-MM-YYYY");
-                    setArrivalDate(arrivalDate);
+                    setArrivalDate(arrDate);
                   }}
+                  // value={arrivalDate}
                 />
                 <DatePicker
                   className="h-10 w-96 mx-2"
                   size="small"
-                  placeholder="Booking Date"
+                  placeholder={departureDate !== "" ? departureDate : "Departure Date"}
+                  value={0}
+                  onClick={()=>{
+                    setFilteredRoomType("");
+                    setFilteredSourceRoom("");
+                    setFilteredStatusRoom("");
+                    setArrivalDate("");
+                    setBookingDate("");
+                  }}
                   onChange={(value) => {
                     const depDate = moment(value).format("DD-MM-YYYY");
-                    setDepartureDate(departureDate);
+                    setDepartureDate(depDate);
                   }}
+                  // value={departureDate}
                 />
               </div>
               <div className="overflow-x-auto shadow-md sm:rounded-lg">
@@ -359,9 +393,10 @@ const Bookings = () => {
                   </thead>
                   <tbody>
                     {bookingData?.map((val, i) => {
+                      // console.log(val.fromDate)
                       return (
                         <>
-                          {filteredRoomType === "" && filteredStatusRoom === "" && filteredSourceRoom === "" ? (
+                          {filteredRoomType === "" && filteredStatusRoom === "" && filteredSourceRoom === "" && bookingDate === "" && arrivalDate === "" && departureDate === "" ? (
                             <tr
                               key={i}
                               className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
@@ -432,7 +467,21 @@ const Bookings = () => {
                               </td>
                             </tr>
                           ) : (
-                            filteredRoomType === val.roomName || filteredStatusRoom === val.bookingStatus || filteredSourceRoom === val.externalSite ? 
+                            filteredRoomType === val.roomName || filteredStatusRoom === val.bookingStatus || filteredSourceRoom === val.externalSite ||
+                            bookingDate === new Date(val.fromDate).toDateString() ||
+                             arrivalDate === new Date(val.fromDate)
+                            .toLocaleString("en-GB")
+                            .split(",")
+                            .splice(0, 1)
+                            .join("")
+                            .split("/")
+                            .join("-") || departureDate === new Date(val.toDate)
+                            .toLocaleString("en-GB")
+                            .split(",")
+                            .splice(0, 1)
+                            .join("")
+                            .split("/")
+                            .join("-") ? 
                               <tr
                                 key={i}
                                 className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
