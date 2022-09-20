@@ -144,10 +144,6 @@ const Login = () => {
                     <input type="radio" onClick={() => setRadio("cm")} />
                     <label>CM</label>
                   </div>
-                  <div className="flex gap-1">
-                    <input type="radio" onClick={() => setRadio("eglobe")} />
-                    <label>EGlobe</label>
-                  </div>
                 </div>
                 <div className={styles.buttonContainer}>
                   <button className={styles.submitbutton} onClick={signIn}>
