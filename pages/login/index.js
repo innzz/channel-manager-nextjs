@@ -137,16 +137,12 @@ const Login = () => {
                 </Form.Group>
                 <div className="flex gap-3 ml-1">
                   <div className="flex gap-1">
-                    <input type="radio" onClick={() => setRadio("crs")} />
+                    <input type="radio" name="radio" onClick={() => setRadio("crs")} />
                     <label>CRS</label>
                   </div>
                   <div className="flex gap-1">
-                    <input type="radio" onClick={() => setRadio("cm")} />
+                    <input type="radio" name="radio" onClick={() => setRadio("cm")} />
                     <label>CM</label>
-                  </div>
-                  <div className="flex gap-1">
-                    <input type="radio" onClick={() => setRadio("eglobe")} />
-                    <label>EGlobe</label>
                   </div>
                 </div>
                 <div className={styles.buttonContainer}>
