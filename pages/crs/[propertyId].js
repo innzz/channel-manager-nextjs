@@ -850,7 +850,7 @@ export default function PropertyId() {
                                             );
                                             return (
                                               <>
-                                                {planRatesOfSevenDays?.roomRatePlans?.map(
+                                                { planRatesOfSevenDays?.roomRatePlans?.map(
                                                   (plansRatesToShow, keyi) => {
                                                     console.log(
                                                       "plansRatesToShow",
@@ -1023,10 +1023,13 @@ export default function PropertyId() {
                                                                       );
                                                                     }}
                                                                   >
-                                                                    ₹
-                                                                    {
+                                                                    {parseInt(
+                                                                  plansRatesToShow.amount
+                                                                ) > -1
+                                                                  ? `₹${parseInt(
                                                                       plansRatesToShow.amount
-                                                                    }
+                                                                    )}`
+                                                                  : "No Plan"}
                                                                   </span>
                                                                 )}
                                                               </Col>
