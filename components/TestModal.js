@@ -1,135 +1,88 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import "antd/dist/antd.css";
 import moment from "moment";
 import { DatePicker } from "antd";
 import { RiCloseFill } from "react-icons/ri";
-import { bulkUpdateRatesAndAvailablity } from "../assets/api/bulkUpdateRatesAndAvailablity";
-import { DataByDates } from "../assets/api/dataByDates";
 
-export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurrentdate}) {
-  let ModalRoomDetails = roomDetails;
-  const [showModal, setShowModal] = useState(false);
+export default function ModalOne(props) {
+  const [showModal, setShowModal] = React.useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [bulkUpdationRoom, setBulkUpdationRoom] = useState(ModalRoomDetails);
-  
-  // console.log("bulk update room",bulkUpdationRoom)
+  const [totalNoRooms, setTotalNoRooms] = useState("");
+  const [price, setPrice] = useState("");
+  const [noOfBooked, setNoOfBooked] = useState("");
+  const [noOfHold, setNoOfHold] = useState("");
+  const [noOfAvailable, setNoOfAvailable] = useState("");
+  //   console.log(currentDate, seventhDayDate);
+  // console.log(props.roomDetails);
+  // console.log(props.roomDetailsToShow);
+  const propertyId = props.propertyId;
+  const roomId = props.defaultRoomId;
+  const token = props.token;
 
-    //It will give Current Date
-    const getCurrentDateFunction = () => {
-      const currentDate = new Date().toLocaleDateString().split("/");
-      // const currentDateNew = [];
-      for (let i = 0; i < currentDate.length; i++) {
-        if (currentDate[i] < 10) {
-          currentDate[i] = 0 + currentDate[i];
-        }
-      }
-      const currDate = currentDate.reverse();
-      let tempArrival = "";
-      tempArrival = currentDate[2];
-      currentDate[2] = currentDate[1];
-      currentDate[1] = tempArrival;
-  
-      let currentDateNew = currDate.join("-");
-      return currentDateNew;
-    };
-  
-    // It will give seventh Day Date from Current Date
-    const getSevenDaysAfterDate = (noOfDays) => {
-      const sevenDaysDate = new Date();
-      sevenDaysDate.setDate(sevenDaysDate.getDate() + noOfDays);
-      const sevenDays = sevenDaysDate.toLocaleDateString().split("/");
-      const newSevenDays = [];
-      for (let i = 0; i < sevenDays.length; i++) {
-        if (sevenDays[i] < 10) {
-          sevenDays[i] = 0 + sevenDays[i];
-        }
-        newSevenDays.push(sevenDays[i]);
-      }
-      const newSevenDaysDate = sevenDays.reverse();
-      let newTempArr = "";
-      newTempArr = sevenDays[2];
-      sevenDays[2] = sevenDays[1];
-      sevenDays[1] = newTempArr;
-  
-      let seventhDayDate = sevenDays.join("-");
-      return seventhDayDate;
-    };
+  // console.log(fromDate);
+  // console.log(toDate);
+  // console.log(totalNoRooms);
+  // console.log(price);
+  // console.log(noOfBooked);
+  // console.log(noOfHold);
+  // console.log(noOfAvailable);
+  // console.log(propertyId);
+  // console.log(roomId);
+  // console.log(token);
 
-    useEffect(() => {
-      setBulkUpdationRoom(roomDetails)
-    }, [ModalRoomDetails])
-    
-
-
-    //It will handle all the input values
-  const handleBulkUpdationOfRoom = (e)=>{
-    if (e.target.name === 'totalNoRooms') {
-      setBulkUpdationRoom({...bulkUpdationRoom,totalNoRooms: +e.target.value})
-    }
-    else if (e.target.name === 'price'){
-      setBulkUpdationRoom({...bulkUpdationRoom,price: +e.target.value})
-    }
-    else if (e.target.name === 'noOfBooked'){
-      setBulkUpdationRoom({...bulkUpdationRoom,noOfBooked: +e.target.value})
-    }
-    else if (e.target.name === 'noOfHold'){
-      setBulkUpdationRoom({...bulkUpdationRoom,noOfOnHold: +e.target.value})
-    }
-    else if (e.target.name === 'noOfAvailable'){
-      setBulkUpdationRoom({...bulkUpdationRoom,noOfAvailable: +e.target.value})
-    }
-  }
-
-  //It will bulk update rates and availablities of selected room
-  const bulkUpdateInventory = async ({noOfAvailable,noOfBooked,noOfOnHold,price,propertyId,roomId,totalNoRooms}) => {
+  const bulkUpdateInventory = async () => {
     let data = {
       fromDate: fromDate,
       noOfAvailable: noOfAvailable,
       noOfBooked: noOfBooked,
-      noOfOnHold: noOfOnHold,
+      noOfOnHold: noOfHold,
       price: price,
       propertyId: propertyId,
       roomId: roomId,
       toDate: toDate,
       totalNoRooms: totalNoRooms,
     };
-    // console.log(data)
-    let updatedBulkRatesAndAvailablities = await bulkUpdateRatesAndAvailablity(data,token);
-    let currentDateFuncResponse = getCurrentDateFunction();
-    let seventhDayDateFuncResponse = getSevenDaysAfterDate(7);
-    const dataRefreshed = {
-      fromDate: currentDateFuncResponse,
-      propertyId: propertyId,
-      roomId: roomId,
-      toDate: seventhDayDateFuncResponse,
-    };
-    let refreshedDataOfRooms = await DataByDates(dataRefreshed, token);
-    let refreshedDataOfRoomsResponse = refreshedDataOfRooms;
-    setSevenDaysDataofRooms(refreshedDataOfRoomsResponse);
-    setCurrentdate(currentDateFuncResponse);
+    const res = await fetch(
+      "https://api.bookonelocal.in/api-bookone/api/availability/bulkAvailabilityUpdateByRoomAndDateRange",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          APP_ID: "BOOKONE_WEB_APP",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    let updatedResponse = await res.json();
+    console.log(updatedResponse);
   };
 
   return (
     <>
       <button
-      style={{backgroundColor:"#1D174D"}}
-        className=" text-white font-bold uppercase text-sm px-3 py-2 rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+        className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-3 py-2 rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
       >
-        Bulk Update Inventory
+        Test Modal
       </button>
       {showModal ? (
-        <div>
+        <>
+          {props.roomDetails.map((val, i) => {
+            return (
+              <div key={i}>
+                {val.name == props.roomDetailsToShow?.name && (
                   <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-full backdrop-blur-sm">
                     <div className="relative my-6 mx-auto max-w-3xl w-full">
                       {/*content*/}
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                         <div className="flex justify-between bg-blue-500 items-center p-2">
                           <h3 className="text-white text-xl">
-                            Update Inventory for {roomDetails.roomName}
+                            Update Inventory for {val.name}
                           </h3>
                           <RiCloseFill
                             className="text-white h-6 w-6 text-bold"
@@ -168,10 +121,12 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                               <input
                                 className="form-control block text-sm text-gray-500 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                 name="totalNoRooms"
-                                type="totalNoRooms"
+                                type="number"
                                 id="totalNoRooms"
                                 placeholder="No Of Rooms"
-                                onChange={handleBulkUpdationOfRoom}
+                                onChange={(e) =>
+                                  setTotalNoRooms(+e.target.value)
+                                }
                                 required
                               />
                             </div>
@@ -188,7 +143,7 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                                 type="number"
                                 id="price"
                                 placeholder="Price"
-                                onChange={handleBulkUpdationOfRoom}
+                                onChange={(e) => setPrice(+e.target.value)}
                                 required
                               />
                             </div>
@@ -207,7 +162,7 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                                 type="number"
                                 id="noOfBooked"
                                 placeholder="Booked"
-                                onChange={handleBulkUpdationOfRoom}
+                                onChange={(e) => setNoOfBooked(+e.target.value)}
                                 required
                               />
                             </div>
@@ -224,7 +179,7 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                                 type="number"
                                 id="noOfHold"
                                 placeholder="Hold"
-                                onChange={handleBulkUpdationOfRoom}
+                                onChange={(e) => setNoOfHold(+e.target.value)}
                                 required
                               />
                             </div>
@@ -243,13 +198,15 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                                 type="number"
                                 id="noOfAvailable"
                                 placeholder="Available"
-
-                                onChange={handleBulkUpdationOfRoom}
+                                onChange={(e) =>
+                                  setNoOfAvailable(+e.target.value)
+                                }
                                 required
                               />
                             </div>
                           </div>
                         </form>
+                        {/*footer*/}
                         <div className="flex items-center justify-end px-2 py-2 border-t border-solid border-slate-200 rounded-b">
                           <button
                             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -262,7 +219,7 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button"
                             onClick={() => {
-                              bulkUpdateInventory(bulkUpdationRoom);
+                              bulkUpdateInventory();
                               setShowModal(false);
                             }}
                           >
@@ -272,8 +229,11 @@ export default function Modal({roomDetails,token,setSevenDaysDataofRooms,setCurr
                       </div>
                     </div>
                   </div>
-                {/* )} */}
-        </div>
+                )}
+              </div>
+            );
+          })}
+        </>
       ) : null}
     </>
   );

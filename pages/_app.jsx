@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { SSRProvider } from "@react-aria/ssr";
 import { useState } from "react";
+import NavBar from "../components/Navbar";
 
 function MyApp({ Component, pageProps }) {
   const [showTravelAgencyName, setShowTravelAgencyName] = useState({});

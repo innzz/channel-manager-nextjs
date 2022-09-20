@@ -76,7 +76,7 @@ function NavBar(props) {
               <MdSupportAgent className="h-6" />
               <span>Support</span>
             </li>
-            <Link href={`/bookings/${props.bookingId}`}>
+            <Link href={`/crsBookings/${props.bookingId}`}>
               <li className="flex gap-2">
                 <MdSupportAgent className="h-6" />
                 <span>Bookings</span>

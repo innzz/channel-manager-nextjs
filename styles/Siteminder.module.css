@@ -442,12 +442,11 @@
 .roomTypeDrop {
   display: block;
   position: absolute;
-  top: 5vh;
+  top: 30px;
   padding: 10px 0;
   background-color: rgb(255, 255, 255);
   color: black;
   list-style: none;
-  width: 20vh;
   z-index: 20;
   /* border-radius: 0.5vh; */
   border: 1px solid rgb(206, 206, 206);
@@ -470,12 +469,11 @@
 .ratePlanDrop {
   display: block;
   position: absolute;
-  top: 5vh;
+  top: 30px;
   padding: 10px 0;
   background-color: rgb(255, 255, 255);
   color: black;
   list-style: none;
-  width: 20vh;
   z-index: 20;
   /* border-radius: 0.5vh; */
   border: 1px solid rgb(206, 206, 206);
