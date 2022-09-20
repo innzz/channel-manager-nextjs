@@ -170,7 +170,7 @@ const Bookings = () => {
               </div>
               <div className="flex items-center justify-between my-4">
                 <div
-                  onClick={() => setFilterRoomTypeShow(!filterRoomTypeShow)}
+                  onClick={() => {setFilterRoomTypeShow(!filterRoomTypeShow)}}
                   className="flex relative border items-center justify-between p-2 rounded shadow-sm w-96 mx-2"
                 >
                   <button className="mr-2">
@@ -183,7 +183,7 @@ const Bookings = () => {
                     <div className="absolute bg-white top-10 left-0 p-2 w-full drop-shadow-lg rounded">
                       <>
                         <div
-                          onClick={() => setFilteredRoomType("")}
+                          onClick={() => {setFilteredRoomType("")}}
                           className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold p-2"
                         >
                           All
@@ -192,7 +192,7 @@ const Bookings = () => {
                           return (
                             <div
                               onClick={() =>
-                                setFilteredRoomType(filteredRoomType)
+                                {setFilteredRoomType(filteredRoomType);setFilteredStatusRoom("");setFilteredSourceRoom("")}
                               }
                               key={key}
                               className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold p-2"
@@ -208,7 +208,7 @@ const Bookings = () => {
 
                 <div
                   onClick={() =>
-                    setFilterBookingStatusTypeShow(!filterBookingStatusTypeShow)
+                    {setFilterBookingStatusTypeShow(!filterBookingStatusTypeShow)}
                   }
                   className="flex relative border items-center justify-between p-2 rounded shadow-sm w-96 mx-2"
                 >
@@ -231,7 +231,7 @@ const Bookings = () => {
                           return (
                             <div
                               onClick={() =>
-                                setFilteredStatusRoom(filteredStatus)
+                                {setFilteredStatusRoom(filteredStatus); setFilteredRoomType("");setFilteredSourceRoom("")}
                               }
                               key={key}
                               className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
@@ -271,7 +271,7 @@ const Bookings = () => {
                           return (
                             <div
                               onClick={() =>
-                                setFilteredSourceRoom(filteredSource)
+                                {setFilteredSourceRoom(filteredSource);setFilteredStatusRoom("");setFilteredRoomType("")}
                               }
                               key={key}
                               className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
@@ -289,7 +289,7 @@ const Bookings = () => {
                   size="small"
                   placeholder="Booking Date"
                   onChange={(value) => {
-                    const bookDate = moment(value).format("YYYY-MM-DD");
+                    const bookDate = moment(value).format("DD-MM-YYYY");
                     setBookingDate(bookingDate);
                   }}
                 />
@@ -298,7 +298,7 @@ const Bookings = () => {
                   size="small"
                   placeholder="Arrival Date"
                   onChange={(value) => {
-                    const arrDate = moment(value).format("YYYY-MM-DD");
+                    const arrDate = moment(value).format("DD-MM-YYYY");
                     setArrivalDate(arrivalDate);
                   }}
                 />
@@ -307,7 +307,7 @@ const Bookings = () => {
                   size="small"
                   placeholder="Booking Date"
                   onChange={(value) => {
-                    const depDate = moment(value).format("YYYY-MM-DD");
+                    const depDate = moment(value).format("DD-MM-YYYY");
                     setDepartureDate(departureDate);
                   }}
                 />
@@ -361,7 +361,7 @@ const Bookings = () => {
                     {bookingData?.map((val, i) => {
                       return (
                         <>
-                          {filteredRoomType === "" ? (
+                          {filteredRoomType === "" && filteredStatusRoom === "" && filteredSourceRoom === "" ? (
                             <tr
                               key={i}
                               className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
@@ -432,7 +432,7 @@ const Bookings = () => {
                               </td>
                             </tr>
                           ) : (
-                            filteredRoomType === val.roomName && (
+                            filteredRoomType === val.roomName || filteredStatusRoom === val.bookingStatus || filteredSourceRoom === val.externalSite ? 
                               <tr
                                 key={i}
                                 className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
@@ -506,7 +506,79 @@ const Bookings = () => {
                                   {val.notes == null ? "No Notes" : val.notes}
                                 </td>
                               </tr>
-                            )
+                            : filteredStatusRoom === val.bookingStatus ? <tr
+                            key={i}
+                            className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                          >
+                            <td className="py-4 px-6 text-black font-semibold">
+                              {val.propertyReservationNumber}
+                            </td>
+                            <td className="py-4 px-6 font-bold">
+                              {`${val.firstName}`.charAt(0).toUpperCase() +
+                                `${val.firstName}`.slice(1)}{" "}
+                              {`${val.lastName}`.charAt(0).toUpperCase() +
+                                `${val.lastName}`.slice(1)}
+                            </td>
+                            <td className="py-4 px-6">
+                              {new Date(val.fromDate).toDateString()}
+                            </td>
+                            <td className="py-4 px-6">
+                              {new Date(val.toDate).toDateString()}
+                            </td>
+                            <td className="py-4 px-6">
+                              {new Date(val.fromDate)
+                                .toLocaleString("en-GB")
+                                .split(",")
+                                .splice(0, 1)
+                                .join("")
+                                .split("/")
+                                .join("-")}
+                            </td>
+                            <td className="py-4 px-6">
+                              {new Date(val.toDate)
+                                .toLocaleString("en-GB")
+                                .split(",")
+                                .splice(0, 1)
+                                .join("")
+                                .split("/")
+                                .join("-")}
+                            </td>
+                            <td className="py-4 px-6">{val.roomName}</td>
+                            <td className="py-4 px-6">
+                              {val.roomNumbers === null
+                                ? "null"
+                                : val.roomNumbers}
+                            </td>
+
+                            {val.externalSite == "Walkin" ? (
+                              <td className="py-4 px-6">
+                                <div className="flex items-center justify-evenly px-1 py-1 bg-green-400 text-white font-semibold rounded">
+                                  <FaShoePrints />
+                                  <div>Walkin</div>
+                                </div>
+                              </td>
+                            ) : val.externalSite == "Website" ? (
+                              <td className="py-4 px-6">
+                                <div className="flex items-center justify-evenly px-1 py-1 bg-blue-400 text-white font-semibold rounded">
+                                  <BsGlobe />
+                                  <div>Website</div>
+                                </div>
+                              </td>
+                            ) : val.externalSite === null ? (
+                              <td className="py-4 px-6">No-Source</td>
+                            ) : (
+                              ""
+                            )}
+                            <td className="py-4 px-6">
+                              {val.bookingStatus}
+                            </td>
+                            <td className="py-4 px-6">
+                              {val.payableAmount}
+                            </td>
+                            <td className="py-4 px-6">
+                              {val.notes == null ? "No Notes" : val.notes}
+                            </td>
+                          </tr> : ""
                           )}
                         </>
                       );

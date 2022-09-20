@@ -117,7 +117,7 @@ const Bookings = ()=> {
     <Navbar />
     <div className={styles.bookingsMainContainer}>
         <div className={styles.bookingsSearchSection}>
-        <Link href={`/crs/${bookingId}`}><span className={styles.bookingsSearchSectionBookingsMngmtSpan}><BiArrowBack className={styles.bookingsSearchSectionBookingsMngmtIcon} />Booking Management</span></Link>
+        <span className={styles.bookingsSearchSectionBookingsMngmtSpan}><Link href={`/crs/${bookingId}`}><BiArrowBack className={styles.bookingsSearchSectionBookingsMngmtIcon} /></Link>Booking Management</span>
             <span className={styles.bookingsSearchSectionBookingsInputSpan}><BiSearch className={styles.bookingsSearchSectionIcon} size={26}/><input className={styles.bookingsSearchSectionInput} placeholder='Search bookings' /></span>
         </div>
         <div className={styles.bookingsTableSection}>
