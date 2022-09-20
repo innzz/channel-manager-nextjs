@@ -32,7 +32,7 @@ function NavBar(props) {
             className={styles.logoImage}
             height={60}
             width={150}
-            src="/logo.svg"
+            src="/Logo_Bookone.svg"
           />
         </Link>
       </Col>

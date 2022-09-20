@@ -361,32 +361,34 @@ export default function PropertyId() {
         </Head>
         <div className={styles.buttonGroup}>
           <Row>
-            <Col className={styles.buttons}>
-              <div
+            {/* <Col className={styles.buttons}> */}
+              {/* <div
                 style={{
                   width: "40%",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
               >
-                <BulkUpdateModal
-                  roomDetails={sevenDaysDataOfRoom[0]}
+
+              </div> */}
+            {/* </Col> */}
+            <Col className={`${styles.rightlinkText} w-96 gap-1`}>
+              <BulkUpdateModal
+                roomDetails={sevenDaysDataOfRoom[0]}
+                setSevenDaysDataofRooms={setSevenDaysDataofRooms}
+                setCurrentdate={setCurrentdate}
+                token={token}
+              />
+              {roomDetailsToShow.bookoneRoomId !== undefined && (
+                <AddOrUpdatePlan
+                  roomDetails={roomDetailsToShow}
+                  propertyId={propertyId}
                   setSevenDaysDataofRooms={setSevenDaysDataofRooms}
                   setCurrentdate={setCurrentdate}
                   token={token}
                 />
-                {roomDetailsToShow.bookoneRoomId !== undefined && (
-                  <AddOrUpdatePlan
-                    roomDetails={roomDetailsToShow}
-                    propertyId={propertyId}
-                    setSevenDaysDataofRooms={setSevenDaysDataofRooms}
-                    setCurrentdate={setCurrentdate}
-                    token={token}
-                  />
-                )}
-              </div>
+              )}
             </Col>
-            <Col className={styles.rightlinkText}></Col>
           </Row>
         </div>
 
@@ -482,18 +484,18 @@ export default function PropertyId() {
                           {date.getDay() == 1
                             ? "MON"
                             : date.getDay() == 2
-                            ? "TUE"
-                            : date.getDay() == 3
-                            ? "WED"
-                            : date.getDay() == 4
-                            ? "THU"
-                            : date.getDay() == 5
-                            ? "FRI"
-                            : date.getDay() == 6
-                            ? "SAT"
-                            : date.getDay() == 0
-                            ? "SUN"
-                            : "NO DAY"}
+                              ? "TUE"
+                              : date.getDay() == 3
+                                ? "WED"
+                                : date.getDay() == 4
+                                  ? "THU"
+                                  : date.getDay() == 5
+                                    ? "FRI"
+                                    : date.getDay() == 6
+                                      ? "SAT"
+                                      : date.getDay() == 0
+                                        ? "SUN"
+                                        : "NO DAY"}
                         </span>
                         <span className={styles.boldDateText}>
                           {date.getDate() < 10
@@ -504,28 +506,28 @@ export default function PropertyId() {
                           {date.getMonth() == 0
                             ? "JAN"
                             : date.getMonth() == 1
-                            ? "FEB"
-                            : date.getMonth() == 2
-                            ? "MAR"
-                            : date.getMonth() == 3
-                            ? "APR"
-                            : date.getMonth() == 4
-                            ? "MAY"
-                            : date.getMonth() == 5
-                            ? "JUN"
-                            : date.getMonth() == 6
-                            ? "JUL"
-                            : date.getMonth() == 7
-                            ? "AUG"
-                            : date.getMonth() == 8
-                            ? "SEP"
-                            : date.getMonth() == 9
-                            ? "OCT"
-                            : date.getMonth() == 10
-                            ? "NOV"
-                            : date.getMonth() == 11
-                            ? "DEC"
-                            : "NO MONTH"}
+                              ? "FEB"
+                              : date.getMonth() == 2
+                                ? "MAR"
+                                : date.getMonth() == 3
+                                  ? "APR"
+                                  : date.getMonth() == 4
+                                    ? "MAY"
+                                    : date.getMonth() == 5
+                                      ? "JUN"
+                                      : date.getMonth() == 6
+                                        ? "JUL"
+                                        : date.getMonth() == 7
+                                          ? "AUG"
+                                          : date.getMonth() == 8
+                                            ? "SEP"
+                                            : date.getMonth() == 9
+                                              ? "OCT"
+                                              : date.getMonth() == 10
+                                                ? "NOV"
+                                                : date.getMonth() == 11
+                                                  ? "DEC"
+                                                  : "NO MONTH"}
                         </span>
                       </Col>
                     );
@@ -644,10 +646,10 @@ export default function PropertyId() {
                     >
                       {(updationRoomState === true &&
                         updationRoom.id === room.id) ||
-                      (updationRoomPlanState === true &&
-                        updationRoom.id === room.id) ||
-                      (updationRoomPriceState === true &&
-                        updationRoom.id === room.id) ? (
+                        (updationRoomPlanState === true &&
+                          updationRoom.id === room.id) ||
+                        (updationRoomPriceState === true &&
+                          updationRoom.id === room.id) ? (
                         <div
                           style={{
                             display: "flex",
@@ -720,12 +722,12 @@ export default function PropertyId() {
                                 {val.name == avail.roomName && (
                                   <Col className={styles.col} key={avail.id}>
                                     {updationRoomState === true &&
-                                    updationRoom.id === avail.id ? (
+                                      updationRoom.id === avail.id ? (
                                       <input
                                         type="text"
                                         name="noOfAvailable"
                                         placeholder={updationRoom.noOfAvailable}
-                                        className={styles.availabilityInput}
+                                        className={`${styles.availabilityInput} text-black font-semibold`}
                                         value={updationRoom.noOfAvailable}
                                         onChange={
                                           handleUpdationOfRoomRatesAndAvailablity
@@ -733,6 +735,7 @@ export default function PropertyId() {
                                       />
                                     ) : (
                                       <span
+                                        className="text-gray-200 font-semibold"
                                         onClick={() => {
                                           setUpdationRoom(avail);
                                           setUpdationRoomState(true);
@@ -781,7 +784,7 @@ export default function PropertyId() {
                               <Col className={styles.col} key={keyj}>
                                 <div className={styles.roomsAndPlansPrices}>
                                   {updationRoomPriceState === true &&
-                                  updationRoom.id === roomPrice.id ? (
+                                    updationRoom.id === roomPrice.id ? (
                                     <input
                                       type="text"
                                       name="price"
@@ -850,7 +853,7 @@ export default function PropertyId() {
                                             );
                                             return (
                                               <>
-                                                {planRatesOfSevenDays?.roomRatePlans?.map(
+                                                { planRatesOfSevenDays?.roomRatePlans?.map(
                                                   (plansRatesToShow, keyi) => {
                                                     console.log(
                                                       "plansRatesToShow",
@@ -860,70 +863,70 @@ export default function PropertyId() {
                                                       <>
                                                         {planName.name ==
                                                           plansRatesToShow.name && (
-                                                          <Col
-                                                            key={keyi}
-                                                            className={
-                                                              styles.col
-                                                            }
-                                                          >
-                                                            {updationRoomPlanState ===
-                                                              true &&
-                                                            updationRoom.id ===
-                                                              planRatesOfSevenDays.id &&
-                                                            plansRatesToShow.code ===
-                                                              updationRoomPlan.code ? (
-                                                              <input
-                                                                type="text"
-                                                                value={
-                                                                  updationRoomPlan.amount
-                                                                }
-                                                                name={
-                                                                  plansRatesToShow.name
-                                                                }
-                                                                onChange={(e) =>
-                                                                  handleUpdationOfRoomsPlans(
-                                                                    e,
-                                                                    plansRatesToShow
-                                                                  )
-                                                                }
-                                                                placeholder={
-                                                                  plansRatesToShow.amount
-                                                                }
-                                                                className={
-                                                                  styles.plansInput
-                                                                }
-                                                              />
-                                                            ) : (
-                                                              <span
-                                                                onClick={() => {
-                                                                  setUpdationRoomPlan(
-                                                                    plansRatesToShow
-                                                                  );
-                                                                  setUpdationRoomPlanState(
-                                                                    true
-                                                                  );
-                                                                  setUpdationRoom(
-                                                                    planRatesOfSevenDays
-                                                                  );
-                                                                  setUpdationRoomState(
-                                                                    false
-                                                                  );
-                                                                  setUpdationRoomPriceState(
-                                                                    false
-                                                                  );
-                                                                }}
-                                                              >
-                                                                {parseInt(
-                                                                  plansRatesToShow.amount
-                                                                ) > -1
-                                                                  ? `₹${parseInt(
+                                                            <Col
+                                                              key={keyi}
+                                                              className={
+                                                                styles.col
+                                                              }
+                                                            >
+                                                              {updationRoomPlanState ===
+                                                                true &&
+                                                                updationRoom.id ===
+                                                                planRatesOfSevenDays.id &&
+                                                                plansRatesToShow.code ===
+                                                                updationRoomPlan.code ? (
+                                                                <input
+                                                                  type="text"
+                                                                  value={
+                                                                    updationRoomPlan.amount
+                                                                  }
+                                                                  name={
+                                                                    plansRatesToShow.name
+                                                                  }
+                                                                  onChange={(e) =>
+                                                                    handleUpdationOfRoomsPlans(
+                                                                      e,
+                                                                      plansRatesToShow
+                                                                    )
+                                                                  }
+                                                                  placeholder={
+                                                                    plansRatesToShow.amount
+                                                                  }
+                                                                  className={
+                                                                    styles.plansInput
+                                                                  }
+                                                                />
+                                                              ) : (
+                                                                <span
+                                                                  onClick={() => {
+                                                                    setUpdationRoomPlan(
+                                                                      plansRatesToShow
+                                                                    );
+                                                                    setUpdationRoomPlanState(
+                                                                      true
+                                                                    );
+                                                                    setUpdationRoom(
+                                                                      planRatesOfSevenDays
+                                                                    );
+                                                                    setUpdationRoomState(
+                                                                      false
+                                                                    );
+                                                                    setUpdationRoomPriceState(
+                                                                      false
+                                                                    );
+                                                                  }}
+                                                                >
+                                                                  {parseInt(
+                                                                    plansRatesToShow.amount
+                                                                  ) > -1
+                                                                    ? `₹${parseInt(
                                                                       plansRatesToShow.amount
                                                                     )}`
-                                                                  : "No Plan"}
-                                                              </span>
-                                                            )}
-                                                          </Col>
-                                                        )}
+                                                                    : "No Plan"}
+                                                                </span>
+                                                              )}
+                                                            </Col>
+                                                          )}
                                                       </>
                                                     );
                                                   }
@@ -1023,10 +1026,13 @@ export default function PropertyId() {
                                                                       );
                                                                     }}
                                                                   >
-                                                                    ₹
-                                                                    {
+                                                                    {parseInt(
+                                                                  plansRatesToShow.amount
+                                                                ) > -1
+                                                                  ? `₹${parseInt(
                                                                       plansRatesToShow.amount
-                                                                    }
+                                                                    )}`
+                                                                  : "No Plan"}
                                                                   </span>
                                                                 )}
                                                               </Col>
