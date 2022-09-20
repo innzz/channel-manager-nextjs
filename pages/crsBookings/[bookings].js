@@ -24,6 +24,19 @@ const Bookings = () => {
   const [departureDate, setDepartureDate] = useState("");
   const [bookingData, setBookingData] = useState([]);
 
+  ///// Filtered Values
+  const [filteredRoomType, setFilteredRoomType] = useState("");
+  const [filteredStatusRoom, setFilteredStatusRoom] = useState("");
+  const [filteredSourceRoom, setFilteredSourceRoom] = useState("");
+
+  ///// Filtered Dropdown Show True/False
+  const [filterRoomTypeShow, setFilterRoomTypeShow] = useState(false);
+  const [filterBookingStatusTypeShow, setFilterBookingStatusTypeShow] =
+    useState(false);
+  const [filterBookingSourceTypeShow, setFilterBookingSourceTypeShow] =
+    useState(false);
+  const [filterByRoomType, setFilterByRoomType] = useState([]);
+
   const getBookings = async (token) => {
     const res = await axios.get(
       `https://api.bookonelocal.in/api-bookone/api/booking/getCurrentAndFutureBookings/${bookings}`,
@@ -40,16 +53,54 @@ const Bookings = () => {
     // console.log(data);
     setBookingData(data);
   };
-  
+
+  // const roomTypeName = async (token) => {
+  //   const res = await axios.get(
+  //     `https://api.bookonelocal.in/channel-integration/api/channelManager/property/${bookings}`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         APP_ID: "BOOKONE_WEB_APP",
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //       },
+  //     }
+  //   );
+  //   const { data } = await res;
+  //   setRoomTypeData(data?.roomDtos);
+  // };
+
   useEffect(() => {
     let bookingPageToken = localStorage.getItem("token");
     if (bookingPageToken && bookings !== undefined) {
       // if (bookings !== undefined) {
-        getBookings(bookingPageToken);
+      getBookings(bookingPageToken);
+      // roomTypeName(bookingPageToken);
       // }
     }
   }, [router]);
-  //   console.log(bookingData);
+  // console.log(filteredRoom);
+
+  const filteredRoomByStatus = [];
+  const filteredRoomBySource = [];
+  const filteredRoomsByType = [];
+  for (let i = 0; i < bookingData.length; i++) {
+    const a = bookingData[i].bookingStatus;
+    const b = bookingData[i].externalSite;
+    if (!filteredRoomByStatus.includes(bookingData[i].bookingStatus)) {
+      filteredRoomByStatus.push(bookingData[i].bookingStatus);
+    } else if (!filteredRoomBySource.includes(bookingData[i].externalSite)) {
+      filteredRoomBySource.push(bookingData[i].externalSite);
+    } else if (!filteredRoomsByType.includes(bookingData[i].roomName)) {
+      filteredRoomsByType.push(bookingData[i].roomName);
+    }
+    // console.log(a);
+  }
+  // console.log(filteredRoomByStatus);
+  console.log(filteredStatusRoom);
+  console.log(filteredSourceRoom);
+  // console.log(filteredRoomsByType);
+  console.log(filteredRoomType);
 
   return (
     <>
@@ -106,6 +157,11 @@ const Bookings = () => {
             <div className="p-4 bg-white rounded">
               <div className="flex justify-end">
                 <button
+                  onClick={() => {
+                    setFilteredRoomType("");
+                    setFilteredStatusRoom("");
+                    setFilteredSourceRoom("");
+                  }}
                   className="py-1 px-5 text-white rounded shadow-md"
                   style={{ backgroundColor: "#1D174D" }}
                 >
@@ -113,17 +169,120 @@ const Bookings = () => {
                 </button>
               </div>
               <div className="flex items-center justify-between my-4">
-                <div className="flex border items-center justify-between p-2 rounded shadow-sm w-96 mx-2">
-                  <button className="mr-2">Filter by Room Type</button>
+                <div
+                  onClick={() => setFilterRoomTypeShow(!filterRoomTypeShow)}
+                  className="flex relative border items-center justify-between p-2 rounded shadow-sm w-96 mx-2"
+                >
+                  <button className="mr-2">
+                    {filteredRoomType === ""
+                      ? "Filter by Room Type"
+                      : filteredRoomType}
+                  </button>
                   <BsFillCaretDownFill size={15} className="font-bold" />
+                  {filterRoomTypeShow === true && (
+                    <div className="absolute bg-white top-10 left-0 p-2 w-full drop-shadow-lg rounded">
+                      <>
+                        <div
+                          onClick={() => setFilteredRoomType("")}
+                          className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold p-2"
+                        >
+                          All
+                        </div>
+                        {filteredRoomsByType.map((filteredRoomType, key) => {
+                          return (
+                            <div
+                              onClick={() =>
+                                setFilteredRoomType(filteredRoomType)
+                              }
+                              key={key}
+                              className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold p-2"
+                            >
+                              {filteredRoomType}
+                            </div>
+                          );
+                        })}
+                      </>
+                    </div>
+                  )}
                 </div>
-                <div className="flex border items-center justify-between p-2 rounded shadow-sm w-96 mx-2">
-                  <button className="mr-2">Filter by Booking Status</button>
+
+                <div
+                  onClick={() =>
+                    setFilterBookingStatusTypeShow(!filterBookingStatusTypeShow)
+                  }
+                  className="flex relative border items-center justify-between p-2 rounded shadow-sm w-96 mx-2"
+                >
+                  <button className="mr-2">
+                    {filteredStatusRoom === ""
+                      ? "Filter by Booking Status"
+                      : filteredStatusRoom}
+                  </button>
                   <BsFillCaretDownFill size={15} className="font-bold" />
+                  {filterBookingStatusTypeShow === true && (
+                    <div className="absolute bg-white top-10 left-0 p-2 w-full drop-shadow-lg rounded">
+                      <>
+                        <div
+                          onClick={() => setFilteredStatusRoom("")}
+                          className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
+                        >
+                          All
+                        </div>
+                        {filteredRoomByStatus.map((filteredStatus, key) => {
+                          return (
+                            <div
+                              onClick={() =>
+                                setFilteredStatusRoom(filteredStatus)
+                              }
+                              key={key}
+                              className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
+                            >
+                              {filteredStatus}
+                            </div>
+                          );
+                        })}
+                      </>
+                    </div>
+                  )}
                 </div>
-                <div className="flex border items-center justify-between p-2 rounded shadow-sm w-96 mx-2">
-                  <button className="mr-2">Filter by Booking Source</button>
+                <div
+                  onClick={() =>
+                    setFilterBookingSourceTypeShow(!filterBookingSourceTypeShow)
+                  }
+                  className="flex border relative items-center justify-between p-2 rounded shadow-sm w-96 mx-2"
+                >
+                  <button className="mr-2">
+                    {filteredSourceRoom === ""
+                      ? "Filter by Booking Source"
+                      : filteredSourceRoom}
+                  </button>
                   <BsFillCaretDownFill size={15} className="font-bold" />
+                  {filterBookingSourceTypeShow === true && (
+                    <div className="absolute bg-white top-10 left-0 p-2 w-full drop-shadow-lg rounded">
+                      <>
+                        <div
+                          onClick={() => {
+                            setFilteredSourceRoom("");
+                          }}
+                          className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
+                        >
+                          All
+                        </div>
+                        {filteredRoomBySource.map((filteredSource, key) => {
+                          return (
+                            <div
+                              onClick={() =>
+                                setFilteredSourceRoom(filteredSource)
+                              }
+                              key={key}
+                              className="hover:bg-purple-600 hover:text-white decoration-none p-1 rounded font-semibold"
+                            >
+                              {filteredSource}
+                            </div>
+                          );
+                        })}
+                      </>
+                    </div>
+                  )}
                 </div>
                 <DatePicker
                   className="h-10 w-96 mx-2"
@@ -201,75 +360,155 @@ const Bookings = () => {
                   <tbody>
                     {bookingData?.map((val, i) => {
                       return (
-                        <tr
-                          key={i}
-                          className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
-                        >
-                          <td className="py-4 px-6 text-black font-semibold">
-                            {val.propertyReservationNumber}
-                          </td>
-                          <td className="py-4 px-6 font-bold">
-                            {`${val.firstName}`.charAt(0).toUpperCase() +
-                              `${val.firstName}`.slice(1)}{" "}
-                            {`${val.lastName}`.charAt(0).toUpperCase() +
-                              `${val.lastName}`.slice(1)}
-                          </td>
-                          <td className="py-4 px-6">
-                            {new Date(val.fromDate).toDateString()}
-                          </td>
-                          <td className="py-4 px-6">
-                            {new Date(val.toDate).toDateString()}
-                          </td>
-                          <td className="py-4 px-6">
-                            {new Date(val.fromDate)
-                              .toLocaleString("en-GB")
-                              .split(",")
-                              .splice(0, 1)
-                              .join("")
-                              .split("/")
-                              .join("-")}
-                          </td>
-                          <td className="py-4 px-6">
-                            {new Date(val.toDate)
-                              .toLocaleString("en-GB")
-                              .split(",")
-                              .splice(0, 1)
-                              .join("")
-                              .split("/")
-                              .join("-")}
-                          </td>
-                          <td className="py-4 px-6">{val.roomName}</td>
-                          <td className="py-4 px-6">
-                            {val.roomNumbers === null
-                              ? "null"
-                              : val.roomNumbers}
-                          </td>
+                        <>
+                          {filteredRoomType === "" ? (
+                            <tr
+                              key={i}
+                              className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                            >
+                              <td className="py-4 px-6 text-black font-semibold">
+                                {val.propertyReservationNumber}
+                              </td>
+                              <td className="py-4 px-6 font-bold">
+                                {`${val.firstName}`.charAt(0).toUpperCase() +
+                                  `${val.firstName}`.slice(1)}{" "}
+                                {`${val.lastName}`.charAt(0).toUpperCase() +
+                                  `${val.lastName}`.slice(1)}
+                              </td>
+                              <td className="py-4 px-6">
+                                {new Date(val.fromDate).toDateString()}
+                              </td>
+                              <td className="py-4 px-6">
+                                {new Date(val.toDate).toDateString()}
+                              </td>
+                              <td className="py-4 px-6">
+                                {new Date(val.fromDate)
+                                  .toLocaleString("en-GB")
+                                  .split(",")
+                                  .splice(0, 1)
+                                  .join("")
+                                  .split("/")
+                                  .join("-")}
+                              </td>
+                              <td className="py-4 px-6">
+                                {new Date(val.toDate)
+                                  .toLocaleString("en-GB")
+                                  .split(",")
+                                  .splice(0, 1)
+                                  .join("")
+                                  .split("/")
+                                  .join("-")}
+                              </td>
+                              <td className="py-4 px-6">{val.roomName}</td>
+                              <td className="py-4 px-6">
+                                {val.roomNumbers === null
+                                  ? "null"
+                                  : val.roomNumbers}
+                              </td>
 
-                          {val.externalSite == "Walkin" ? (
-                            <td className="py-4 px-6">
-                              <div className="flex items-center justify-evenly px-1 py-1 bg-green-400 text-white font-semibold rounded">
-                                <FaShoePrints />
-                                <div>Walkin</div>
-                              </div>
-                            </td>
-                          ) : val.externalSite == "Website" ? (
-                            <td className="py-4 px-6">
-                              <div className="flex items-center justify-evenly px-1 py-1 bg-blue-400 text-white font-semibold rounded">
-                                <BsGlobe />
-                                <div>Website</div>
-                              </div>
-                            </td>
-                          ) : val.externalSite === null ? (
-                            <td className="py-4 px-6">No-Source</td>
+                              {val.externalSite == "Walkin" ? (
+                                <td className="py-4 px-6">
+                                  <div className="flex items-center justify-evenly px-1 py-1 bg-green-400 text-white font-semibold rounded">
+                                    <FaShoePrints />
+                                    <div>Walkin</div>
+                                  </div>
+                                </td>
+                              ) : val.externalSite == "Website" ? (
+                                <td className="py-4 px-6">
+                                  <div className="flex items-center justify-evenly px-1 py-1 bg-blue-400 text-white font-semibold rounded">
+                                    <BsGlobe />
+                                    <div>Website</div>
+                                  </div>
+                                </td>
+                              ) : val.externalSite === null ? (
+                                <td className="py-4 px-6">No-Source</td>
+                              ) : (
+                                ""
+                              )}
+                              <td className="py-4 px-6">{val.bookingStatus}</td>
+                              <td className="py-4 px-6">{val.payableAmount}</td>
+                              <td className="py-4 px-6">
+                                {val.notes == null ? "No Notes" : val.notes}
+                              </td>
+                            </tr>
                           ) : (
-                            ""
+                            filteredRoomType === val.roomName && (
+                              <tr
+                                key={i}
+                                className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                              >
+                                <td className="py-4 px-6 text-black font-semibold">
+                                  {val.propertyReservationNumber}
+                                </td>
+                                <td className="py-4 px-6 font-bold">
+                                  {`${val.firstName}`.charAt(0).toUpperCase() +
+                                    `${val.firstName}`.slice(1)}{" "}
+                                  {`${val.lastName}`.charAt(0).toUpperCase() +
+                                    `${val.lastName}`.slice(1)}
+                                </td>
+                                <td className="py-4 px-6">
+                                  {new Date(val.fromDate).toDateString()}
+                                </td>
+                                <td className="py-4 px-6">
+                                  {new Date(val.toDate).toDateString()}
+                                </td>
+                                <td className="py-4 px-6">
+                                  {new Date(val.fromDate)
+                                    .toLocaleString("en-GB")
+                                    .split(",")
+                                    .splice(0, 1)
+                                    .join("")
+                                    .split("/")
+                                    .join("-")}
+                                </td>
+                                <td className="py-4 px-6">
+                                  {new Date(val.toDate)
+                                    .toLocaleString("en-GB")
+                                    .split(",")
+                                    .splice(0, 1)
+                                    .join("")
+                                    .split("/")
+                                    .join("-")}
+                                </td>
+                                <td className="py-4 px-6">{val.roomName}</td>
+                                <td className="py-4 px-6">
+                                  {val.roomNumbers === null
+                                    ? "null"
+                                    : val.roomNumbers}
+                                </td>
+
+                                {val.externalSite == "Walkin" ? (
+                                  <td className="py-4 px-6">
+                                    <div className="flex items-center justify-evenly px-1 py-1 bg-green-400 text-white font-semibold rounded">
+                                      <FaShoePrints />
+                                      <div>Walkin</div>
+                                    </div>
+                                  </td>
+                                ) : val.externalSite == "Website" ? (
+                                  <td className="py-4 px-6">
+                                    <div className="flex items-center justify-evenly px-1 py-1 bg-blue-400 text-white font-semibold rounded">
+                                      <BsGlobe />
+                                      <div>Website</div>
+                                    </div>
+                                  </td>
+                                ) : val.externalSite === null ? (
+                                  <td className="py-4 px-6">No-Source</td>
+                                ) : (
+                                  ""
+                                )}
+                                <td className="py-4 px-6">
+                                  {val.bookingStatus}
+                                </td>
+                                <td className="py-4 px-6">
+                                  {val.payableAmount}
+                                </td>
+                                <td className="py-4 px-6">
+                                  {val.notes == null ? "No Notes" : val.notes}
+                                </td>
+                              </tr>
+                            )
                           )}
-                          <td className="py-4 px-6">{val.bookingStatus}</td>
-                          <td className="py-4 px-6">{val.payableAmount}</td>
-                          <td className="py-4 px-6">
-                            {val.notes == null ? "No Notes" : val.notes}
-                          </td>
-                        </tr>
+                        </>
                       );
                     })}
                   </tbody>
